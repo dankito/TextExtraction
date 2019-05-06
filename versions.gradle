@@ -5,6 +5,8 @@ ext {
 
     openPdfVersion = '1.2.17'
     
+    slf4jVersion = '1.7.16'
+    
     
     junitVersion = '4.12'
     assertJVersion = '3.11.1'
