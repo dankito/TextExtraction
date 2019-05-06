@@ -1,0 +1,31 @@
+
+buildscript {
+    
+    apply from: 'versions.gradle'
+    
+    
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+
+
+allprojects {
+    group 'net.dankito.text.extraction'
+    version '1.0.0-SNAPSHOT'
+
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+        google()
+    }
+}
