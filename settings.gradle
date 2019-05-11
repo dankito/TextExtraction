@@ -1,3 +1,5 @@
+include ':TextExtractionCommon'
+
 include ':PdfTextExtraction'
 
 include ':TestAppAndroid'

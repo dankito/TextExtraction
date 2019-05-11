@@ -1,0 +1,17 @@
+apply plugin: 'kotlin'
+
+
+sourceCompatibility = 1.7
+
+compileKotlin.kotlinOptions.jvmTarget = "1.6"
+
+compileTestKotlin.kotlinOptions.jvmTarget = "1.6"
+
+
+dependencies {
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    api "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+
+    api "org.slf4j:slf4j-api:$slf4jVersion"
+    
+}
