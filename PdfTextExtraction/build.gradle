@@ -8,14 +8,8 @@ compileKotlin.kotlinOptions.jvmTarget = "1.6"
 compileTestKotlin.kotlinOptions.jvmTarget = "1.6"
 
 
-repositories {
-    mavenCentral()
-}
-
-
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    api project(':TextExtractionCommon')
 
     implementation "com.github.librepdf:openpdf:$openPdfVersion"
 

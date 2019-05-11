@@ -23,7 +23,8 @@ class PdfTextExtractorTest {
         val result = underText.extractText(TestPdfFile)
 
         // then
-        assertThat(result).isEqualTo("<insert your extracted text here>")
+        assertThat(result.pages).isNotEmpty
+        assertThat(result.text).isEqualTo("<add your expected text here>")
     }
 
 }
