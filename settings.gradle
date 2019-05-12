@@ -2,5 +2,7 @@ include ':TextExtractionCommon'
 
 include ':PdfTextExtraction'
 
+include ':InvoiceDataExtractor'
+
 include ':TestAppAndroid'
 
