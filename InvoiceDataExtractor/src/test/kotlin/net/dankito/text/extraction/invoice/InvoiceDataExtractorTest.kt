@@ -18,16 +18,20 @@ class InvoiceDataExtractorTest {
 
 
         // then
-        assertThat(result.totalAmount.amount).isEqualTo(15.0)
-        assertThat(result.totalAmount.currency).isEqualTo("€")
+        assertThat(result).isNotNull
 
-        assertThat(result.netAmout?.amount).isEqualTo(12.61)
-        assertThat(result.netAmout?.currency).isEqualTo("€")
+        result?.let {
+            assertThat(result.totalAmount.amount).isEqualTo(15.0)
+            assertThat(result.totalAmount.currency).isEqualTo("€")
 
-        assertThat(result.valueAddedTax?.amount).isEqualTo(2.39)
-        assertThat(result.valueAddedTax?.currency).isEqualTo("€")
+            assertThat(result.netAmout?.amount).isEqualTo(12.61)
+            assertThat(result.netAmout?.currency).isEqualTo("€")
 
-        assertThat(result.valueAddedTaxRate).isEqualTo(19f)
+            assertThat(result.valueAddedTax?.amount).isEqualTo(2.39)
+            assertThat(result.valueAddedTax?.currency).isEqualTo("€")
+
+            assertThat(result.valueAddedTaxRate).isEqualTo(19f)
+        }
     }
 
 }

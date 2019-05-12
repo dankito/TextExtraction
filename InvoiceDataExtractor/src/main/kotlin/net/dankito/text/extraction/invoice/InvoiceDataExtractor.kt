@@ -2,7 +2,6 @@ package net.dankito.text.extraction.invoice
 
 import net.dankito.text.extraction.invoice.model.AmountOfMoney
 import net.dankito.text.extraction.invoice.model.Invoice
-import java.lang.Exception
 import java.text.NumberFormat
 import java.util.*
 import java.util.regex.Matcher
@@ -24,11 +23,11 @@ open class InvoiceDataExtractor(protected val currencySymbolPatternString: Strin
     }
 
 
-    open fun extractInvoiceData(text: String): Invoice {
+    open fun extractInvoiceData(text: String): Invoice? {
         return extractInvoiceData(text.split("\n"))
     }
 
-    open fun extractInvoiceData(lines: List<String>): Invoice {
+    open fun extractInvoiceData(lines: List<String>): Invoice? {
         val pattern = createCurrencySymbolPattern(currencySymbolPatternString)
 
         val matchers = lines.associateBy( { it } , { pattern.matcher(it) } )
@@ -37,9 +36,13 @@ open class InvoiceDataExtractor(protected val currencySymbolPatternString: Strin
 
         val amounts = matchersWithCurrencySymbols.mapNotNull {
             extractAmountsOfMoney(it.key, it.value)
-        }.flatMap { it }.toSet()
+        }.flatten().toSet()
 
-        return Invoice(AmountOfMoney(0.0, "", "")) // TODO
+        findTotalNetAndVatAmount(amounts)?.let { potentialAmounts ->
+            return Invoice(potentialAmounts.first, potentialAmounts.second, potentialAmounts.third)
+        }
+
+        return null
     }
 
     protected open fun extractAmountsOfMoney(line: String, matcherWithCurrencySymbol: Matcher): List<AmountOfMoney> {
@@ -107,6 +110,35 @@ open class InvoiceDataExtractor(protected val currencySymbolPatternString: Strin
         } catch (ignored: Exception) { }
 
         return amountString.toDouble()
+    }
+
+
+    protected open fun findTotalNetAndVatAmount(amounts: Collection<AmountOfMoney>)
+            : Triple<AmountOfMoney, AmountOfMoney?, AmountOfMoney?>? {
+
+        if (amounts.isNotEmpty()) {
+            val amountsSorted = amounts.sortedByDescending { it.amount }
+
+            for (totalIndex in 0 until amountsSorted.size) {
+                val potentialTotal = amountsSorted[totalIndex]
+
+                for (netIndex in (totalIndex + 1) until amountsSorted.size - 1) {
+                    val potentialNet = amountsSorted[netIndex]
+
+                    for (vatIndex in (netIndex + 1) until amountsSorted.size) {
+                        val potentialVat = amountsSorted[vatIndex]
+
+                        if (potentialTotal.amount == (potentialNet.amount + potentialVat.amount)) {
+                            return Triple(potentialTotal, potentialNet, potentialVat)
+                        }
+                    }
+                }
+            }
+
+            return Triple(amountsSorted.first(), null, null)
+        }
+
+        return null
     }
 
 
