@@ -75,9 +75,9 @@ open class InvoiceDataExtractor(protected val currencySymbolPatternString: Strin
 
         val decimalNumberAfterCurrencySymbolMatcher = createPatternForDecimalNumberAfterCurrencySymbol(
             decimalNumberPatternString, currencySymbol
-        ).matcher(line.substring(matcherWithCurrencySymbol.end()))
+        ).matcher(line.substring(matcherWithCurrencySymbol.start()))
 
-        if (decimalNumberAfterCurrencySymbolMatcher.find(matcherWithCurrencySymbol.start())) {
+        if (decimalNumberAfterCurrencySymbolMatcher.find()) {
             return extractAmountOfMoney(decimalNumberAfterCurrencySymbolMatcher, currencySymbol)
         }
 
