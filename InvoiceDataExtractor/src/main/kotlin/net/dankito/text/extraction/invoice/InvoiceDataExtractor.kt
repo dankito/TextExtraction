@@ -9,7 +9,7 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
-open class InvoiceDataExtractor(protected val currencySymbolPatternString: String = "\\p{Sc}",
+open class InvoiceDataExtractor(protected val currencySymbolPatternString: String = "\\p{Sc}|EUR",
                                 protected val decimalNumberPatternString: String = "\\d+([\\,\\.]\\d{1,2})?"
 ) {
 
