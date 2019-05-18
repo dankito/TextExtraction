@@ -8,4 +8,6 @@ interface IAmountCategorizer {
 
     fun findTotalNetAndVatAmount(amounts: Collection<AmountOfMoney>): TotalNetAndVatAmount?
 
+    fun findValueAddedTaxRate(percentages: List<AmountOfMoney>): AmountOfMoney?
+
 }

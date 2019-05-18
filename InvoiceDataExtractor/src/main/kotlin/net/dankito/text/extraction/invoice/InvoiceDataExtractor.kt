@@ -15,9 +15,11 @@ open class InvoiceDataExtractor @JvmOverloads constructor(
 
     open fun extractInvoiceData(lines: List<String>): Invoice? {
 
-        val amounts = amountExtractor.extractAmountsOfMoney(lines)
+        val percentages = amountExtractor.extractPercentages(lines)
 
-        val vatRateCandidates = amountExtractor.extractPercentages(lines)
+        val potentialVatRate = amountCategorizer.findValueAddedTaxRate(percentages)
+
+        val amounts = amountExtractor.extractAmountsOfMoney(lines)
 
         amountCategorizer.findTotalNetAndVatAmount(amounts)?.let { potentialAmounts ->
             return Invoice(potentialAmounts.totalAmount, potentialAmounts.netAmount, potentialAmounts.valueAddedTax)
