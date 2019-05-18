@@ -79,7 +79,7 @@ open class InvoiceDataExtractor(protected val currencySymbolPatternString: Strin
         ).matcher(relevantLinePart.substring(0, matcherWithCurrencySymbol.end()))
 
         if (decimalNumberBeforeCurrencySymbolMatcher.find()) {
-            return extractAmountOfMoney(decimalNumberBeforeCurrencySymbolMatcher, currencySymbol)
+            return extractAmountOfMoney(decimalNumberBeforeCurrencySymbolMatcher, line, currencySymbol)
         }
 
 
@@ -88,17 +88,17 @@ open class InvoiceDataExtractor(protected val currencySymbolPatternString: Strin
         ).matcher(relevantLinePart.substring(matcherWithCurrencySymbol.start()))
 
         if (decimalNumberAfterCurrencySymbolMatcher.find()) {
-            return extractAmountOfMoney(decimalNumberAfterCurrencySymbolMatcher, currencySymbol)
+            return extractAmountOfMoney(decimalNumberAfterCurrencySymbolMatcher, line, currencySymbol)
         }
 
         return null
     }
 
-    protected open fun extractAmountOfMoney(decimalNumberMatcher: Matcher, currencySymbol: String): AmountOfMoney {
+    protected open fun extractAmountOfMoney(decimalNumberMatcher: Matcher, line: String, currencySymbol: String): AmountOfMoney {
         val amountWithCurrency = decimalNumberMatcher.group()
         val amount = extractAmount(amountWithCurrency, currencySymbol)
 
-        return AmountOfMoney(amount, currencySymbol, amountWithCurrency)
+        return AmountOfMoney(amount, currencySymbol, amountWithCurrency, line)
     }
 
     protected open fun extractAmount(amountWithCurrency: String, currencySymbol: String): Double {
@@ -128,12 +128,15 @@ open class InvoiceDataExtractor(protected val currencySymbolPatternString: Strin
         val percentageSymbol = getPercentageSymbol()
         val vatRatePattern = createPatternForValueAddedTaxRate(decimalNumberPatternString, percentageSymbol)
 
-        val matchersWithPercentage = lines.map { vatRatePattern.matcher(it) }.filter { it.find() }
+        val matchers = lines.associateBy( { it } , { vatRatePattern.matcher(it) } )
+        val matchersWithPercentage = matchers.filter { it.value.find() }
 
-        return matchersWithPercentage.mapNotNull { mapPercentageToAmountOfMoney(it, percentageSymbol) }
+        return matchersWithPercentage.mapNotNull { mapPercentageToAmountOfMoney(it.value, it.key, percentageSymbol) }
     }
 
-    protected open fun mapPercentageToAmountOfMoney(matcherWithPercentage: Matcher, percentageSymbol: String): AmountOfMoney? {
+    protected open fun mapPercentageToAmountOfMoney(matcherWithPercentage: Matcher, line: String,
+                                                    percentageSymbol: String): AmountOfMoney? {
+
         val percentageString = matcherWithPercentage.group()
         val percentageNumberAsString = percentageString.replace(percentageSymbol, "").trim()
 
@@ -141,7 +144,7 @@ open class InvoiceDataExtractor(protected val currencySymbolPatternString: Strin
             val percentageNumberAsFloat = extractNumber(percentageNumberAsString)?.toFloat() ?: percentageNumberAsString.toFloat()
 
             if (percentageNumberAsFloat in 0f..100f) { // is really a percentage
-                return AmountOfMoney(percentageNumberAsFloat.toDouble(), percentageSymbol, percentageString)
+                return AmountOfMoney(percentageNumberAsFloat.toDouble(), percentageSymbol, percentageString, line)
             }
         } catch (e: Exception) { log.warn("Could not map $percentageNumberAsString to Float", e) }
 
