@@ -1,12 +1,12 @@
 package net.dankito.text.extraction.invoice
 
 import net.dankito.text.extraction.invoice.model.AmountOfMoney
+import net.dankito.text.extraction.invoice.model.TotalNetAndVatAmount
 
 
 open class AmountCategorizer : IAmountCategorizer {
 
-    override fun findTotalNetAndVatAmount(amounts: Collection<AmountOfMoney>)
-            : Triple<AmountOfMoney, AmountOfMoney?, AmountOfMoney?>? {
+    override fun findTotalNetAndVatAmount(amounts: Collection<AmountOfMoney>): TotalNetAndVatAmount? {
 
         if (amounts.isNotEmpty()) {
             val amountsSorted = amounts.sortedByDescending { it.amount }
@@ -21,13 +21,13 @@ open class AmountCategorizer : IAmountCategorizer {
                         val potentialVat = amountsSorted[vatIndex]
 
                         if (potentialTotal.amount == (potentialNet.amount + potentialVat.amount)) {
-                            return Triple(potentialTotal, potentialNet, potentialVat)
+                            return TotalNetAndVatAmount(potentialTotal, potentialNet, potentialVat)
                         }
                     }
                 }
             }
 
-            return Triple(amountsSorted.first(), null, null)
+            return TotalNetAndVatAmount(amountsSorted.first(), null, null)
         }
 
         return null

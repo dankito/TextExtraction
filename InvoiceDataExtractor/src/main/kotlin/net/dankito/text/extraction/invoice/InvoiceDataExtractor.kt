@@ -20,7 +20,7 @@ open class InvoiceDataExtractor @JvmOverloads constructor(
         val vatRateCandidates = amountExtractor.extractPercentages(lines)
 
         amountCategorizer.findTotalNetAndVatAmount(amounts)?.let { potentialAmounts ->
-            return Invoice(potentialAmounts.first, potentialAmounts.second, potentialAmounts.third)
+            return Invoice(potentialAmounts.totalAmount, potentialAmounts.netAmount, potentialAmounts.valueAddedTax)
         }
 
         return null
