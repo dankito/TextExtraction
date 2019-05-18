@@ -2,11 +2,12 @@ package net.dankito.text.extraction.invoice
 
 import net.dankito.text.extraction.invoice.model.AmountOfMoney
 import net.dankito.text.extraction.invoice.model.Invoice
-import java.lang.Exception
+import org.slf4j.LoggerFactory
 import java.text.NumberFormat
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import kotlin.Exception
 
 
 open class InvoiceDataExtractor(protected val currencySymbolPatternString: String = "\\p{Sc}|EUR",
@@ -21,6 +22,9 @@ open class InvoiceDataExtractor(protected val currencySymbolPatternString: Strin
 
         // German uses comma as decimal separator
         val GermanNumberFormat = NumberFormat.getNumberInstance(Locale.GERMAN)
+
+
+        private val log = LoggerFactory.getLogger(InvoiceDataExtractor::class.java)
     }
 
 
@@ -38,6 +42,8 @@ open class InvoiceDataExtractor(protected val currencySymbolPatternString: Strin
         val amounts = matchersWithCurrencySymbols.mapNotNull {
             extractAmountsOfMoney(it.key, it.value)
         }.flatMap { it }.toSet()
+
+        val vatRateCandidates = extractValueAddedTaxRate(lines)
 
         return Invoice(AmountOfMoney(0.0, "", "")) // TODO
     }
@@ -94,19 +100,48 @@ open class InvoiceDataExtractor(protected val currencySymbolPatternString: Strin
     protected open fun extractAmount(amountWithCurrency: String, currencySymbol: String): Double {
         val amountString = amountWithCurrency.replace(currencySymbol, "").trim()
 
+        return extractNumber(amountString)?.toDouble() ?: amountString.toDouble()
+    }
+
+    protected open fun extractNumber(numberString: String): Number? {
         try {
-            return UserNumberFormat.parse(amountString).toDouble()
+            return UserNumberFormat.parse(numberString)
         } catch (ignored: Exception) { }
 
         try {
-            return EnglishNumberFormat.parse(amountString).toDouble()
+            return EnglishNumberFormat.parse(numberString)
         } catch (ignored: Exception) { }
 
         try {
-            return GermanNumberFormat.parse(amountString).toDouble()
+            return GermanNumberFormat.parse(numberString)
         } catch (ignored: Exception) { }
 
-        return amountString.toDouble()
+        return null
+    }
+
+
+    protected open fun extractValueAddedTaxRate(lines: List<String>): List<AmountOfMoney> {
+        val percentageSymbol = getPercentageSymbol()
+        val vatRatePattern = createPatternForValueAddedTaxRate(decimalNumberPatternString, percentageSymbol)
+
+        val matchersWithPercentage = lines.map { vatRatePattern.matcher(it) }.filter { it.find() }
+
+        return matchersWithPercentage.mapNotNull { mapPercentageToAmountOfMoney(it, percentageSymbol) }
+    }
+
+    protected open fun mapPercentageToAmountOfMoney(matcherWithPercentage: Matcher, percentageSymbol: String): AmountOfMoney? {
+        val percentageString = matcherWithPercentage.group()
+        val percentageNumberAsString = percentageString.replace(percentageSymbol, "").trim()
+
+        try {
+            val percentageNumberAsFloat = extractNumber(percentageNumberAsString)?.toFloat() ?: percentageNumberAsString.toFloat()
+
+            if (percentageNumberAsFloat in 0f..100f) { // is really a percentage
+                return AmountOfMoney(percentageNumberAsFloat.toDouble(), percentageSymbol, percentageString)
+            }
+        } catch (e: Exception) { log.warn("Could not map $percentageNumberAsString to Float", e) }
+
+        return null
     }
 
 
@@ -124,6 +159,16 @@ open class InvoiceDataExtractor(protected val currencySymbolPatternString: Strin
                                                                          currencySymbol: String): Pattern {
 
         return Pattern.compile(currencySymbol + "\\s*" + decimalNumberPatternString, Pattern.CASE_INSENSITIVE)
+    }
+
+    protected open fun getPercentageSymbol(): String {
+        return "%"
+    }
+
+    protected open fun createPatternForValueAddedTaxRate(decimalNumberPatternString: String,
+                                                         percentageSymbol: String): Pattern {
+
+        return Pattern.compile(decimalNumberPatternString + "\\s*" + percentageSymbol, Pattern.CASE_INSENSITIVE)
     }
 
 }
