@@ -30,7 +30,8 @@ class InvoiceDataExtractorTest {
             assertThat(result.valueAddedTax?.amount).isEqualTo(2.39)
             assertThat(result.valueAddedTax?.currency).isEqualTo("€")
 
-            assertThat(result.valueAddedTaxRate).isEqualTo(19f)
+            assertThat(result.valueAddedTaxRate?.amount).isEqualTo(19.0)
+            assertThat(result.valueAddedTaxRate?.currency).isEqualTo("%")
         }
     }
 
@@ -46,15 +47,16 @@ class InvoiceDataExtractorTest {
 
         result?.let {
             assertThat(result.totalAmount.amount).isEqualTo(6.99)
-            assertThat(result.totalAmount.currency).isEqualTo("€")
+            assertThat(result.totalAmount.currency).isEqualTo("EUR")
 
             assertThat(result.netAmout?.amount).isEqualTo(5.87)
-            assertThat(result.netAmout?.currency).isEqualTo("€")
+            assertThat(result.netAmout?.currency).isEqualTo("EUR")
 
             assertThat(result.valueAddedTax?.amount).isEqualTo(1.12)
-            assertThat(result.valueAddedTax?.currency).isEqualTo("€")
+            assertThat(result.valueAddedTax?.currency).isEqualTo("EUR")
 
-            assertThat(result.valueAddedTaxRate).isEqualTo(19f)
+            assertThat(result.valueAddedTaxRate?.amount).isEqualTo(19.0)
+            assertThat(result.valueAddedTaxRate?.currency).isEqualTo("%")
         }
     }
 
