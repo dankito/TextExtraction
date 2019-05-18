@@ -39,12 +39,11 @@ open class InvoiceDataExtractor(protected val currencySymbolPatternString: Strin
         val matchersWithCurrencySymbols = matchers.filter { it.value.find() }
 
         val amounts = matchersWithCurrencySymbols.mapNotNull {
-            extractAmountsOfMoney(it.key, it.value)
+            extractAmountsOfMoney(it.value, it.key)
         }.flatten().toSet()
 
         val vatRateCandidates = extractValueAddedTaxRate(lines)
 
-        return Invoice(AmountOfMoney(0.0, "", "")) // TODO
         findTotalNetAndVatAmount(amounts)?.let { potentialAmounts ->
             return Invoice(potentialAmounts.first, potentialAmounts.second, potentialAmounts.third)
         }
@@ -52,31 +51,32 @@ open class InvoiceDataExtractor(protected val currencySymbolPatternString: Strin
         return null
     }
 
-    protected open fun extractAmountsOfMoney(line: String, matcherWithCurrencySymbol: Matcher): List<AmountOfMoney> {
+    protected open fun extractAmountsOfMoney(matcherWithCurrencySymbol: Matcher, line: String): List<AmountOfMoney> {
 
         matcherWithCurrencySymbol.reset()
-        var substringStart = 0
+        var lineSubstringStart = 0
 
         val amounts = mutableListOf<AmountOfMoney>()
 
         while (matcherWithCurrencySymbol.find()) {
-            extractAmountsOfMoney(matcherWithCurrencySymbol, line.substring(substringStart))?.let {
+            extractAmountOfMoney(matcherWithCurrencySymbol, line, lineSubstringStart)?.let {
                 amounts.add(it)
             }
 
-            substringStart = matcherWithCurrencySymbol.end()
+            lineSubstringStart = matcherWithCurrencySymbol.end()
         }
 
         return amounts
     }
 
-    private fun extractAmountsOfMoney(matcherWithCurrencySymbol: Matcher, line: String): AmountOfMoney? { // TODO: fix signature
+    protected open fun extractAmountOfMoney(matcherWithCurrencySymbol: Matcher, line: String, lineSubstringStart: Int): AmountOfMoney? {
+        val relevantLinePart = line.substring(lineSubstringStart)
         val currencySymbol = matcherWithCurrencySymbol.group()
 
 
         val decimalNumberBeforeCurrencySymbolMatcher = createPatternForDecimalNumberBeforeCurrencySymbol(
             decimalNumberPatternString, currencySymbol
-        ).matcher(line.substring(0, matcherWithCurrencySymbol.end()))
+        ).matcher(relevantLinePart.substring(0, matcherWithCurrencySymbol.end()))
 
         if (decimalNumberBeforeCurrencySymbolMatcher.find()) {
             return extractAmountOfMoney(decimalNumberBeforeCurrencySymbolMatcher, currencySymbol)
@@ -85,7 +85,7 @@ open class InvoiceDataExtractor(protected val currencySymbolPatternString: Strin
 
         val decimalNumberAfterCurrencySymbolMatcher = createPatternForDecimalNumberAfterCurrencySymbol(
             decimalNumberPatternString, currencySymbol
-        ).matcher(line.substring(matcherWithCurrencySymbol.start()))
+        ).matcher(relevantLinePart.substring(matcherWithCurrencySymbol.start()))
 
         if (decimalNumberAfterCurrencySymbolMatcher.find()) {
             return extractAmountOfMoney(decimalNumberAfterCurrencySymbolMatcher, currencySymbol)
