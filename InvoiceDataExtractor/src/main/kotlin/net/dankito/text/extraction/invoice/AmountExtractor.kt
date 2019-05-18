@@ -16,10 +16,10 @@ open class AmountExtractor(protected val currencySymbolPatternString: String = "
         val UserNumberFormat = NumberFormat.getNumberInstance()
 
         // most languages have the English number format with a dot as decimal separator
-        val EnglishNumberFormat = NumberFormat.getNumberInstance(Locale.ENGLISH)
+        val NumberFormatWithDotAsDecimalSeparator = NumberFormat.getNumberInstance(Locale.ENGLISH)
 
         // German uses comma as decimal separator
-        val GermanNumberFormat = NumberFormat.getNumberInstance(Locale.GERMAN)
+        val NumberFormatWithCommaAsDecimalSeparator = NumberFormat.getNumberInstance(Locale.GERMAN)
 
 
         private val log = LoggerFactory.getLogger(AmountExtractor::class.java)
@@ -129,11 +129,11 @@ open class AmountExtractor(protected val currencySymbolPatternString: String = "
         } catch (ignored: Exception) { }
 
         try {
-            return EnglishNumberFormat.parse(numberString)
+            return NumberFormatWithDotAsDecimalSeparator.parse(numberString)
         } catch (ignored: Exception) { }
 
         try {
-            return GermanNumberFormat.parse(numberString)
+            return NumberFormatWithCommaAsDecimalSeparator.parse(numberString)
         } catch (ignored: Exception) { }
 
         return null
