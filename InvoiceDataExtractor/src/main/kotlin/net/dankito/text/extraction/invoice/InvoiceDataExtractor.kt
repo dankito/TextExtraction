@@ -4,7 +4,7 @@ import net.dankito.text.extraction.invoice.model.AmountOfMoney
 import net.dankito.text.extraction.invoice.model.Invoice
 
 
-open class InvoiceDataExtractor @JvmOverloads constructor(protected val amountExtractor: AmountExtractor = AmountExtractor()) {
+open class InvoiceDataExtractor @JvmOverloads constructor(protected val amountExtractor: IAmountExtractor = AmountExtractor()) {
 
 
     open fun extractInvoiceData(text: String): Invoice? {

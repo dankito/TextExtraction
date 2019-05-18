@@ -10,7 +10,7 @@ import java.util.regex.Pattern
 
 open class AmountExtractor(protected val currencySymbolPatternString: String = "\\p{Sc}|EUR",
                            protected val decimalNumberPatternString: String = "\\d+([\\,\\.]\\d{1,2})?"
-) {
+) : IAmountExtractor {
 
     companion object {
         val UserNumberFormat = NumberFormat.getNumberInstance()
@@ -26,7 +26,7 @@ open class AmountExtractor(protected val currencySymbolPatternString: String = "
     }
 
 
-    open fun extractAmountsOfMoney(lines: List<String>): List<AmountOfMoney> {
+    override fun extractAmountsOfMoney(lines: List<String>): List<AmountOfMoney> {
         val pattern = createCurrencySymbolPattern(currencySymbolPatternString)
 
         val matchers = lines.associateBy( { it } , { pattern.matcher(it) } )
@@ -95,7 +95,7 @@ open class AmountExtractor(protected val currencySymbolPatternString: String = "
     }
 
 
-    open fun extractPercentages(lines: List<String>): List<AmountOfMoney> {
+    override fun extractPercentages(lines: List<String>): List<AmountOfMoney> {
         val percentageSymbol = getPercentageSymbol()
         val percentagesPattern = createPatternForPercentage(decimalNumberPatternString, percentageSymbol)
 
