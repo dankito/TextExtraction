@@ -5,7 +5,8 @@ import net.dankito.text.extraction.invoice.model.Invoice
 
 open class InvoiceDataExtractor @JvmOverloads constructor(
     protected val amountExtractor: IAmountExtractor = AmountExtractor(),
-    protected val amountCategorizer: AmountCategorizer = AmountCategorizer()
+    protected val amountCategorizer: IAmountCategorizer = AmountCategorizer(),
+    protected val dateExtractor: DateExtractor = DateExtractor()
 ) {
 
 
@@ -20,6 +21,8 @@ open class InvoiceDataExtractor @JvmOverloads constructor(
         val potentialVatRate = amountCategorizer.findValueAddedTaxRate(percentages)
 
         val amounts = amountExtractor.extractAmountsOfMoney(lines)
+
+        val dates = dateExtractor.extractDates(lines)
 
         amountCategorizer.findTotalNetAndVatAmount(amounts)?.let { potentialAmounts ->
             return Invoice(potentialAmounts.totalAmount, potentialAmounts.netAmount, potentialAmounts.valueAddedTax, potentialVatRate)
