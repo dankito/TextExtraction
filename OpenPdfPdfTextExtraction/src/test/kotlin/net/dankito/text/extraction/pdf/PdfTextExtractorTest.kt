@@ -2,7 +2,6 @@ package net.dankito.text.extraction.pdf
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.slf4j.LoggerFactory
 import java.io.File
 
 
