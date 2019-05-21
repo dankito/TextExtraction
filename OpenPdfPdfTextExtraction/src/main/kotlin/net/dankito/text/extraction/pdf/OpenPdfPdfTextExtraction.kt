@@ -16,6 +16,9 @@ class OpenPdfPdfTextExtraction: ITextExtractor {
     }
 
 
+    override val isAvailable = true
+
+
     override fun extractText(file: File): ExtractedText {
         val reader = PdfReader(file.inputStream())
 
