@@ -3,20 +3,21 @@ package net.dankito.text.extraction.pdf
 import java.io.File
 import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.parser.PdfTextExtractor
+import net.dankito.text.extraction.ITextExtractor
 import net.dankito.text.extraction.model.ExtractedText
 import net.dankito.text.extraction.model.Page
 import org.slf4j.LoggerFactory
 
 
-class OpenPdfPdfTextExtraction {
+class OpenPdfPdfTextExtraction: ITextExtractor {
 
     companion object {
         private val log = LoggerFactory.getLogger(OpenPdfPdfTextExtraction::class.java)
     }
 
 
-    fun extractText(pdfFile: File): ExtractedText {
-        val reader = PdfReader(pdfFile.inputStream())
+    override fun extractText(file: File): ExtractedText {
+        val reader = PdfReader(file.inputStream())
 
         val textExtractor = PdfTextExtractor(reader)
 
