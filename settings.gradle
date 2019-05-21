@@ -1,6 +1,6 @@
 include ':TextExtractionCommon'
 
-include ':OpenPdfPdfTextExtraction'
+include ':OpenPdfPdfTextExtractor'
 
 include ':InvoiceDataExtractor'
 

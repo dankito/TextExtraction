@@ -9,10 +9,10 @@ import net.dankito.text.extraction.model.Page
 import org.slf4j.LoggerFactory
 
 
-class OpenPdfPdfTextExtraction: ITextExtractor {
+class OpenPdfPdfTextExtractor: ITextExtractor {
 
     companion object {
-        private val log = LoggerFactory.getLogger(OpenPdfPdfTextExtraction::class.java)
+        private val log = LoggerFactory.getLogger(OpenPdfPdfTextExtractor::class.java)
     }
 
 

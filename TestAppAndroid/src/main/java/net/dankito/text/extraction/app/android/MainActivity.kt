@@ -18,7 +18,7 @@ import android.widget.Toast
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
-import net.dankito.text.extraction.pdf.OpenPdfPdfTextExtraction
+import net.dankito.text.extraction.pdf.OpenPdfPdfTextExtractor
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.util.*
@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun extractTextOfFile(pdfFile: File) {
         try {
-            val pdfTextExtractor = OpenPdfPdfTextExtraction()
+            val pdfTextExtractor = OpenPdfPdfTextExtractor()
 
             val startTime = Date()
             val extractedText = pdfTextExtractor.extractText(pdfFile)
