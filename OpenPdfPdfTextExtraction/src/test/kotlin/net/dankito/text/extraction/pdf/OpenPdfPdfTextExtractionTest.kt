@@ -5,14 +5,14 @@ import org.junit.Test
 import java.io.File
 
 
-class PdfTextExtractorTest {
+class OpenPdfPdfTextExtractionTest {
 
     companion object {
         private val TestPdfFile = File("<insert path to your test pdf here>")
     }
 
 
-    private val underText = PdfTextExtractor()
+    private val underText = OpenPdfPdfTextExtraction()
 
 
     @Test

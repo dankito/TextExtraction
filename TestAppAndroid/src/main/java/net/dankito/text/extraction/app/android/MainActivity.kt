@@ -18,10 +18,11 @@ import android.widget.Toast
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
-import net.dankito.text.extraction.pdf.PdfTextExtractor
+import net.dankito.text.extraction.pdf.OpenPdfPdfTextExtraction
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.util.*
+import kotlin.Exception
 
 class MainActivity : AppCompatActivity() {
 
@@ -96,15 +97,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun extractTextOfFile(pdfFile: File) {
-        val pdfTextExtractor = PdfTextExtractor()
+        try {
+            val pdfTextExtractor = OpenPdfPdfTextExtraction()
 
-        val startTime = Date()
-        val extractedText = pdfTextExtractor.extractText(pdfFile)
-        val timeElapsed = (Date().time - startTime.time) / 1000
+            val startTime = Date()
+            val extractedText = pdfTextExtractor.extractText(pdfFile)
+            val timeElapsed = (Date().time - startTime.time) / 1000
 
-        log.info("Extracting text of file $pdfFile took $timeElapsed seconds")
+            log.info("Extracting text of file $pdfFile took $timeElapsed seconds")
 
-        Toast.makeText(this, "Extracted in $timeElapsed seconds:\n$extractedText", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Extracted in $timeElapsed seconds:\n${extractedText.text}", Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            log.error("Could not extract text of file $pdfFile", e)
+        }
     }
 
 

@@ -8,10 +8,10 @@ import net.dankito.text.extraction.model.Page
 import org.slf4j.LoggerFactory
 
 
-class PdfTextExtractor {
+class OpenPdfPdfTextExtraction {
 
     companion object {
-        private val log = LoggerFactory.getLogger(PdfTextExtractor::class.java)
+        private val log = LoggerFactory.getLogger(OpenPdfPdfTextExtraction::class.java)
     }
 
 
