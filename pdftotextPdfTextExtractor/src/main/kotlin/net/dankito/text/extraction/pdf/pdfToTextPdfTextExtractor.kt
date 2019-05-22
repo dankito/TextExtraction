@@ -22,15 +22,51 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdf
 
     override fun extractText(file: File): ExtractedText {
         if (isAvailable) {
-            val result = ExtractedText()
-
-            // TODO: add .exe to pdftotext / pdftotextExecutablePath on Windows
-            result.addPage(Page(executeCommand(pdftotextExecutablePath, "-layout", file.absolutePath, "-").output))
-
-            return result
+            // to extract all text at once:
+            // result.addPage(Page(executeCommand(pdftotextExecutablePath, "-layout", file.absolutePath, "-").output))
+            return extractTextPageByPage(file)
         }
 
         return ExtractedText() // TODO: add error info to ExtractedText
+    }
+
+    protected open fun extractTextPageByPage(file: File): ExtractedText {
+        val result = ExtractedText()
+
+        generateSequence(1) { it + 1 }.forEach { pageNum ->
+            val pageResult = extractPageText(file, pageNum)
+
+            if (pageResult.successful) {
+                result.addPage(Page(pageResult.output, pageNum))
+            }
+            else { // if pageNum is out of range exitCode 99 gets returned and error message is 'Command Line Error: Wrong page range given: the first page (<count pages>) can not be after the last page (<count pages + 1>).'
+                result.countPages = pageNum - 1
+                return result
+            }
+        }
+
+        return result // should never come to this
+    }
+
+    protected open fun extractPageText(file: File, pageNum: Int): ExecuteCommandResult {
+        /**
+         * pdftotext command line arguments:
+         *  -f <int>: first page to convert
+         *  -l <int>: last page to convert
+         *  -layout: maintain original physical layout
+         *  - (last parameter): print to console instead of to file
+         */
+        // TODO: add .exe to pdftotext / pdftotextExecutablePath on Windows
+        return executeCommand(
+            pdftotextExecutablePath,
+            "-f",
+            pageNum.toString(),
+            "-l",
+            pageNum.toString(),
+            "-layout",
+            file.absolutePath,
+            "-"
+        )
     }
 
 
