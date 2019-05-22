@@ -15,7 +15,7 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdf
 
 
     // TODO: adjust for a) Windows b) if pdftotextExecutablePath is set
-    protected val didFindPdftotextExecutable: Boolean = File(executeCommand("which", pdftotextExecutablePath)).exists()
+    protected val didFindPdftotextExecutable: Boolean = File(executeCommand("which", pdftotextExecutablePath).output).exists()
 
     override val isAvailable = didFindPdftotextExecutable
 
@@ -25,7 +25,7 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdf
             val result = ExtractedText()
 
             // TODO: add .exe to pdftotext / pdftotextExecutablePath on Windows
-            result.addPage(Page(executeCommand(pdftotextExecutablePath, "-layout", file.absolutePath, "-")))
+            result.addPage(Page(executeCommand(pdftotextExecutablePath, "-layout", file.absolutePath, "-").output))
 
             return result
         }
@@ -34,7 +34,7 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdf
     }
 
 
-    protected open fun executeCommand(vararg arguments: String): String {
+    protected open fun executeCommand(vararg arguments: String): ExecuteCommandResult {
         try {
             // TODO: add "/bin/bash" or "cmd.exe" ?
 
@@ -42,21 +42,26 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdf
 
             val process = processBuilder.start()
 
-            val reader = process.inputStream.bufferedReader()
+            val outputReader = process.inputStream.bufferedReader()
 
-            val processOutput = reader.readText().trim()
+            val processOutput = outputReader.readText().trim()
+
+            val errorReader = process.errorStream.bufferedReader()
+
+            val errors = errorReader.readText().trim()
 
             val exitCode = process.waitFor()
             log.info("Command ${arguments.joinToString(" ")} exited with code $exitCode")
 
-            reader.close()
+            outputReader.close()
+            errorReader.close()
 
-            return processOutput
+            return ExecuteCommandResult(exitCode, processOutput, errors)
         } catch (e: Exception) {
             log.error("Could not execute command ${arguments.joinToString(" ")}", e)
-        }
 
-        return "" // TODO: what to return in this case? String?
+            return ExecuteCommandResult(-1, "", e.toString())
+        }
     }
 
 }
