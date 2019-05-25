@@ -1,4 +1,4 @@
-package net.dankito.text.extraction.app.android.views
+package net.dankito.text.extraction.app.android.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment

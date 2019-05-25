@@ -3,7 +3,7 @@ package net.dankito.text.extraction.app.android.adapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import net.dankito.text.extraction.app.android.views.ExtractTextTabFragment
+import net.dankito.text.extraction.app.android.fragment.ExtractTextTabFragment
 
 
 /**
