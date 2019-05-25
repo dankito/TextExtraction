@@ -2,7 +2,6 @@ package net.dankito.text.extraction.app.android
 
 import android.os.Bundle
 import android.os.Environment
-import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -54,11 +53,6 @@ class MainActivity : AppCompatActivity() {
 
         container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
-
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
     }
 
 
