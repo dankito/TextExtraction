@@ -4,15 +4,12 @@ import android.os.Bundle
 import android.os.Environment
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
-import net.dankito.text.extraction.app.android.views.ExtractTextTabFragment
+import net.dankito.text.extraction.app.android.adapter.MainActivityTabsAdapter
 import net.dankito.text.extraction.pdf.OpenPdfPdfTextExtractor
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -33,7 +30,7 @@ class MainActivity : AppCompatActivity() {
      * may be best to switch to a
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
-    private val mSectionsPagerAdapter: SectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
+    private val sectionsPagerAdapter = MainActivityTabsAdapter(supportFragmentManager)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         // Set up the ViewPager with the sections adapter.
-        container.adapter = mSectionsPagerAdapter
+        container.adapter = sectionsPagerAdapter
 
         container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
@@ -101,25 +98,6 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Extracted in $timeElapsed seconds:\n${extractedText.text}", Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
             log.error("Could not extract text of file $pdfFile", e)
-        }
-    }
-
-
-    /**
-     * A [FragmentPagerAdapter] that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-
-        override fun getItem(position: Int): Fragment {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a ExtractTextTabFragment (defined as a static inner class below).
-            return ExtractTextTabFragment.newInstance(position + 1)
-        }
-
-        override fun getCount(): Int {
-            // Show 3 total pages.
-            return 3
         }
     }
 
