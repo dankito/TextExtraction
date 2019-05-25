@@ -1,6 +1,7 @@
 package net.dankito.text.extraction.image
 
 import net.dankito.text.extraction.ITextExtractor
+import net.dankito.text.extraction.image.model.Tesseract4Config
 import net.dankito.text.extraction.model.ExtractedText
 import net.dankito.text.extraction.model.Page
 import org.bytedeco.javacpp.BytePointer
@@ -11,36 +12,28 @@ import org.slf4j.LoggerFactory
 import java.io.File
 
 
-open class Tesseract4ImageTextExtractor : ITextExtractor {
+open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : ITextExtractor {
 
     companion object {
         private val log = LoggerFactory.getLogger(Tesseract4ImageTextExtractor::class.java)
     }
 
 
-    protected val isTesseract4Installed: Boolean
+    override val isAvailable: Boolean
 
-    open val tessdataDirectory = File("tessdata")
+
+    protected val api = TessBaseAPI()
 
 
     init {
-        isTesseract4Installed = determineIsTesseract4Installed()
+        this.isAvailable = initTesseract(api, config)
     }
 
-
-    override val isAvailable = isTesseract4Installed
 
 
     override fun extractText(file: File): ExtractedText {
         if (isAvailable) {
             try {
-                val api = TessBaseAPI()
-
-                if (api.Init(tessdataDirectory.absolutePath, null) != 0) { // TODO: set language
-                    log.error("Could not initialize tesseract.")
-                    api.End()
-                    return ExtractedText() // TODO: add error info to ExtractedText
-                }
 
                 val result = ExtractedText()
 
@@ -69,12 +62,14 @@ open class Tesseract4ImageTextExtractor : ITextExtractor {
     }
 
 
-    protected open fun determineIsTesseract4Installed(): Boolean {
-        val api = TessBaseAPI()
+    protected open fun initTesseract(api: TessBaseAPI, config: Tesseract4Config): Boolean {
+        val languagesString = config.languages?.joinToString("+")
 
-        val isTesseract4Installed = api.Init(tessdataDirectory.absolutePath, null) == 0
+        val isTesseract4Installed = api.Init(config.tessdataDirectory.absolutePath, languagesString) == 0
 
-        api.End()
+        config.pageSegMode?.let { pageSegMode ->
+            api.SetPageSegMode(pageSegMode.mode)
+        }
 
         return isTesseract4Installed
     }
