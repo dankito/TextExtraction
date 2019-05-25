@@ -1,19 +1,14 @@
 package net.dankito.text.extraction.app.android
 
 import android.os.Bundle
-import android.os.Environment
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import net.dankito.text.extraction.app.android.adapter.MainActivityTabsAdapter
-import net.dankito.text.extraction.pdf.OpenPdfPdfTextExtractor
 import net.dankito.utils.android.permissions.PermissionsService
 import org.slf4j.LoggerFactory
-import java.io.File
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -84,25 +79,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun initLogic() {
-        val downloadDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
 
-        extractTextOfFile(File(downloadDirectory, "<place your pdf file here>"))
-    }
-
-    private fun extractTextOfFile(pdfFile: File) {
-        try {
-            val pdfTextExtractor = OpenPdfPdfTextExtractor()
-
-            val startTime = Date()
-            val extractedText = pdfTextExtractor.extractText(pdfFile)
-            val timeElapsed = (Date().time - startTime.time) / 1000
-
-            log.info("Extracting text of file $pdfFile took $timeElapsed seconds")
-
-            Toast.makeText(this, "Extracted in $timeElapsed seconds:\n${extractedText.text}", Toast.LENGTH_LONG).show()
-        } catch (e: Exception) {
-            log.error("Could not extract text of file $pdfFile", e)
-        }
     }
 
 }
