@@ -9,10 +9,11 @@ import org.bytedeco.leptonica.global.lept.pixDestroy
 import org.bytedeco.leptonica.global.lept.pixRead
 import org.bytedeco.tesseract.TessBaseAPI
 import org.slf4j.LoggerFactory
+import java.io.Closeable
 import java.io.File
 
 
-open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : ITextExtractor {
+open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : ITextExtractor, Closeable {
 
     companion object {
         private val log = LoggerFactory.getLogger(Tesseract4ImageTextExtractor::class.java)
@@ -30,6 +31,10 @@ open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : ITextExtract
     }
 
 
+    override fun close() {
+        api.End()
+    }
+
 
     override fun extractText(file: File): ExtractedText {
         if (isAvailable) {
@@ -44,11 +49,13 @@ open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : ITextExtract
                 // Get OCR result
                 val outText: BytePointer? = api.GetUTF8Text()
 
-                outText?.string?.let { result.addPage(Page(it)) }
+                outText?.string?.let {
+                    result.addPage(Page(it))
+
+                    outText.deallocate()
+                }
 
                 // Destroy used object and release memory
-                api.End()
-                outText?.deallocate()
                 pixDestroy(image)
 
                 return result
