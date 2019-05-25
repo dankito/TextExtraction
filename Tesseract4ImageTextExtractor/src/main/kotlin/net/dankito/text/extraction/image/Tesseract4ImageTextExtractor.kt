@@ -40,10 +40,16 @@ open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : ITextExtract
         if (isAvailable) {
             try {
 
-                val result = ExtractedText()
-
                 // Open input image with leptonica library
                 val image = pixRead(file.absolutePath)
+
+                if (image == null) {
+                    return ExtractedText() // image not found / openable / unsupported type
+                }
+
+
+                val result = ExtractedText()
+
                 api.SetImage(image)
 
                 // Get OCR result
