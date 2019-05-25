@@ -5,6 +5,8 @@ ext {
 
     openPdfVersion = '1.2.17'
     
+    tesseract4Version = '4.0.0-1.5'
+    
     slf4jVersion = '1.7.16'
     
     

@@ -3,6 +3,8 @@ include ':TextExtractionCommon'
 include ':pdftotextPdfTextExtractor'
 include ':OpenPdfPdfTextExtractor'
 
+include ':Tesseract4ImageTextExtractor'
+
 include ':InvoiceDataExtractor'
 
 include ':TestAppAndroid'
