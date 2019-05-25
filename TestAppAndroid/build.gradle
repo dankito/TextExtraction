@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "net.dankito.text.extraction.app.android"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -38,6 +38,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
     implementation project(':OpenPdfPdfTextExtractor')
+
+    implementation "net.dankito.filechooserdialog:filechooserdialog-android:$fileChooserVersion"
 
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'

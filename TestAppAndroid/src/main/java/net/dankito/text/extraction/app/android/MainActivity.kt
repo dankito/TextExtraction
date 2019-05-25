@@ -11,6 +11,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import net.dankito.text.extraction.app.android.adapter.MainActivityTabsAdapter
 import net.dankito.text.extraction.pdf.OpenPdfPdfTextExtractor
+import net.dankito.utils.android.permissions.PermissionsService
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.util.*
@@ -31,6 +32,8 @@ class MainActivity : AppCompatActivity() {
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
     private val sectionsPagerAdapter = MainActivityTabsAdapter(supportFragmentManager)
+
+    val permissionsService = PermissionsService(this)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +59,13 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+    }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        permissionsService.onRequestPermissionsResult(requestCode, permissions.map { it }.toTypedArray(), grantResults)
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
 

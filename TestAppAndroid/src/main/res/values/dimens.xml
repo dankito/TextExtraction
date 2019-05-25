@@ -4,4 +4,10 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
+
+    <dimen name="fragment_extract_text_tab_select_file_height">50dp</dimen>
+    <dimen name="fragment_extract_text_tab_select_file_margin_bottom">12dp</dimen>
+    <dimen name="fragment_extract_text_tab_select_file_edit_text_left_right_margin">6dp</dimen>
+    <dimen name="fragment_extract_text_tab_select_file_button_width">80dp</dimen>
+
 </resources>

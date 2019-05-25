@@ -26,6 +26,7 @@ ext {
     
     /*  Android */
     
+    fileChooserVersion = '1.1.5'
     multiDexVersion = '1.0.3'
     
 }
