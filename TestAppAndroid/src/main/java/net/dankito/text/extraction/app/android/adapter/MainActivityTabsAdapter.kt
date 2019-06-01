@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import net.dankito.text.extraction.app.android.fragment.OpenPdfExtractTextTabFragment
+import net.dankito.text.extraction.app.android.fragment.itextExtractTextTabFragment
 
 
 /**
@@ -13,13 +14,14 @@ import net.dankito.text.extraction.app.android.fragment.OpenPdfExtractTextTabFra
 class MainActivityTabsAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
 
     override fun getCount(): Int {
-        return 1
+        return 2
     }
 
 
     override fun getItem(position: Int): Fragment? {
         when (position) {
             0 -> return OpenPdfExtractTextTabFragment()
+            1 -> return itextExtractTextTabFragment()
         }
 
         // should never come to here
