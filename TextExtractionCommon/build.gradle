@@ -11,7 +11,36 @@ compileTestKotlin.kotlinOptions.jvmTarget = "1.6"
 dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     api "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    
+//    api "net.dankito.utils:java-utils:$javaUtilsVersion"
 
     api "org.slf4j:slf4j-api:$slf4jVersion"
+
+
+    testCompile "junit:junit:$junitVersion"
+    testCompile "org.assertj:assertj-core:$assertJVersion"
+
+    testCompile "org.mockito:mockito-core:$mockitoVersion"
+    testCompile "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion" // so that Mockito.any() doesn't return null which null-safe Kotlin parameter don't like
+    // for how to enable mocking final class (which is standard in Kotlin) with Mockito see https://github.com/mockito/mockito/wiki/What's-new-in-Mockito-2#mock-the-unmockable-opt-in-mocking-of-final-classesmethods
+
+    testCompile "ch.qos.logback:logback-classic:$logbackVersion"
     
+}
+
+
+/*      to share test classes and resources with other projects     */
+
+task testsJar(type: Jar, dependsOn: testClasses) {
+    archiveClassifier = 'tests'
+    from sourceSets.test.output
+}
+
+configurations {
+    tests
+}
+
+artifacts {
+    tests testsJar
+    archives testsJar
 }
