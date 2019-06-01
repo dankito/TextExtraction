@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import kotlinx.android.synthetic.main.fragment_extract_text_tab.*
 import kotlinx.android.synthetic.main.fragment_extract_text_tab.view.*
 import net.dankito.filechooserdialog.FileChooserDialog
@@ -45,6 +46,9 @@ abstract class ExtractTextTabFragment : Fragment() {
         rootView.btnSelectFile.setOnClickListener { selectFile() }
 
         rootView.btnExtractSelectedFile.setOnClickListener { extractTextOfFileAndShowResult() }
+
+        // to prevent that keyboard gets displayed on start
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
         return rootView
     }
