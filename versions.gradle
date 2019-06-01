@@ -4,6 +4,7 @@ ext {
 
 
     openPdfVersion = '1.2.12' // last version running on pre-24 Androids (doesn't use java.util.Optional)
+    itextVersion = '7.1.6'
     
     tesseract4Version = '4.0.0-1.5'
     
