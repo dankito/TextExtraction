@@ -50,12 +50,56 @@
             android:text="@string/select_file_button_text"
     />
 
+    <RelativeLayout
+            android:id="@+id/lytExtractionControlBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fragment_extract_text_tab_extraction_control_bar_height"
+            android:layout_below="@+id/txtvwSelectFileLabel"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+    >
+
+        <TextView
+                android:id="@+id/txtvwExtractionTime"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_toLeftOf="@+id/prgbrIsExtractingText"
+                android:layout_toStartOf="@+id/prgbrIsExtractingText"
+                android:layout_marginRight="@dimen/fragment_extract_text_tab_textview_extraction_time_margin_right"
+                android:layout_marginEnd="@dimen/fragment_extract_text_tab_textview_extraction_time_margin_right"
+        />
+
+        <ProgressBar
+                android:id="@+id/prgbrIsExtractingText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@+id/btnExtractSelectedFile"
+                android:layout_toStartOf="@+id/btnExtractSelectedFile"
+                android:layout_marginRight="@dimen/fragment_extract_text_tab_progressbar_is_extracting_text_margin_right"
+                android:layout_marginEnd="@dimen/fragment_extract_text_tab_progressbar_is_extracting_text_margin_right"
+                android:indeterminate="true"
+                android:visibility="gone"
+        />
+
+        <Button
+                android:id="@+id/btnExtractSelectedFile"
+                android:layout_width="@dimen/fragment_extract_text_tab_extract_button_width"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:text="@string/fragment_extract_text_tab_button_extract_selected_file_label"
+                android:enabled="false"
+        />
+
+    </RelativeLayout>
+
     <TextView
             android:id="@+id/txtvwExtractedText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_below="@+id/txtvwSelectFileLabel"
+            android:layout_below="@+id/lytExtractionControlBar"
             android:layout_marginTop="@dimen/fragment_extract_text_tab_select_file_margin_bottom"
             android:scrollbars="vertical"
     />

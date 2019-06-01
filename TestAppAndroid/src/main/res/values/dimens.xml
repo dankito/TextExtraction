@@ -4,9 +4,13 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
 
-    <dimen name="fragment_extract_text_tab_select_file_height">50dp</dimen>
+    <dimen name="fragment_extract_text_tab_select_file_height">45dp</dimen>
     <dimen name="fragment_extract_text_tab_select_file_margin_bottom">12dp</dimen>
     <dimen name="fragment_extract_text_tab_select_file_edit_text_left_right_margin">6dp</dimen>
-    <dimen name="fragment_extract_text_tab_select_file_button_width">80dp</dimen>
+    <dimen name="fragment_extract_text_tab_select_file_button_width">75dp</dimen>
+    <dimen name="fragment_extract_text_tab_extraction_control_bar_height">45dp</dimen>
+    <dimen name="fragment_extract_text_tab_textview_extraction_time_margin_right">6dp</dimen>
+    <dimen name="fragment_extract_text_tab_progressbar_is_extracting_text_margin_right">6dp</dimen>
+    <dimen name="fragment_extract_text_tab_extract_button_width">120dp</dimen>
 
 </resources>

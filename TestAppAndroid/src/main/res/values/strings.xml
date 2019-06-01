@@ -8,5 +8,6 @@
     <string name="select_file_button_text">…</string>
 
     <string name="fragment_extract_text_tab_select_file_label">File:</string>
+    <string name="fragment_extract_text_tab_button_extract_selected_file_label">Extract</string>
 
 </resources>

@@ -1,7 +1,10 @@
 package net.dankito.text.extraction.app.android.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.Editable
+import android.text.TextWatcher
 import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
@@ -39,7 +42,11 @@ abstract class ExtractTextTabFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_extract_text_tab, container, false)
 
+        rootView.edtxtSelectedFile.addTextChangedListener(edtxtSelectedFileTextWatch)
+
         rootView.btnSelectFile.setOnClickListener { selectFile() }
+
+        rootView.btnExtractSelectedFile.setOnClickListener { extractTextOfFileAndShowResult() }
 
         rootView.txtvwExtractedText.movementMethod = ScrollingMovementMethod() // to make TextView scrollable
 
@@ -71,18 +78,38 @@ abstract class ExtractTextTabFragment : Fragment() {
 
 
     protected open fun selectedFile(file: File) {
-        lastSelectedFile = file
         edtxtSelectedFile.setText(file.absolutePath)
 
-        extractTextOfFileAsync(file) { extractedText ->
-            activity?.runOnUiThread {
-                showExtractedTextOnUiThread(extractedText)
-            }
+        existingFileSelected(file)
+    }
 
+    protected open fun existingFileSelected(file: File) {
+        lastSelectedFile = file
+
+        btnExtractSelectedFile.isEnabled = true
+    }
+
+
+    protected open fun extractTextOfFileAndShowResult() {
+        lastSelectedFile?.let { file ->
+            val startTime = Date().time
+            prgbrIsExtractingText.visibility = View.VISIBLE
+
+            extractTextOfFileAsync(file) { extractedText ->
+                val durationMillis = Date().time - startTime
+
+                activity?.runOnUiThread {
+                    showExtractedTextOnUiThread(extractedText, durationMillis)
+                }
+            }
         }
     }
 
-    protected open fun showExtractedTextOnUiThread(extractedText: ExtractedText?) {
+    protected open fun showExtractedTextOnUiThread(extractedText: ExtractedText?, durationMillis: Long) {
+        prgbrIsExtractingText.visibility = View.GONE
+        txtvwExtractionTime.text = String.format("%02d:%02d.%03d min", durationMillis / (60 * 1000),
+            (durationMillis / 1000) % 60, durationMillis % 1000)
+
         extractedText?.let {
             txtvwExtractedText.text = extractedText.text
         }
@@ -125,6 +152,33 @@ abstract class ExtractTextTabFragment : Fragment() {
         this.textExtractorField = newTextExtractor
 
         return newTextExtractor
+    }
+
+
+    protected val edtxtSelectedFileTextWatch = object : TextWatcher {
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+        override fun onTextChanged(string: CharSequence?, start: Int, before: Int, count: Int) {
+            string?.toString().let { enteredText ->
+                try {
+                    val file = File(enteredText)
+
+                    if (file.exists()) {
+                        existingFileSelected(file)
+                    }
+                    else {
+                        btnExtractSelectedFile.isEnabled = false
+                    }
+                } catch (e: Exception) {
+                    log.warn("Could not convert '$string' to a File object", e)
+                }
+            }
+
+        }
+
+        override fun afterTextChanged(s: Editable?) { }
+
     }
 
 }
