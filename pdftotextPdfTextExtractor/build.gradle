@@ -12,6 +12,8 @@ dependencies {
     api project(':TextExtractionCommon')
 
 
+    testApi project(path: ':TextExtractionCommon', configuration: 'tests')
+
     testCompile "junit:junit:$junitVersion"
     testCompile "org.assertj:assertj-core:$assertJVersion"
 
