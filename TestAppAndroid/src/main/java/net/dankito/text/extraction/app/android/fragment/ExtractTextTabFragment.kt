@@ -1,11 +1,9 @@
 package net.dankito.text.extraction.app.android.fragment
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
-import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,8 +45,6 @@ abstract class ExtractTextTabFragment : Fragment() {
         rootView.btnSelectFile.setOnClickListener { selectFile() }
 
         rootView.btnExtractSelectedFile.setOnClickListener { extractTextOfFileAndShowResult() }
-
-        rootView.txtvwExtractedText.movementMethod = ScrollingMovementMethod() // to make TextView scrollable
 
         return rootView
     }

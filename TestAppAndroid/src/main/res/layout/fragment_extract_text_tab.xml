@@ -94,14 +94,20 @@
 
     </RelativeLayout>
 
-    <TextView
-            android:id="@+id/txtvwExtractedText"
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/lytExtractionControlBar"
             android:layout_marginTop="@dimen/fragment_extract_text_tab_select_file_margin_bottom"
-            android:scrollbars="vertical"
-    />
+    >
+
+        <TextView
+                android:id="@+id/txtvwExtractedText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+        />
+
+    </ScrollView>
 
 </RelativeLayout>
