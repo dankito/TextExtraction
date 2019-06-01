@@ -12,7 +12,7 @@ dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     api "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     
-//    api "net.dankito.utils:java-utils:$javaUtilsVersion"
+    api "net.dankito.utils:java-utils:$javaUtilsVersion"
 
     api "org.slf4j:slf4j-api:$slf4jVersion"
 

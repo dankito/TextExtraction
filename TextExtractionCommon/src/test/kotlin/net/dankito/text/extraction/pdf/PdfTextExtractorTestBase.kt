@@ -2,6 +2,8 @@ package net.dankito.text.extraction.pdf
 
 import net.dankito.text.extraction.ITextExtractor
 import net.dankito.text.extraction.model.Page
+import net.dankito.utils.io.FileUtils
+import net.dankito.utils.resources.ResourceFilesExtractor
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.io.File
@@ -20,6 +22,10 @@ abstract class PdfTextExtractorTestBase {
 
 
     protected val underTest = createExtractor()
+
+    protected val fileUtils = FileUtils()
+
+    protected val resourceFilesExtractor = ResourceFilesExtractor()
 
 
     @Test
@@ -81,7 +87,18 @@ abstract class PdfTextExtractorTestBase {
     protected open fun getTestFile(filename: String): File {
         val fileUrl = PdfTextExtractorTestBase::class.java.classLoader.getResource(File(TestPdfFilesFolderName, filename).path)
 
-        return File(fileUrl.toURI())
+        if ("jar" == fileUrl.protocol) { // if running from jar file
+            val tempFolder = fileUtils.getTempDir() // extract test pdfs to temp folder
+
+            resourceFilesExtractor.extractAllFilesFromFolder(
+                PdfTextExtractorTestBase::class.java,
+                File(TestPdfFilesFolderName), tempFolder
+            )
+
+            return File(tempFolder, filename)
+        } else {
+            return File(fileUrl.toURI())
+        }
     }
 
 }
