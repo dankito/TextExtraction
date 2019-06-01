@@ -28,4 +28,6 @@ allprojects {
         jcenter()
         google()
     }
+
+    task allDeps(type: DependencyReportTask) {} // to have a simple way to print all dependencies to console
 }
