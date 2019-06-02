@@ -10,3 +10,5 @@ include ':InvoiceDataExtractor'
 
 include ':TestAppAndroid'
 
+include ':TestAppJavaFX'
+

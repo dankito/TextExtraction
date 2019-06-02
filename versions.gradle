@@ -1,5 +1,8 @@
 ext {
 
+    appVersionName = '1.0.0'
+    
+
     kotlinVersion = '1.3.31'
 
 
@@ -31,5 +34,10 @@ ext {
     
     fileChooserVersion = '1.1.5'
     multiDexVersion = '1.0.3'
+    
+    
+    /*  JavaFX  */
+
+    javaFxUtilsVersion = '2.0.0-SNAPSHOT'
     
 }
