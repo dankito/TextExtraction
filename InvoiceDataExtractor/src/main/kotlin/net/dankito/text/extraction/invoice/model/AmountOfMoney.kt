@@ -1,7 +1,8 @@
 package net.dankito.text.extraction.invoice.model
 
 
-class AmountOfMoney(val amount: Double, val currency: String, val amountWithCurrency: String, val foundInLine: String) {
+class AmountOfMoney(val amount: Double, val currency: String, val amountWithCurrency: String, foundInLine: String) :
+    SearchResult(foundInLine) {
 
 
     override fun equals(other: Any?): Boolean {

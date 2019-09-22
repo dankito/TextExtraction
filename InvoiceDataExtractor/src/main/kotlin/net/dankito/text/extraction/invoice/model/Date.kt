@@ -4,7 +4,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 
-open class Date(val day: Int, val month: Int, val year: Int, val dateString: String, val foundInLine: String) {
+open class Date(val day: Int, val month: Int, val year: Int, val dateString: String, foundInLine: String) :
+    SearchResult(foundInLine) {
 
     companion object {
         val DateFormatter = SimpleDateFormat("dd.MM.yyyy")
