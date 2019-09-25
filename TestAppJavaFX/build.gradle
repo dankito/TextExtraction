@@ -20,6 +20,7 @@ dependencies {
     compile project(':TextExtractionCommon')
     compile project(':OpenPdfPdfTextExtractor')
     compile project(':itextPdfTextExtractor')
+    compile project(':pdftotextPdfTextExtractor')
 
     compile "net.dankito.utils:java-fx-utils:$javaFxUtilsVersion"
 
