@@ -3,6 +3,8 @@ package net.dankito.text.extraction.app.javafx.window.main.controls
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 import javafx.scene.layout.Priority
 import javafx.stage.FileChooser
 import net.dankito.text.extraction.ITextExtractor
@@ -57,6 +59,8 @@ abstract class ExtractTextTabBase(protected val threadPool: IThreadPool) : View(
 
             textfield(lastSelectedFilePath) {
                 useMaxHeight = true
+
+                setOnKeyReleased { keyReleased(it) }
 
                 hboxConstraints {
                     hGrow = Priority.ALWAYS
@@ -125,6 +129,14 @@ abstract class ExtractTextTabBase(protected val threadPool: IThreadPool) : View(
             }
         } catch (e: Exception) {
             logger.warn("Could not convert '$enteredFilePath' to a File object", e)
+        }
+    }
+
+    private fun keyReleased(event: KeyEvent) {
+        if (event.code == KeyCode.ENTER) {
+            if (isExistingFileSelected.value) {
+                lastSelectedFile?.let { selectedFile(it) }
+            }
         }
     }
 
