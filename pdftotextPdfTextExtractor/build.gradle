@@ -9,10 +9,10 @@ compileTestKotlin.kotlinOptions.jvmTarget = "1.6"
 
 
 dependencies {
-    api project(':TextExtractionCommon')
+    api project(':TextExtractorCommon')
 
 
-    testApi project(path: ':TextExtractionCommon', configuration: 'tests')
+    testApi project(path: ':TextExtractorCommon', configuration: 'tests')
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.assertj:assertj-core:$assertJVersion"

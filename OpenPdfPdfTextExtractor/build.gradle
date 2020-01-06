@@ -10,12 +10,12 @@ compileTestKotlin.kotlinOptions.jvmTarget = "1.8"
 
 
 dependencies {
-    api project(':TextExtractionCommon')
+    api project(':TextExtractorCommon')
 
     implementation "com.github.librepdf:openpdf:$openPdfVersion"
 
 
-    testCompile project(path: ':TextExtractionCommon', configuration: 'tests')
+    testCompile project(path: ':TextExtractorCommon', configuration: 'tests')
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.assertj:assertj-core:$assertJVersion"
