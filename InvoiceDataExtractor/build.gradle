@@ -9,7 +9,7 @@ compileTestKotlin.kotlinOptions.jvmTarget = "1.6"
 
 
 dependencies {
-    api project(':TextExtractionCommon')
+    api "net.dankito.utils:java-utils:$javaUtilsVersion"
 
 
     testCompile "junit:junit:$junitVersion"
