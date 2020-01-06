@@ -1,5 +1,6 @@
-package net.dankito.text.extraction.invoice
+package net.dankito.text.extraction.invoice.bank
 
+import net.dankito.text.extraction.invoice.ExtractorBase
 import net.dankito.text.extraction.invoice.model.StringSearchResult
 import java.util.regex.Pattern
 
