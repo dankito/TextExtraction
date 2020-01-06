@@ -18,6 +18,8 @@ class OpenPdfPdfTextExtractor: ITextExtractor {
 
     override val isAvailable = true
 
+    override val textExtractionQuality = 70
+
     override fun canExtractDataFromFile(file: File): Boolean {
         return "pdf" == file.extension.toLowerCase()
     }

@@ -24,6 +24,8 @@ open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : ITextExtract
 
     override val isAvailable: Boolean
 
+    override val textExtractionQuality = 50
+
     override fun canExtractDataFromFile(file: File): Boolean {
         return SupportedFileTypes.contains(file.extension.toLowerCase())
     }
