@@ -6,6 +6,8 @@ include ':itextPdfTextExtractor'
 
 include ':Tesseract4ImageTextExtractor'
 
+include ':TextExtractorRegistry'
+
 include ':TextInfoExtractor'
 
 include ':TestAppAndroid'
