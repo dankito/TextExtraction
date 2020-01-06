@@ -6,7 +6,7 @@ include ':itextPdfTextExtractor'
 
 include ':Tesseract4ImageTextExtractor'
 
-include ':InvoiceDataExtractor'
+include ':TextInfoExtractor'
 
 include ':TestAppAndroid'
 
