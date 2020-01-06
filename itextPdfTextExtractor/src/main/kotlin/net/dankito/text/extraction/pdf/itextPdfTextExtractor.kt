@@ -19,6 +19,10 @@ class itextPdfTextExtractor: ITextExtractor {
 
     override val isAvailable = true // TODO: is this true for all Android versions?
 
+    override fun canExtractDataFromFile(file: File): Boolean {
+        return "pdf" == file.extension.toLowerCase()
+    }
+
 
     override fun extractText(file: File): ExtractedText {
         val reader = PdfReader(file.inputStream())

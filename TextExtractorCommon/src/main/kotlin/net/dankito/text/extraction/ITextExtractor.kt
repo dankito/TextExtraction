@@ -8,6 +8,8 @@ interface ITextExtractor {
 
     val isAvailable: Boolean
 
+    fun canExtractDataFromFile(file: File): Boolean
+
     fun extractText(file: File): ExtractedText
 
 }

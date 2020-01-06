@@ -1,12 +1,12 @@
 package net.dankito.text.extraction.pdf
 
-import java.io.File
 import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.parser.PdfTextExtractor
 import net.dankito.text.extraction.ITextExtractor
 import net.dankito.text.extraction.model.ExtractedText
 import net.dankito.text.extraction.model.Page
 import org.slf4j.LoggerFactory
+import java.io.File
 
 
 class OpenPdfPdfTextExtractor: ITextExtractor {
@@ -17,6 +17,10 @@ class OpenPdfPdfTextExtractor: ITextExtractor {
 
 
     override val isAvailable = true
+
+    override fun canExtractDataFromFile(file: File): Boolean {
+        return "pdf" == file.extension.toLowerCase()
+    }
 
 
     override fun extractText(file: File): ExtractedText {

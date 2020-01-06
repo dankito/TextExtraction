@@ -1,10 +1,10 @@
 package net.dankito.text.extraction.pdf
 
 import net.dankito.text.extraction.ITextExtractor
-import java.io.File
 import net.dankito.text.extraction.model.ExtractedText
 import net.dankito.text.extraction.model.Page
 import org.slf4j.LoggerFactory
+import java.io.File
 
 
 open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdftotextExecutablePath: String = "pdftotext") : ITextExtractor {
@@ -15,9 +15,14 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdf
 
 
     // TODO: adjust for a) Windows b) if pdftotextExecutablePath is set
-    protected val didFindPdftotextExecutable: Boolean = File(executeCommand("which", pdftotextExecutablePath).output).exists()
+    protected val didFindPdftotextExecutable: Boolean =
+        File(executeCommand("which", pdftotextExecutablePath).output).exists()
 
     override val isAvailable = didFindPdftotextExecutable
+
+    override fun canExtractDataFromFile(file: File): Boolean {
+        return "pdf" == file.extension.toLowerCase()
+    }
 
 
     override fun extractText(file: File): ExtractedText {
