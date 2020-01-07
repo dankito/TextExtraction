@@ -15,18 +15,18 @@ open class InvoiceDataExtractor @JvmOverloads constructor(
     protected val dateExtractor: DateExtractor = DateExtractor(),
     protected val ibanExtractor: IIbanExtractor = IbanExtractor(),
     protected val bicExtractor: IBicExtractor = BicExtractor()
-) : ExtractorBase() {
+) : ExtractorBase(), IInvoiceDataExtractor {
 
     companion object {
         private val log = LoggerFactory.getLogger(InvoiceDataExtractor::class.java)
     }
 
 
-    open fun extractInvoiceData(text: String): InvoiceData {
+    override fun extractInvoiceData(text: String): InvoiceData {
         return extractInvoiceData(getLines(text))
     }
 
-    open fun extractInvoiceData(lines: List<String>): InvoiceData {
+    override fun extractInvoiceData(lines: List<String>): InvoiceData {
         try {
             val percentages = amountExtractor.extractPercentages(lines)
 
