@@ -9,7 +9,7 @@ import java.util.regex.Pattern
 
 
 open class AmountExtractor(protected val currencySymbolPatternString: String = "\\p{Sc}|EUR",
-                           protected val decimalNumberPatternString: String = "(\\d+|\\d{1,3}([\\,\\.]\\d{3})+)([\\,\\.]\\d{1,2})?"
+                           protected val decimalNumberPatternString: String = "(?:\\d+|\\d{1,3}(?:[\\,\\.]\\d{3})+)(?:[\\,\\.]\\d{1,2})?"
 ) : IAmountExtractor {
 
     companion object {
