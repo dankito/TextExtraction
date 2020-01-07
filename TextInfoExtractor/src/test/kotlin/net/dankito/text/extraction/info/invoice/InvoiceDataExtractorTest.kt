@@ -25,8 +25,8 @@ class InvoiceDataExtractorTest {
             assertThat(result.totalAmount.amount).isEqualTo(15.0)
             assertThat(result.totalAmount.currency).isEqualTo("€")
 
-            assertThat(result.netAmout?.amount).isEqualTo(12.61)
-            assertThat(result.netAmout?.currency).isEqualTo("€")
+            assertThat(result.netAmount?.amount).isEqualTo(12.61)
+            assertThat(result.netAmount?.currency).isEqualTo("€")
 
             assertThat(result.valueAddedTax?.amount).isEqualTo(2.39)
             assertThat(result.valueAddedTax?.currency).isEqualTo("€")
@@ -50,8 +50,8 @@ class InvoiceDataExtractorTest {
             assertThat(result.totalAmount.amount).isEqualTo(6.99)
             assertThat(result.totalAmount.currency).isEqualTo("EUR")
 
-            assertThat(result.netAmout?.amount).isEqualTo(5.87)
-            assertThat(result.netAmout?.currency).isEqualTo("EUR")
+            assertThat(result.netAmount?.amount).isEqualTo(5.87)
+            assertThat(result.netAmount?.currency).isEqualTo("EUR")
 
             assertThat(result.valueAddedTax?.amount).isEqualTo(1.12)
             assertThat(result.valueAddedTax?.currency).isEqualTo("EUR")
@@ -78,8 +78,8 @@ class InvoiceDataExtractorTest {
             assertThat(result.totalAmount.amount).isEqualTo(12974.20)
             assertThat(result.totalAmount.currency).isEqualTo("€")
 
-            assertThat(result.netAmout?.amount).isEqualTo(10903.20)
-            assertThat(result.netAmout?.currency).isEqualTo("€")
+            assertThat(result.netAmount?.amount).isEqualTo(10903.20)
+            assertThat(result.netAmount?.currency).isEqualTo("€")
 
             assertThat(result.valueAddedTax?.amount).isEqualTo(2071.00)
             assertThat(result.valueAddedTax?.currency).isEqualTo("€")

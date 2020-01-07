@@ -1,7 +1,7 @@
 package net.dankito.text.extraction.info.invoice
 
 import net.dankito.text.extraction.info.*
-import net.dankito.text.extraction.info.model.Invoice
+import net.dankito.text.extraction.info.model.InvoiceData
 
 
 open class InvoiceDataExtractor @JvmOverloads constructor(
@@ -11,11 +11,11 @@ open class InvoiceDataExtractor @JvmOverloads constructor(
 ) {
 
 
-    open fun extractInvoiceData(text: String): Invoice? {
+    open fun extractInvoiceData(text: String): InvoiceData? {
         return extractInvoiceData(text.split("\n"))
     }
 
-    open fun extractInvoiceData(lines: List<String>): Invoice? {
+    open fun extractInvoiceData(lines: List<String>): InvoiceData? {
 
         val percentages = amountExtractor.extractPercentages(lines)
 
@@ -26,7 +26,7 @@ open class InvoiceDataExtractor @JvmOverloads constructor(
         val dates = dateExtractor.extractDates(lines)
 
         amountCategorizer.findTotalNetAndVatAmount(amounts)?.let { potentialAmounts ->
-            return Invoice(potentialAmounts.totalAmount, potentialAmounts.netAmount, potentialAmounts.valueAddedTax, potentialVatRate)
+            return InvoiceData(potentialAmounts.totalAmount, potentialAmounts.netAmount, potentialAmounts.valueAddedTax, potentialVatRate)
         }
 
         return null
