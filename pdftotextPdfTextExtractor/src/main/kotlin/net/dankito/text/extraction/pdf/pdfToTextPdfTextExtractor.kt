@@ -94,7 +94,7 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdf
             val errors = errorReader.readText().trim()
 
             val exitCode = process.waitFor()
-            log.info("Command ${arguments.joinToString(" ")} exited with code $exitCode")
+            log.debug("Command ${arguments.joinToString(" ")} exited with code $exitCode")
 
             outputReader.close()
             errorReader.close()
