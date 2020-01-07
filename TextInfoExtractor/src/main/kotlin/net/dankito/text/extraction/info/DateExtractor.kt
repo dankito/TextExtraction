@@ -1,6 +1,6 @@
 package net.dankito.text.extraction.info
 
-import net.dankito.text.extraction.info.model.Date
+import net.dankito.text.extraction.info.model.DateData
 import net.dankito.text.extraction.info.model.DatePartsPosition
 import org.slf4j.LoggerFactory
 import java.util.regex.Matcher
@@ -35,11 +35,11 @@ open class DateExtractor : IDateExtractor {
     }
 
 
-    override fun extractDates(text: String): List<Date> {
+    override fun extractDates(text: String): List<DateData> {
         return extractDates(text.split("\n"))
     }
 
-    override fun extractDates(lines: List<String>): List<Date> {
+    override fun extractDates(lines: List<String>): List<DateData> {
 
         val dayMonthYearDates = findDateStrings(lines, DayMonthYearPattern, DayMonthYearDatePartsPosition)
 
@@ -69,7 +69,7 @@ open class DateExtractor : IDateExtractor {
         return listOf()
     }
 
-    protected open fun findDateStrings(lines: List<String>, pattern: Pattern, datePartsPosition: DatePartsPosition): List<Date> {
+    protected open fun findDateStrings(lines: List<String>, pattern: Pattern, datePartsPosition: DatePartsPosition): List<DateData> {
         val matchers = lines.associateBy( { it } , { pattern.matcher(it) } )
 
         val matches = matchers.filter { it.value.find() }
@@ -90,22 +90,22 @@ open class DateExtractor : IDateExtractor {
         return matches
     }
 
-    protected open fun mapStringsToDates(dateStrings: Map<String, List<String>>, datePartsPosition: DatePartsPosition): List<Date> {
+    protected open fun mapStringsToDates(dateStrings: Map<String, List<String>>, datePartsPosition: DatePartsPosition): List<DateData> {
         return dateStrings.map { mapStringsToDates(it.key, it.value, datePartsPosition) }.flatten()
     }
 
-    protected open fun mapStringsToDates(line: String, dateStrings: List<String>, datePartsPosition: DatePartsPosition): List<Date> {
+    protected open fun mapStringsToDates(line: String, dateStrings: List<String>, datePartsPosition: DatePartsPosition): List<DateData> {
         return dateStrings.mapNotNull { mapStringToDate(line, it, datePartsPosition) }
     }
 
-    protected open fun mapStringToDate(line: String, dateString: String, datePartsPosition: DatePartsPosition): Date? {
+    protected open fun mapStringToDate(line: String, dateString: String, datePartsPosition: DatePartsPosition): DateData? {
         try {
             val dateStringWithNormalizedSeparator = dateString.replace(".", " ").replace("/", " ").replace("-", " ")
 
             val dateParts = dateStringWithNormalizedSeparator.split(" ")
 
             if (dateParts.size == 3) {
-                return Date(dateParts[datePartsPosition.dayPosition - 1].toInt(),
+                return DateData(dateParts[datePartsPosition.dayPosition - 1].toInt(),
                     dateParts[datePartsPosition.monthPosition - 1].toInt(),
                     dateParts[datePartsPosition.yearPosition - 1].toInt(),
                     dateString,

@@ -1,6 +1,6 @@
 package net.dankito.text.extraction.info
 
-import net.dankito.text.extraction.info.model.Date
+import net.dankito.text.extraction.info.model.DateData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
@@ -8,11 +8,11 @@ class DateExtractorTest {
 
     companion object {
 
-        val ExpectedResult = Date(27, 3, 1988, "", "")
+        val ExpectedResult = DateData(27, 3, 1988, "", "")
 
-        val ExpectedResultShortYear = Date(27, 3, 88, "", "")
+        val ExpectedResultShortYear = DateData(27, 3, 88, "", "")
 
-        val ExpectedResultShortDay = Date(7, 3, 1988, "", "")
+        val ExpectedResultShortDay = DateData(7, 3, 1988, "", "")
 
     }
 
@@ -251,7 +251,7 @@ class DateExtractorTest {
         assertThat(result).hasSize(1)
 
         // TODO: this cannot be distingued from 'dd.M.yyyy'
-        assertThat(result.get(0)).isEqualTo(Date(3, 7, 1988, "", ""))
+        assertThat(result.get(0)).isEqualTo(DateData(3, 7, 1988, "", ""))
     }
 
     @Test
@@ -301,7 +301,7 @@ class DateExtractorTest {
         assertThat(result).hasSize(1)
 
         // TODO: this cannot be distingued from 'dd-M-yyyy'
-        assertThat(result.get(0)).isEqualTo(Date(3, 7, 1988, "", ""))
+        assertThat(result.get(0)).isEqualTo(DateData(3, 7, 1988, "", ""))
     }
 
     @Test
@@ -351,7 +351,7 @@ class DateExtractorTest {
         assertThat(result).hasSize(1)
 
         // TODO: this cannot be distingued from 'dd/M/yyyy'
-        assertThat(result.get(0)).isEqualTo(Date(3, 7, 1988, "", ""))
+        assertThat(result.get(0)).isEqualTo(DateData(3, 7, 1988, "", ""))
     }
 
     @Test
@@ -401,7 +401,7 @@ class DateExtractorTest {
         assertThat(result).hasSize(1)
 
         // TODO: this cannot be distingued from 'dd M yyyy'
-        assertThat(result.get(0)).isEqualTo(Date(3, 7, 1988, "", ""))
+        assertThat(result.get(0)).isEqualTo(DateData(3, 7, 1988, "", ""))
     }
 
     @Test
