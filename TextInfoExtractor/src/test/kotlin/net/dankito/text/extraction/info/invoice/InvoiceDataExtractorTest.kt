@@ -1,4 +1,4 @@
-package net.dankito.text.extraction.info
+package net.dankito.text.extraction.info.invoice
 
 import net.dankito.text.extraction.info.util.TestInvoices
 import org.assertj.core.api.Assertions.assertThat

@@ -1,5 +1,6 @@
-package net.dankito.text.extraction.info
+package net.dankito.text.extraction.info.invoice
 
+import net.dankito.text.extraction.info.*
 import net.dankito.text.extraction.info.model.Invoice
 
 
