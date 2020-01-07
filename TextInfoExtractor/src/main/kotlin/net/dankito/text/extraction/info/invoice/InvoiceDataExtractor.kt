@@ -41,10 +41,10 @@ open class InvoiceDataExtractor @JvmOverloads constructor(
             val bics = bicExtractor.extractBics(lines)
 
             amountCategorizer.findTotalNetAndVatAmount(amounts)?.let { potentialAmounts ->
-                return InvoiceData(amounts, dates, ibans, bics, potentialAmounts.totalAmount, potentialAmounts.netAmount, potentialAmounts.valueAddedTax, potentialVatRate)
+                return InvoiceData(amounts, percentages, dates, ibans, bics, potentialAmounts.totalAmount, potentialAmounts.netAmount, potentialAmounts.valueAddedTax, potentialVatRate)
             }
 
-            return InvoiceData(amounts, dates, ibans, bics)
+            return InvoiceData(amounts, percentages, dates, ibans, bics)
         } catch (e: Exception) {
             log.error("Could not extract invoice data from:${lines.map { System.lineSeparator() + it }}", e)
 
