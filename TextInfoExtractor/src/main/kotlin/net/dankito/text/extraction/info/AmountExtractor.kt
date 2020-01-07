@@ -63,7 +63,7 @@ open class AmountExtractor(protected val currencySymbolPatternString: String = "
 
         val decimalNumberBeforeCurrencySymbolMatcher = createPatternForDecimalNumberBeforeCurrencySymbol(
             decimalNumberPatternString, currencySymbol
-        ).matcher(relevantLinePart.substring(0, matcherWithCurrencySymbol.end()))
+        ).matcher(relevantLinePart.substring(0, matcherWithCurrencySymbol.end() - lineSubstringStart))
 
         if (decimalNumberBeforeCurrencySymbolMatcher.find()) {
             return extractAmountOfMoney(decimalNumberBeforeCurrencySymbolMatcher, line, currencySymbol)
@@ -72,7 +72,7 @@ open class AmountExtractor(protected val currencySymbolPatternString: String = "
 
         val decimalNumberAfterCurrencySymbolMatcher = createPatternForDecimalNumberAfterCurrencySymbol(
             decimalNumberPatternString, currencySymbol
-        ).matcher(relevantLinePart.substring(matcherWithCurrencySymbol.start()))
+        ).matcher(relevantLinePart.substring(matcherWithCurrencySymbol.start() - lineSubstringStart))
 
         if (decimalNumberAfterCurrencySymbolMatcher.find()) {
             return extractAmountOfMoney(decimalNumberAfterCurrencySymbolMatcher, line, currencySymbol)
