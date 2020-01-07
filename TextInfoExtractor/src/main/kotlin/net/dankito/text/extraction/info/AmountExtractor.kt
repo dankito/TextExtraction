@@ -64,8 +64,12 @@ open class AmountExtractor(
         val amounts = mutableListOf<AmountOfMoney>()
 
         while (matcherWithCurrencySymbol.find()) {
-            extractAmountOfMoney(matcherWithCurrencySymbol, line, lineSubstringStart)?.let {
-                amounts.add(it)
+            try {
+                extractAmountOfMoney(matcherWithCurrencySymbol, line, lineSubstringStart)?.let {
+                    amounts.add(it)
+                }
+            } catch (e: Exception) {
+                log.error("Could not extract amount from line '$line'", e)
             }
 
             lineSubstringStart = matcherWithCurrencySymbol.end()
