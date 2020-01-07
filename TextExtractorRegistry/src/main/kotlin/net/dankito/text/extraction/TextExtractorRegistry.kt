@@ -3,7 +3,7 @@ package net.dankito.text.extraction
 import java.io.File
 
 
-open class TextExtractorRegistry(extractors: List<ITextExtractor>) : ITextExtractorRegistry {
+open class TextExtractorRegistry @JvmOverloads constructor(extractors: List<ITextExtractor> = listOf()) : ITextExtractorRegistry {
 
     protected val availableExtractors: MutableList<ITextExtractor> = ArrayList(extractors)
 
