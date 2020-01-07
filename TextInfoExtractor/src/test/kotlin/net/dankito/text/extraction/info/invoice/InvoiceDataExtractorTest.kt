@@ -25,6 +25,10 @@ class InvoiceDataExtractorTest {
 
         assertThat(result.dates).extracting("dateString").containsOnly("02.05.2019", "13.05.2019")
 
+        assertThat(result.ibans).isEmpty()
+
+        assertThat(result.bics).isEmpty()
+
         assertThat(result.potentialTotalAmount?.amount).isEqualTo(15.0)
         assertThat(result.potentialTotalAmount?.currency).isEqualTo("€")
 
@@ -51,6 +55,10 @@ class InvoiceDataExtractorTest {
         assertThat(result.allAmounts).extracting("amount").containsOnly(6.99, 1.12, 5.87)
 
         assertThat(result.dates).extracting("dateString").containsOnly("20.03.2019", "26.03.2019", "20.12.2018", "19.12.2019", "19.09.2019", "20.04.2019", "21.03.2019")
+
+        assertThat(result.ibans).isEmpty()
+
+        assertThat(result.bics).isEmpty()
 
         assertThat(result.potentialTotalAmount?.amount).isEqualTo(6.99)
         assertThat(result.potentialTotalAmount?.currency).isEqualTo("EUR")
@@ -81,6 +89,10 @@ class InvoiceDataExtractorTest {
         assertThat(result.allAmounts).extracting("amount").containsOnly(80.0, 10903.2, 2071.0, 12974.2)
 
         assertThat(result.dates).extracting("dateString").containsOnly("31.01.2020")
+
+        assertThat(result.ibans).extracting("hit").containsOnly("DE11876543211234567890")
+
+        assertThat(result.bics).extracting("hit").containsOnly("ABCDDEBBXXX")
 
         assertThat(result.potentialTotalAmount?.amount).isEqualTo(12974.20)
         assertThat(result.potentialTotalAmount?.currency).isEqualTo("€")
