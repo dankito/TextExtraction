@@ -165,13 +165,17 @@ open class AmountExtractor(
     protected open fun createPatternForDecimalNumberBeforeCurrencySymbol(decimalNumberPatternString: String,
                                                                          currencySymbol: String): Pattern {
 
-        return Pattern.compile(decimalNumberPatternString + "\\s*" + currencySymbol, Pattern.CASE_INSENSITIVE)
+        return Pattern.compile(decimalNumberPatternString + "\\s*" + getCurrencySymbolPattern(currencySymbol), Pattern.CASE_INSENSITIVE)
     }
 
     protected open fun createPatternForDecimalNumberAfterCurrencySymbol(decimalNumberPatternString: String,
                                                                          currencySymbol: String): Pattern {
 
-        return Pattern.compile(currencySymbol + "\\s*" + decimalNumberPatternString, Pattern.CASE_INSENSITIVE)
+        return Pattern.compile(getCurrencySymbolPattern(currencySymbol) + "\\s*" + decimalNumberPatternString, Pattern.CASE_INSENSITIVE)
+    }
+
+    private fun getCurrencySymbolPattern(currencySymbol: String): String {
+        return currencySymbol.replace("$", "\\$") // the dollar sign is a reserved RegEx character and therefore has to be masked
     }
 
     protected open fun getPercentageSymbol(): String {
