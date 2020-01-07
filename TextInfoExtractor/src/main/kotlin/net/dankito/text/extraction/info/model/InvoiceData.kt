@@ -4,6 +4,7 @@ package net.dankito.text.extraction.info.model
 // TODO: may move to package invoice
 open class InvoiceData(
     val allAmounts: List<AmountOfMoney>,
+    val dates: List<DateData>,
     val potentialTotalAmount: AmountOfMoney? = null,
     val potentialNetAmount: AmountOfMoney? = null,
     val potentialValueAddedTax: AmountOfMoney? = null,
@@ -13,7 +14,7 @@ open class InvoiceData(
 
     companion object {
         fun couldNotExtractInvoiceData(error: Exception?): InvoiceData {
-            return InvoiceData(listOf(), null, null, null, null, error)
+            return InvoiceData(listOf(), listOf(), null, null, null, null, error)
         }
     }
 

@@ -14,19 +14,19 @@ open class DateExtractor : IDateExtractor {
         const val Month = "(1[012]|0?[1-9])"
         const val Year = "(19|20)?\\d\\d"
         const val Separator = "[./ -]"
-        const val Boundary = "(\\b|\\D)"
+        const val Boundary = "\\b"
 
-        // = "(\\b|\\D)([012][0-9]|3[01]|[1-9])[- /.](1[012]|0?[1-9])[- /.](19|20)?\\d\\d(\\b|\\D)"
+        // = "\\b([012][0-9]|3[01]|[1-9])[- /.](1[012]|0?[1-9])[- /.](19|20)?\\d\\d\\b"
         const val DayMonthYearPatternString = "$Boundary$Day$Separator$Month$Separator$Year$Boundary"
         val DayMonthYearPattern = Pattern.compile(DayMonthYearPatternString)
         val DayMonthYearDatePartsPosition = DatePartsPosition(1, 2, 3)
 
-        // = "(\\b|\\D)(1[012]|0?[1-9])[- /.]([012][0-9]|3[01]|[1-9])[- /.](19|20)?\\d\\d(\\b|\\D)"
+        // = "\\b(1[012]|0?[1-9])[- /.]([012][0-9]|3[01]|[1-9])[- /.](19|20)?\\d\\d\\b"
         const val MonthDayYearPatternString = "$Boundary$Month$Separator$Day$Separator$Year$Boundary"
         val MonthDayYearPattern = Pattern.compile(MonthDayYearPatternString)
         val MonthDayYearDatePartsPosition = DatePartsPosition(2, 1, 3)
 
-        // = "(\\b|\\D)(19|20)?\\d\\d[- /.](1[012]|0?[1-9])[- /.]([012][0-9]|3[01]|[1-9])(\\b|\\D)"
+        // = "\\b(19|20)?\\d\\d[- /.](1[012]|0?[1-9])[- /.]([012][0-9]|3[01]|[1-9])\\b"
         const val YearMonthDayPatternString = "$Boundary$Year$Separator$Month$Separator$Day$Boundary"
         val YearMonthDayPattern = Pattern.compile(YearMonthDayPatternString)
         val YearMonthDayDatePartsPosition = DatePartsPosition(3, 2, 1)
