@@ -19,21 +19,19 @@ class InvoiceDataExtractorTest {
 
 
         // then
-        assertThat(result).isNotNull
+        assertThat(result.error).isNull()
 
-        result?.let {
-            assertThat(result.totalAmount.amount).isEqualTo(15.0)
-            assertThat(result.totalAmount.currency).isEqualTo("€")
+        assertThat(result.totalAmount.amount).isEqualTo(15.0)
+        assertThat(result.totalAmount.currency).isEqualTo("€")
 
-            assertThat(result.netAmount?.amount).isEqualTo(12.61)
-            assertThat(result.netAmount?.currency).isEqualTo("€")
+        assertThat(result.netAmount?.amount).isEqualTo(12.61)
+        assertThat(result.netAmount?.currency).isEqualTo("€")
 
-            assertThat(result.valueAddedTax?.amount).isEqualTo(2.39)
-            assertThat(result.valueAddedTax?.currency).isEqualTo("€")
+        assertThat(result.valueAddedTax?.amount).isEqualTo(2.39)
+        assertThat(result.valueAddedTax?.currency).isEqualTo("€")
 
-            assertThat(result.valueAddedTaxRate?.amount).isEqualTo(19.0)
-            assertThat(result.valueAddedTaxRate?.currency).isEqualTo("%")
-        }
+        assertThat(result.valueAddedTaxRate?.amount).isEqualTo(19.0)
+        assertThat(result.valueAddedTaxRate?.currency).isEqualTo("%")
     }
 
     @Test
@@ -44,21 +42,19 @@ class InvoiceDataExtractorTest {
 
 
         // then
-        assertThat(result).isNotNull
+        assertThat(result.error).isNull()
 
-        result?.let {
-            assertThat(result.totalAmount.amount).isEqualTo(6.99)
-            assertThat(result.totalAmount.currency).isEqualTo("EUR")
+        assertThat(result.totalAmount.amount).isEqualTo(6.99)
+        assertThat(result.totalAmount.currency).isEqualTo("EUR")
 
-            assertThat(result.netAmount?.amount).isEqualTo(5.87)
-            assertThat(result.netAmount?.currency).isEqualTo("EUR")
+        assertThat(result.netAmount?.amount).isEqualTo(5.87)
+        assertThat(result.netAmount?.currency).isEqualTo("EUR")
 
-            assertThat(result.valueAddedTax?.amount).isEqualTo(1.12)
-            assertThat(result.valueAddedTax?.currency).isEqualTo("EUR")
+        assertThat(result.valueAddedTax?.amount).isEqualTo(1.12)
+        assertThat(result.valueAddedTax?.currency).isEqualTo("EUR")
 
-            assertThat(result.valueAddedTaxRate?.amount).isEqualTo(19.0)
-            assertThat(result.valueAddedTaxRate?.currency).isEqualTo("%")
-        }
+        assertThat(result.valueAddedTaxRate?.amount).isEqualTo(19.0)
+        assertThat(result.valueAddedTaxRate?.currency).isEqualTo("%")
     }
 
     @Test
@@ -72,22 +68,21 @@ class InvoiceDataExtractorTest {
 
 
         // then
-        assertThat(result).isNotNull
+        assertThat(result.error).isNull()
 
-        result?.let {
-            assertThat(result.totalAmount.amount).isEqualTo(12974.20)
-            assertThat(result.totalAmount.currency).isEqualTo("€")
+        assertThat(result.totalAmount.amount).isEqualTo(12974.20)
+        assertThat(result.totalAmount.currency).isEqualTo("€")
 
-            assertThat(result.netAmount?.amount).isEqualTo(10903.20)
-            assertThat(result.netAmount?.currency).isEqualTo("€")
+        assertThat(result.netAmount?.amount).isEqualTo(10903.20)
+        assertThat(result.netAmount?.currency).isEqualTo("€")
 
-            assertThat(result.valueAddedTax?.amount).isEqualTo(2071.00)
-            assertThat(result.valueAddedTax?.currency).isEqualTo("€")
+        assertThat(result.valueAddedTax?.amount).isEqualTo(2071.00)
+        assertThat(result.valueAddedTax?.currency).isEqualTo("€")
 
-            assertThat(result.valueAddedTaxRate?.amount).isEqualTo(19.0)
-            assertThat(result.valueAddedTaxRate?.currency).isEqualTo("%")
-        }
+        assertThat(result.valueAddedTaxRate?.amount).isEqualTo(19.0)
+        assertThat(result.valueAddedTaxRate?.currency).isEqualTo("%")
     }
+
 
     private fun readFileFromResource(filename: String): String {
         val inputStream = InvoiceDataExtractorTest::class.java.classLoader.getResourceAsStream("test_data/" + filename)
