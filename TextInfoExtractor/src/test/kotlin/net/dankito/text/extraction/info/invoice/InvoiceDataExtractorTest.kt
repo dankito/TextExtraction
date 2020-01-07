@@ -21,17 +21,19 @@ class InvoiceDataExtractorTest {
         // then
         assertThat(result.error).isNull()
 
-        assertThat(result.totalAmount.amount).isEqualTo(15.0)
-        assertThat(result.totalAmount.currency).isEqualTo("€")
+        assertThat(result.allAmounts).extracting("amount").containsOnly(2.1, 12.61, 2.39, 15.0)
 
-        assertThat(result.netAmount?.amount).isEqualTo(12.61)
-        assertThat(result.netAmount?.currency).isEqualTo("€")
+        assertThat(result.potentialTotalAmount?.amount).isEqualTo(15.0)
+        assertThat(result.potentialTotalAmount?.currency).isEqualTo("€")
 
-        assertThat(result.valueAddedTax?.amount).isEqualTo(2.39)
-        assertThat(result.valueAddedTax?.currency).isEqualTo("€")
+        assertThat(result.potentialNetAmount?.amount).isEqualTo(12.61)
+        assertThat(result.potentialNetAmount?.currency).isEqualTo("€")
 
-        assertThat(result.valueAddedTaxRate?.amount).isEqualTo(19.0)
-        assertThat(result.valueAddedTaxRate?.currency).isEqualTo("%")
+        assertThat(result.potentialValueAddedTax?.amount).isEqualTo(2.39)
+        assertThat(result.potentialValueAddedTax?.currency).isEqualTo("€")
+
+        assertThat(result.potentialValueAddedTaxRate?.amount).isEqualTo(19.0)
+        assertThat(result.potentialValueAddedTaxRate?.currency).isEqualTo("%")
     }
 
     @Test
@@ -44,17 +46,19 @@ class InvoiceDataExtractorTest {
         // then
         assertThat(result.error).isNull()
 
-        assertThat(result.totalAmount.amount).isEqualTo(6.99)
-        assertThat(result.totalAmount.currency).isEqualTo("EUR")
+        assertThat(result.allAmounts).extracting("amount").containsOnly(6.99, 1.12, 5.87)
 
-        assertThat(result.netAmount?.amount).isEqualTo(5.87)
-        assertThat(result.netAmount?.currency).isEqualTo("EUR")
+        assertThat(result.potentialTotalAmount?.amount).isEqualTo(6.99)
+        assertThat(result.potentialTotalAmount?.currency).isEqualTo("EUR")
 
-        assertThat(result.valueAddedTax?.amount).isEqualTo(1.12)
-        assertThat(result.valueAddedTax?.currency).isEqualTo("EUR")
+        assertThat(result.potentialNetAmount?.amount).isEqualTo(5.87)
+        assertThat(result.potentialNetAmount?.currency).isEqualTo("EUR")
 
-        assertThat(result.valueAddedTaxRate?.amount).isEqualTo(19.0)
-        assertThat(result.valueAddedTaxRate?.currency).isEqualTo("%")
+        assertThat(result.potentialValueAddedTax?.amount).isEqualTo(1.12)
+        assertThat(result.potentialValueAddedTax?.currency).isEqualTo("EUR")
+
+        assertThat(result.potentialValueAddedTaxRate?.amount).isEqualTo(19.0)
+        assertThat(result.potentialValueAddedTaxRate?.currency).isEqualTo("%")
     }
 
     @Test
@@ -70,17 +74,19 @@ class InvoiceDataExtractorTest {
         // then
         assertThat(result.error).isNull()
 
-        assertThat(result.totalAmount.amount).isEqualTo(12974.20)
-        assertThat(result.totalAmount.currency).isEqualTo("€")
+        assertThat(result.allAmounts).extracting("amount").containsOnly(80.0, 10903.2, 2071.0, 12974.2)
 
-        assertThat(result.netAmount?.amount).isEqualTo(10903.20)
-        assertThat(result.netAmount?.currency).isEqualTo("€")
+        assertThat(result.potentialTotalAmount?.amount).isEqualTo(12974.20)
+        assertThat(result.potentialTotalAmount?.currency).isEqualTo("€")
 
-        assertThat(result.valueAddedTax?.amount).isEqualTo(2071.00)
-        assertThat(result.valueAddedTax?.currency).isEqualTo("€")
+        assertThat(result.potentialNetAmount?.amount).isEqualTo(10903.20)
+        assertThat(result.potentialNetAmount?.currency).isEqualTo("€")
 
-        assertThat(result.valueAddedTaxRate?.amount).isEqualTo(19.0)
-        assertThat(result.valueAddedTaxRate?.currency).isEqualTo("%")
+        assertThat(result.potentialValueAddedTax?.amount).isEqualTo(2071.00)
+        assertThat(result.potentialValueAddedTax?.currency).isEqualTo("€")
+
+        assertThat(result.potentialValueAddedTaxRate?.amount).isEqualTo(19.0)
+        assertThat(result.potentialValueAddedTaxRate?.currency).isEqualTo("%")
     }
 
 

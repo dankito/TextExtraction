@@ -31,10 +31,10 @@ open class InvoiceDataExtractor @JvmOverloads constructor(
             val dates = dateExtractor.extractDates(lines)
 
             amountCategorizer.findTotalNetAndVatAmount(amounts)?.let { potentialAmounts ->
-                return InvoiceData(potentialAmounts.totalAmount, potentialAmounts.netAmount, potentialAmounts.valueAddedTax, potentialVatRate)
+                return InvoiceData(amounts, potentialAmounts.totalAmount, potentialAmounts.netAmount, potentialAmounts.valueAddedTax, potentialVatRate)
             }
 
-            return InvoiceData.couldNotExtractInvoiceData(null) // will be fixed soon
+            return InvoiceData(amounts)
         } catch (e: Exception) {
             log.error("Could not extract invoice data from:${lines.map { System.lineSeparator() + it }}", e)
 
