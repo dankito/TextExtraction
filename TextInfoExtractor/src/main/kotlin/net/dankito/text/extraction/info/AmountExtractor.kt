@@ -15,10 +15,10 @@ open class AmountExtractor(protected val currencySymbolPatternString: String = "
     companion object {
         val UserNumberFormat = NumberFormat.getNumberInstance()
 
-        // most languages have the English number format with a dot as decimal separator
+        // US and UK English uses a dot as decimal separator and a comma as group (thousand) separator
         val NumberFormatWithDotAsDecimalSeparator = NumberFormat.getNumberInstance(Locale.ENGLISH)
 
-        // German uses comma as decimal separator
+        // German uses comma as decimal separator and a dot as group (thousand) separator
         val NumberFormatWithCommaAsDecimalSeparator = NumberFormat.getNumberInstance(Locale.GERMAN)
 
 
