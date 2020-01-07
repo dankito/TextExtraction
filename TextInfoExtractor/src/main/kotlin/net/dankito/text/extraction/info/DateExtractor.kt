@@ -10,16 +10,24 @@ import java.util.regex.Pattern
 open class DateExtractor : IDateExtractor {
 
     companion object {
+        const val Day = "([012][0-9]|3[01]|[1-9])"
+        const val Month = "(1[012]|0?[1-9])"
+        const val Year = "(19|20)?\\d\\d"
+        const val Separator = "[./ -]"
+        const val Boundary = "(\\b|\\D)"
 
-        const val DayMonthYearPatternString = "(\\b|\\D)([012][0-9]|3[01]|[1-9])[- /.](1[012]|0?[1-9])[- /.](19|20)?\\d\\d(\\b|\\D)"
+        // = "(\\b|\\D)([012][0-9]|3[01]|[1-9])[- /.](1[012]|0?[1-9])[- /.](19|20)?\\d\\d(\\b|\\D)"
+        const val DayMonthYearPatternString = "$Boundary$Day$Separator$Month$Separator$Year$Boundary"
         val DayMonthYearPattern = Pattern.compile(DayMonthYearPatternString)
         val DayMonthYearDatePartsPosition = DatePartsPosition(1, 2, 3)
 
-        const val MonthDayYearPatternString = "(\\b|\\D)(1[012]|0?[1-9])[- /.]([012][0-9]|3[01]|[1-9])[- /.](19|20)?\\d\\d(\\b|\\D)"
+        // = "(\\b|\\D)(1[012]|0?[1-9])[- /.]([012][0-9]|3[01]|[1-9])[- /.](19|20)?\\d\\d(\\b|\\D)"
+        const val MonthDayYearPatternString = "$Boundary$Month$Separator$Day$Separator$Year$Boundary"
         val MonthDayYearPattern = Pattern.compile(MonthDayYearPatternString)
         val MonthDayYearDatePartsPosition = DatePartsPosition(2, 1, 3)
 
-        const val YearMonthDayPatternString = "(\\b|\\D)(19|20)?\\d\\d[- /.](1[012]|0?[1-9])[- /.]([012][0-9]|3[01]|[1-9])(\\b|\\D)"
+        // = "(\\b|\\D)(19|20)?\\d\\d[- /.](1[012]|0?[1-9])[- /.]([012][0-9]|3[01]|[1-9])(\\b|\\D)"
+        const val YearMonthDayPatternString = "$Boundary$Year$Separator$Month$Separator$Day$Boundary"
         val YearMonthDayPattern = Pattern.compile(YearMonthDayPatternString)
         val YearMonthDayDatePartsPosition = DatePartsPosition(3, 2, 1)
 
