@@ -2,6 +2,7 @@ package net.dankito.text.extraction.info
 
 import net.dankito.text.extraction.info.util.TestInvoices
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Assert
 import org.junit.Test
 
 
@@ -11,7 +12,7 @@ class InvoiceDataExtractorTest {
 
 
     @Test
-    fun extractGermanWebHostingInvoiceData() {
+    fun extractInvoiceData_GermanWebHostingInvoice() {
 
         // when
         val result = underTest.extractInvoiceData(TestInvoices.GermanWebHostingInvoice)
@@ -36,7 +37,7 @@ class InvoiceDataExtractorTest {
     }
 
     @Test
-    fun extractGermanMobilePhoneInvoiceData_CurrencySymbolEUR() {
+    fun extractInvoiceData_GermanMobilePhoneInvoice_CurrencySymbolEUR() {
 
         // when
         val result = underTest.extractInvoiceData(TestInvoices.GermanMobilePhoneInvoice)
@@ -58,6 +59,44 @@ class InvoiceDataExtractorTest {
             assertThat(result.valueAddedTaxRate?.amount).isEqualTo(19.0)
             assertThat(result.valueAddedTaxRate?.currency).isEqualTo("%")
         }
+    }
+
+    @Test
+    fun extractInvoiceData_GermanBackendDevelopmentInvoice() {
+
+        // given
+        val invoiceText = readFileFromResource("Invoice Backend Development German.txt")
+
+        // when
+        val result = underTest.extractInvoiceData(invoiceText)
+
+
+        // then
+        assertThat(result).isNotNull
+
+        result?.let {
+            assertThat(result.totalAmount.amount).isEqualTo(12974.20)
+            assertThat(result.totalAmount.currency).isEqualTo("€")
+
+            assertThat(result.netAmout?.amount).isEqualTo(10903.20)
+            assertThat(result.netAmout?.currency).isEqualTo("€")
+
+            assertThat(result.valueAddedTax?.amount).isEqualTo(2071.00)
+            assertThat(result.valueAddedTax?.currency).isEqualTo("€")
+
+            assertThat(result.valueAddedTaxRate?.amount).isEqualTo(19.0)
+            assertThat(result.valueAddedTaxRate?.currency).isEqualTo("%")
+        }
+    }
+
+    private fun readFileFromResource(filename: String): String {
+        val inputStream = InvoiceDataExtractorTest::class.java.classLoader.getResourceAsStream("test_data/" + filename)
+
+        if (inputStream == null) {
+            Assert.fail("Could not find file test_data/$filename in resources folder")
+        }
+
+        return inputStream.bufferedReader().readText()
     }
 
 }
