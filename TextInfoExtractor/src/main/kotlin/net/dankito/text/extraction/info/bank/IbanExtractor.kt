@@ -15,7 +15,7 @@ open class IbanExtractor : ExtractorBase(), IIbanExtractor {
          * - Basic Bank Account Number (BBAN) – up to 30 alphanumeric characters that are country-specific.
          * (https://en.wikipedia.org/wiki/International_Bank_Account_Number#Structure)
          */
-        const val IbanPatternString = "[A-Z]{2}\\d{2}[A-Z0-9]{10,30}"
+        const val IbanPatternString = "\\b[A-Z]{2}\\d{2}[A-Z0-9]{10,30}\\b"
         val IbanPattern = Pattern.compile(IbanPatternString)
 
         /**
@@ -23,7 +23,7 @@ open class IbanExtractor : ExtractorBase(), IIbanExtractor {
          * of four characters separated by a single space, the last group being of variable length as shown in the example below
          * (https://en.wikipedia.org/wiki/International_Bank_Account_Number#Structure)
          */
-        const val IbanWithSpacesPatternString = "[A-Z]{2}\\d{2}\\s([A-Z0-9]{4}\\s){3}[A-Z0-9\\s]{1,18}"
+        const val IbanWithSpacesPatternString = "\\b[A-Z]{2}\\d{2}\\s([A-Z0-9]{4}\\s){3}[A-Z0-9\\s]{1,18}\\b"
         val IbanWithSpacesPattern = Pattern.compile(IbanWithSpacesPatternString)
     }
 
