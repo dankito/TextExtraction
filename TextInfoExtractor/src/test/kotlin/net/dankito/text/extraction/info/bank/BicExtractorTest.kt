@@ -33,6 +33,47 @@ class BicExtractorTest {
 
 
     @Test
+    fun `Not a BIC - less than 8 characters`() {
+
+        // when
+        val result = underTest.extractBics("DEUTDEB")
+
+        // then
+        assertThat(result).isEmpty()
+    }
+
+    @Test
+    fun `Not a BIC - 9 characters`() {
+
+        // when
+        val result = underTest.extractBics("DEUTDEBBC")
+
+        // then
+        assertThat(result).isEmpty()
+    }
+
+    @Test
+    fun `Not a BIC - 10 characters`() {
+
+        // when
+        val result = underTest.extractBics("DEUTDEBBCD")
+
+        // then
+        assertThat(result).isEmpty()
+    }
+
+    @Test
+    fun `Not a BIC - more than 11 characters`() {
+
+        // when
+        val result = underTest.extractBics("DEUTDEBBXXXY")
+
+        // then
+        assertThat(result).isEmpty()
+    }
+
+
+    @Test
     fun `Not a BIC - lower case letter in 1st place`() {
 
         // when

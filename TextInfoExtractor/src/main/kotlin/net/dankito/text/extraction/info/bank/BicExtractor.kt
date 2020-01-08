@@ -19,7 +19,7 @@ open class BicExtractor : ExtractorBase(), IBicExtractor {
          * - 3 letters or digits: branch code, optional ('XXX' for primary office)
          * Where an eight digit code is given, it may be assumed that it refers to the primary office.
          */
-        const val BicPatternString = "\\b[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}[A-Z0-9]{0,3}\\b"
+        const val BicPatternString = "\\b[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}(?:\\b|[A-Z0-9]{03}\\b)"
         val BicPattern = Pattern.compile(BicPatternString)
     }
 
