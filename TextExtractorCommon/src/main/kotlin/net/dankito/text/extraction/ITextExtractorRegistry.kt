@@ -5,6 +5,8 @@ import java.io.File
 
 interface ITextExtractorRegistry {
 
-    fun findBestExtractor(file: File): ITextExtractor?
+    fun getAllExtractorsForFile(file: File): List<ITextExtractor>
+
+    fun findBestExtractorForFile(file: File): ITextExtractor?
 
 }

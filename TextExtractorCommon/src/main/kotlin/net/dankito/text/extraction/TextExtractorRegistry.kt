@@ -11,9 +11,21 @@ open class TextExtractorRegistry @JvmOverloads constructor(extractors: List<ITex
         get() = ArrayList(availableExtractors)
 
 
-    override fun findBestExtractor(file: File): ITextExtractor? {
-        return extractors.sortedByDescending { it.textExtractionQuality }
-            .firstOrNull { it.isAvailable && it.canExtractDataFromFile(file) }
+    override fun getAllExtractorsForFile(file: File): List<ITextExtractor> {
+        return extractors
+            .sortedByDescending { it.textExtractionQuality }
+            .filter { canExtractDataFromFile(it, file) }
+    }
+
+    override fun findBestExtractorForFile(file: File): ITextExtractor? {
+        return extractors
+            .sortedByDescending { it.textExtractionQuality }
+            .firstOrNull { canExtractDataFromFile(it, file) }
+    }
+
+
+    protected open fun canExtractDataFromFile(extractor: ITextExtractor, file: File): Boolean {
+        return extractor.isAvailable && extractor.canExtractDataFromFile(file)
     }
 
 
