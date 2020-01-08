@@ -1,6 +1,7 @@
 package net.dankito.text.extraction.info
 
 import net.dankito.text.extraction.info.model.AmountOfMoney
+import net.dankito.utils.extensions.countOccurrences
 import org.slf4j.LoggerFactory
 import java.text.NumberFormat
 import java.util.*
@@ -146,19 +147,65 @@ open class AmountExtractor(
 
 
     protected open fun extractNumber(numberString: String): Number? {
-        try {
-            return UserNumberFormat.parse(numberString)
-        } catch (ignored: Exception) { }
+        val tryDotAsDecimalSeparatorFirst = tryDotAsDecimalSeparatorFirst(numberString)
 
         try {
-            return NumberFormatWithDotAsDecimalSeparator.parse(numberString)
+            if (tryDotAsDecimalSeparatorFirst) {
+                return NumberFormatWithDotAsDecimalSeparator.parse(numberString)
+            }
         } catch (ignored: Exception) { }
 
         try {
             return NumberFormatWithCommaAsDecimalSeparator.parse(numberString)
         } catch (ignored: Exception) { }
 
+        try {
+            if (tryDotAsDecimalSeparatorFirst == false) {
+                return NumberFormatWithDotAsDecimalSeparator.parse(numberString)
+            }
+        } catch (ignored: Exception) { }
+
+        try {
+            return UserNumberFormat.parse(numberString)
+        } catch (ignored: Exception) { }
+
         return null
+    }
+
+    protected open fun tryDotAsDecimalSeparatorFirst(numberString: String): Boolean {
+        val lastIndexOfDot = numberString.lastIndexOf('.')
+        val lastIndexOfComma = numberString.lastIndexOf(',')
+
+        if (lastIndexOfDot >= 0 && isMostLikelyThousandsSeparator('.', lastIndexOfDot, numberString)) {
+            return false
+        }
+
+        if (lastIndexOfComma >= 0 && isMostLikelyThousandsSeparator(',', lastIndexOfComma, numberString)) {
+            return true
+        }
+
+        return lastIndexOfDot > lastIndexOfComma
+    }
+
+    protected open fun isMostLikelyThousandsSeparator(separator: Char, separatorIndex: Int, numberString: String): Boolean {
+
+        // if separator occurs more than once than it's a thousands and not the decimal separator
+        if (numberString.countOccurrences(separator) > 1) {
+            return true
+        }
+
+        // if there are three digits after the separator than it's most likely the thousands separator. Only in rare cases amounts of money and percentages have three decimal places
+        for (i in separatorIndex + 1 until separatorIndex + 4) {
+            if (i >= numberString.length) {
+                return false
+            }
+
+            if (numberString[i].isDigit() == false) {
+                return false
+            }
+        }
+
+        return true
     }
 
 
