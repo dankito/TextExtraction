@@ -3,7 +3,7 @@ ext {
     appVersionName = '1.0.0'
     
 
-    kotlinVersion = '1.3.31'
+    kotlinVersion = '1.3.61'
 
 
     openPdfVersion = '1.2.12' // last version running on pre-24 Androids (doesn't use java.util.Optional)
