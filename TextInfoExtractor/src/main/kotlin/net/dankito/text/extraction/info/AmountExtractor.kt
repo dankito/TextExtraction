@@ -187,20 +187,40 @@ open class AmountExtractor(
         return lastIndexOfDot > lastIndexOfComma
     }
 
-    protected open fun isMostLikelyThousandsSeparator(separator: Char, separatorIndex: Int, numberString: String): Boolean {
-
+    protected open fun isThousandsSeparator(separator: Char, numberString: String): Boolean {
         // if separator occurs more than once than it's a thousands and not the decimal separator
-        if (numberString.countOccurrences(separator) > 1) {
+        return numberString.countOccurrences(separator) > 1
+    }
+
+    protected open fun isMostLikelyThousandsSeparator(separator: Char, separatorIndex: Int, numberString: String): Boolean {
+        if (isThousandsSeparator(separator, numberString)) {
             return true
         }
 
         // if there are three digits after the separator than it's most likely the thousands separator. Only in rare cases amounts of money and percentages have three decimal places
+        if (areThereExactlyThreeDigitsAfterSeparator(separatorIndex, numberString)) {
+            return true
+        }
+
+        return false
+    }
+
+    protected open fun areThereExactlyThreeDigitsAfterSeparator(separatorIndex: Int, numberString: String): Boolean {
+        // check if the next three characters are a digit
         for (i in separatorIndex + 1 until separatorIndex + 4) {
             if (i >= numberString.length) {
                 return false
             }
 
             if (numberString[i].isDigit() == false) {
+                return false
+            }
+        }
+
+        // TODO: RegEx pattern currently supports only two digits after decimal separator -> this below will never be the case
+        // check if the fourth character of separator is a digit -> if so than digit are decimal places and not grouped thousands (= a group of three digits)
+        if (separatorIndex + 4 < numberString.length) {
+            if (numberString[separatorIndex + 4].isDigit()) {
                 return false
             }
         }
