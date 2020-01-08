@@ -2,8 +2,8 @@ package net.dankito.text.extraction.info.invoice
 
 import net.dankito.text.extraction.info.util.TestInvoices
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 
 
 class InvoiceDataExtractorTest {
@@ -118,7 +118,7 @@ class InvoiceDataExtractorTest {
         val inputStream = InvoiceDataExtractorTest::class.java.classLoader.getResourceAsStream("test_data/" + filename)
 
         if (inputStream == null) {
-            Assert.fail("Could not find file test_data/$filename in resources folder")
+            Assertions.fail<Any>("Could not find file test_data/$filename in resources folder")
         }
 
         return inputStream.bufferedReader().readText()

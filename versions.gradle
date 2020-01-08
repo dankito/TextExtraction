@@ -19,7 +19,9 @@ ext {
     /*  Test    */    
     
     junitVersion = '4.12'
-    assertJVersion = '3.11.1'
+    junit5Version = '5.5.2'
+
+    assertJVersion = '3.14.0'
 
     mockitoVersion = '2.22.0'
     mockitoKotlinVersion = '1.6.0'

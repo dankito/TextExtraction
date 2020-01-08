@@ -2,7 +2,7 @@ package net.dankito.text.extraction.info
 
 import net.dankito.text.extraction.info.model.AmountOfMoney
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 
 class AmountExtractorTest {
