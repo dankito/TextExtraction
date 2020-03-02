@@ -13,7 +13,7 @@ ext {
     
     slf4jVersion = '1.7.16'
     
-    javaUtilsVersion = '1.0.10-SNAPSHOT'
+    javaUtilsVersion = '1.0.10'
     
     
     /*  Test    */    
@@ -40,6 +40,6 @@ ext {
     
     /*  JavaFX  */
 
-    javaFxUtilsVersion = '2.0.0-SNAPSHOT'
+    javaFxUtilsVersion = '1.0.4'
     
 }
