@@ -13,6 +13,9 @@ dependencies {
     api project(':TextExtractorCommon')
 
     implementation "com.github.librepdf:openpdf:$openPdfVersion"
+    // optional dependencies of OpenPdf but needed for some PDFs
+    implementation "org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion"
+    implementation "org.bouncycastle:bcpkix-jdk15on:$bouncyCastleVersion"
 
 
     testCompile project(path: ':TextExtractorCommon', configuration: 'tests')
