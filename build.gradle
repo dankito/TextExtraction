@@ -32,22 +32,24 @@ allprojects {
     task allDeps(type: DependencyReportTask) {} // to have a simple way to print all dependencies to console
 
 
-    apply plugin: 'maven'
-    apply plugin: 'signing'
+    if (it.name.startsWith("TestApp") == false) {
+        apply plugin: 'maven'
 
-    signing {
-        required { gradle.taskGraph.hasTask("uploadArchives") }
-        sign configurations.archives
-    }
+        apply plugin: 'signing'
 
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+        signing {
+            required { gradle.taskGraph.hasTask("uploadArchives") }
+            sign configurations.archives
+        }
 
-                repository url: repositories.mavenLocal().url
+        uploadArchives {
+            repositories {
+                mavenDeployer {
+                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-                // set ossrhUsername and ossrhPassword in your gradle.properties (in ~/.gradle/gradle.properties or project's gradle.properties)
+                    repository url: repositories.mavenLocal().url
+
+                    // set ossrhUsername and ossrhPassword in your gradle.properties (in ~/.gradle/gradle.properties or project's gradle.properties)
 //            if (ossrhUsername != null && ossrhPassword != null) {
 //                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
 //                    authentication(userName: ossrhUsername, password: ossrhPassword)
@@ -58,29 +60,30 @@ allprojects {
 //                }
 //            }
 
-                pom.project {
-                    packaging 'jar'
-                    description "Framework for extracting text from different file types like PDF, images, office files, ..."
-                    url 'https://github.com/dankito/TextExtraction'
-
-                    scm {
-                        connection 'scm:git:git://github.com/dankito/TextExtraction.git'
-                        developerConnection 'scm:git:git@github.com/dankito/TextExtraction.git'
+                    pom.project {
+                        packaging 'jar'
+                        description "Framework for extracting text from different file types like PDF, images, office files, ..."
                         url 'https://github.com/dankito/TextExtraction'
-                    }
 
-                    licenses {
-                        license {
-                            name 'The Apache License, Version 2.0'
-                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        scm {
+                            connection 'scm:git:git://github.com/dankito/TextExtraction.git'
+                            developerConnection 'scm:git:git@github.com/dankito/TextExtraction.git'
+                            url 'https://github.com/dankito/TextExtraction'
                         }
-                    }
 
-                    developers {
-                        developer {
-                            id 'dankito'
-                            name 'Christian Dankl'
-                            email 'maven@dankito.net'
+                        licenses {
+                            license {
+                                name 'The Apache License, Version 2.0'
+                                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            }
+                        }
+
+                        developers {
+                            developer {
+                                id 'dankito'
+                                name 'Christian Dankl'
+                                email 'maven@dankito.net'
+                            }
                         }
                     }
                 }
