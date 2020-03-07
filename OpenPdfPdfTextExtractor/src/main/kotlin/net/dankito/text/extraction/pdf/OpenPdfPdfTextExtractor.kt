@@ -50,8 +50,6 @@ open class OpenPdfPdfTextExtractor: TextExtractorBase() {
                     }
                 }
 
-                reader.close()
-
                 return extractedText
             }
         }
