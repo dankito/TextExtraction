@@ -19,8 +19,6 @@ open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : TextExtracto
 
     companion object {
         private val SupportedFileTypes = listOf("png", "jpg", "tif", "tiff") // set all supported file types
-
-        private val log = LoggerFactory.getLogger(Tesseract4ImageTextExtractor::class.java)
     }
 
 
