@@ -13,6 +13,7 @@ import net.dankito.text.extraction.ITextExtractor
 import net.dankito.text.extraction.model.ErrorInfo
 import net.dankito.text.extraction.model.ErrorType
 import net.dankito.text.extraction.model.ExtractionResult
+import net.dankito.text.extraction.model.ExtractionResultForExtractor
 import net.dankito.utils.IThreadPool
 import net.dankito.utils.javafx.ui.extensions.ensureOnlyUsesSpaceIfVisible
 import net.dankito.utils.javafx.ui.extensions.setBackgroundToColor
@@ -42,7 +43,11 @@ abstract class ExtractTextTabBase(protected val threadPool: IThreadPool) : View(
 
     protected val didTextExtractionReturnAnError = SimpleBooleanProperty(false)
 
-    protected val texExtractionErrorMessage = SimpleStringProperty("")
+    protected val textExtractionErrorMessage = SimpleStringProperty("")
+
+    protected val showTextExtractorInfo = SimpleBooleanProperty(false)
+
+    protected val textExtractionInfo = SimpleStringProperty("")
 
     protected val extractedText = SimpleStringProperty("")
 
@@ -114,7 +119,17 @@ abstract class ExtractTextTabBase(protected val threadPool: IThreadPool) : View(
             }
         }
 
-        label(texExtractionErrorMessage) {
+        label(textExtractionInfo) {
+            useMaxWidth = true
+
+            paddingTop = 8.0
+            paddingBottom = 8.0
+
+            visibleWhen(showTextExtractorInfo)
+            ensureOnlyUsesSpaceIfVisible()
+        }
+
+        label(textExtractionErrorMessage) {
             useMaxWidth = true
 
             paddingTop = 8.0
@@ -193,6 +208,7 @@ abstract class ExtractTextTabBase(protected val threadPool: IThreadPool) : View(
         lastSelectedFile?.let { file ->
             isExtractingText.value = true
             didTextExtractionReturnAnError.value = false
+            showTextExtractorInfo.value = false
             val startTime = Date().time
 
             extractTextOfFileAsync(file) { extractedText ->
@@ -214,19 +230,26 @@ abstract class ExtractTextTabBase(protected val threadPool: IThreadPool) : View(
 
         extractedText.value = extractionResult.text
 
+        if (extractionResult is ExtractionResultForExtractor) {
+            showTextExtractorInfo.value = true
+            textExtractionInfo.value = String.format(messages["info.text.extracted.with"], extractionResult.extractor?.javaClass?.simpleName)
+        }
+
         didTextExtractionReturnAnError.value = extractionResult.errorOccurred
         extractionResult.error?.let { error ->
-            texExtractionErrorMessage.value = getErrorMessage(fileToExtract, error)
+            textExtractionErrorMessage.value = getErrorMessage(fileToExtract, error)
         }
     }
 
     protected open fun getErrorMessage(fileToExtract: File, error: ErrorInfo): String {
         val extractorName = getExtractorName()
+        val fileType = fileToExtract.extension
 
         return when (error.type) {
-            ErrorType.FileTypeNotSupportedByExtractor -> String.format(messages["error.message.extractor.does.not.support.extracting.file.type"], extractorName, fileToExtract.extension)
+            ErrorType.FileTypeNotSupportedByExtractor -> String.format(messages["error.message.extractor.does.not.support.extracting.file.type"], extractorName, fileType)
             ErrorType.ExtractorNotAvailable -> String.format(messages["error.message.extractor.not.available"], extractorName)
             ErrorType.ParseError -> String.format(messages["error.message.could.not.parse.file"], error.exception?.localizedMessage)
+            ErrorType.NoExtractorFoundForFileType -> String.format(messages["error.message.no.extractor.found.for.type"], fileType)
         }
     }
 

@@ -95,14 +95,26 @@
     </RelativeLayout>
 
     <TextView
-            android:id="@+id/txtErrorMessage"
+            android:id="@+id/txtInfoTextExtractedWith"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/lytExtractionControlBar"
-            android:paddingTop="@dimen/fragment_extract_text_tab_select_file_margin_bottom"
-            android:paddingBottom="@dimen/fragment_extract_text_tab_select_file_margin_bottom"
+            android:paddingTop="@dimen/fragment_extract_text_tab_info_padding_top_bottom"
+            android:paddingBottom="@dimen/fragment_extract_text_tab_info_padding_top_bottom"
+            android:visibility="gone"
+    />
+
+    <TextView
+            android:id="@+id/txtErrorMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/txtInfoTextExtractedWith"
+            android:paddingTop="@dimen/fragment_extract_text_tab_info_padding_top_bottom"
+            android:paddingBottom="@dimen/fragment_extract_text_tab_info_padding_top_bottom"
             android:background="#FF0000"
             android:textColor="#FFFFFF"
             android:visibility="gone"

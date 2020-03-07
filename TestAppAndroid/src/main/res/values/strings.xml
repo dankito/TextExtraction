@@ -3,15 +3,18 @@
 
     <string name="main_activity_tab_text_open_pdf">OpenPdf</string>
     <string name="main_activity_tab_text_itext">itext</string>
+    <string name="main_activity_tab_text_find_best_extractor_for_type">Find best extractor</string>
     <string name="action_settings">Settings</string>
 
     <string name="select_file_button_text">…</string>
 
     <string name="fragment_extract_text_tab_select_file_label">File:</string>
     <string name="fragment_extract_text_tab_button_extract_selected_file_label">Extract</string>
+    <string name="fragment_extract_text_tab_info_text_extracted_with">Extracted text with %s.</string>
 
     <string name="fragment_extract_text_tab_error_message_extractor_does_not_support_extracting_file_type">%1$s does not support extracting files of type .%2$s.</string>
     <string name="fragment_extract_text_tab_error_message_extractor_not_available">%1$s not found. Did you install %1$s?</string>
     <string name="fragment_extract_text_tab_error_message_could_not_parse_file">Could not parse file:\n%s.</string>
+    <string name="fragment_extract_text_tab_error_message_no_extractor_found_for_type">There\'s no extractor available for extracting files of type .%1$s.</string>
 
 </resources>

@@ -10,7 +10,7 @@ open class ExtractionResult(val error: ErrorInfo? = null) {
         get() = error != null
 
     open val couldExtractText: Boolean
-        get() = errorOccurred == false && pages.isNotEmpty()
+        get() = errorOccurred == false && pages.isNotEmpty() && text.isNotBlank()
 
 
     open val pages: List<Page>
@@ -26,7 +26,15 @@ open class ExtractionResult(val error: ErrorInfo? = null) {
 
 
     override fun toString(): String {
-        return text
+        if (errorOccurred) {
+            return "Error: $error"
+        }
+
+        if (couldExtractText == false) {
+            return "Error: No pages could get extracted"
+        }
+
+        return "Success: $text"
     }
 
 }

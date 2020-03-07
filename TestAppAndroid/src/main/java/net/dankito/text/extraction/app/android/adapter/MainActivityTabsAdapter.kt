@@ -3,6 +3,8 @@ package net.dankito.text.extraction.app.android.adapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import net.dankito.text.extraction.ITextExtractorRegistry
+import net.dankito.text.extraction.app.android.fragment.FindBestExtractorExtractTextTabFragment
 import net.dankito.text.extraction.app.android.fragment.OpenPdfExtractTextTabFragment
 import net.dankito.text.extraction.app.android.fragment.itextExtractTextTabFragment
 
@@ -11,10 +13,14 @@ import net.dankito.text.extraction.app.android.fragment.itextExtractTextTabFragm
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-class MainActivityTabsAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+class MainActivityTabsAdapter(
+    fragmentManager: FragmentManager,
+    private val extractorRegistry: ITextExtractorRegistry
+) : FragmentPagerAdapter(fragmentManager) {
+
 
     override fun getCount(): Int {
-        return 2
+        return 3
     }
 
 
@@ -22,6 +28,7 @@ class MainActivityTabsAdapter(fragmentManager: FragmentManager) : FragmentPagerA
         when (position) {
             0 -> return OpenPdfExtractTextTabFragment()
             1 -> return itextExtractTextTabFragment()
+            2 -> return FindBestExtractorExtractTextTabFragment(extractorRegistry)
         }
 
         // should never come to here

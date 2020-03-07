@@ -6,7 +6,11 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
+import net.dankito.text.extraction.ITextExtractorRegistry
+import net.dankito.text.extraction.TextExtractorRegistry
 import net.dankito.text.extraction.app.android.adapter.MainActivityTabsAdapter
+import net.dankito.text.extraction.pdf.OpenPdfPdfTextExtractor
+import net.dankito.text.extraction.pdf.itextPdfTextExtractor
 import net.dankito.utils.android.permissions.PermissionsService
 import org.slf4j.LoggerFactory
 
@@ -17,6 +21,11 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private val extractorRegistry: ITextExtractorRegistry = TextExtractorRegistry(listOf(
+        OpenPdfPdfTextExtractor(),
+        itextPdfTextExtractor()
+    ))
+
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
      * fragments for each of the sections. We use a
@@ -25,7 +34,7 @@ class MainActivity : AppCompatActivity() {
      * may be best to switch to a
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
-    private val sectionsPagerAdapter = MainActivityTabsAdapter(supportFragmentManager)
+    private val sectionsPagerAdapter = MainActivityTabsAdapter(supportFragmentManager, extractorRegistry)
 
     val permissionsService = PermissionsService(this)
 

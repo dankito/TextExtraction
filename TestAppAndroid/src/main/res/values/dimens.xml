@@ -6,7 +6,7 @@
 
     <dimen name="fragment_extract_text_tab_select_file_height">45dp</dimen>
     <dimen name="fragment_extract_text_tab_select_file_margin_bottom">12dp</dimen>
-    <dimen name="fragment_extract_text_tab_error_message_padding_top_bottom">8dp</dimen>
+    <dimen name="fragment_extract_text_tab_info_padding_top_bottom">8dp</dimen>
     <dimen name="fragment_extract_text_tab_select_file_edit_text_left_right_margin">6dp</dimen>
     <dimen name="fragment_extract_text_tab_select_file_button_width">75dp</dimen>
     <dimen name="fragment_extract_text_tab_extraction_control_bar_height">45dp</dimen>

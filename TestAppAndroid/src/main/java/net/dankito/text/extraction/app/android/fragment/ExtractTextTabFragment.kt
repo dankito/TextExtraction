@@ -20,6 +20,7 @@ import net.dankito.text.extraction.app.android.R
 import net.dankito.text.extraction.model.ErrorInfo
 import net.dankito.text.extraction.model.ErrorType
 import net.dankito.text.extraction.model.ExtractionResult
+import net.dankito.text.extraction.model.ExtractionResultForExtractor
 import org.slf4j.LoggerFactory
 import java.io.Closeable
 import java.io.File
@@ -100,6 +101,7 @@ abstract class ExtractTextTabFragment : Fragment() {
         lastSelectedFile?.let { file ->
             prgbrIsExtractingText.visibility = View.VISIBLE
             btnExtractSelectedFile.isEnabled = false
+            txtInfoTextExtractedWith.visibility = View.GONE
             txtErrorMessage.visibility = View.GONE
             val extractorName = getExtractorName() // as to be done before triggering asynchronous extractoin as user may in the mean while changes current tab
             val startTime = Date().time
@@ -124,17 +126,25 @@ abstract class ExtractTextTabFragment : Fragment() {
 
         txtvwExtractedText.text = extractionResult.text
 
-        txtErrorMessage.visibility = if (extractionResult.errorOccurred) View.GONE else View.VISIBLE
+        if (extractionResult is ExtractionResultForExtractor) {
+            txtInfoTextExtractedWith.visibility = View.VISIBLE
+            txtInfoTextExtractedWith.text = context.getString(R.string.fragment_extract_text_tab_info_text_extracted_with, extractionResult.extractor?.javaClass?.simpleName)
+        }
+
+        txtErrorMessage.visibility = if (extractionResult.errorOccurred) View.VISIBLE else View.GONE
         extractionResult.error?.let { error ->
             txtErrorMessage.text = getErrorMessage(context, fileToExtract, extractorName, error)
         }
     }
 
     protected open fun getErrorMessage(context: Context, fileToExtract: File, extractorName: String, error: ErrorInfo): String {
+        val fileType = fileToExtract.extension
+
         return when (error.type) {
-            ErrorType.FileTypeNotSupportedByExtractor -> context.getString(R.string.fragment_extract_text_tab_error_message_extractor_does_not_support_extracting_file_type, extractorName, fileToExtract.extension)
+            ErrorType.FileTypeNotSupportedByExtractor -> context.getString(R.string.fragment_extract_text_tab_error_message_extractor_does_not_support_extracting_file_type, extractorName, fileType)
             ErrorType.ExtractorNotAvailable -> context.getString(R.string.fragment_extract_text_tab_error_message_extractor_not_available, extractorName)
             ErrorType.ParseError -> context.getString(R.string.fragment_extract_text_tab_error_message_could_not_parse_file, error.exception?.localizedMessage)
+            ErrorType.NoExtractorFoundForFileType -> context.getString(R.string.fragment_extract_text_tab_error_message_no_extractor_found_for_type, fileType)
         }
     }
 

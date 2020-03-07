@@ -1,5 +1,9 @@
 package net.dankito.text.extraction
 
+import net.dankito.text.extraction.model.ErrorInfo
+import net.dankito.text.extraction.model.ErrorType
+import net.dankito.text.extraction.model.ExtractionResult
+import net.dankito.text.extraction.model.ExtractionResultForExtractor
 import java.io.File
 
 
@@ -7,7 +11,7 @@ open class TextExtractorRegistry @JvmOverloads constructor(extractors: List<ITex
 
     protected val availableExtractors: MutableList<ITextExtractor> = ArrayList(extractors)
 
-    open val extractors: List<ITextExtractor>
+    override val extractors: List<ITextExtractor>
         get() = ArrayList(availableExtractors)
 
 
@@ -21,6 +25,31 @@ open class TextExtractorRegistry @JvmOverloads constructor(extractors: List<ITex
         return extractors
             .sortedByDescending { it.getTextExtractionQualityForFileType(file) }
             .firstOrNull { canExtractDataFromFile(it, file) }
+    }
+
+    override fun extractTextWithBestExtractorForFile(file: File): ExtractionResultForExtractor {
+        var mostSuitableError: ExtractionResult? = null
+        var mostSuitableErrorTextExtractor: ITextExtractor? = null
+
+        getAllExtractorsForFile(file).forEach { extractor ->
+            val extractionResult = extractor.extractText(file)
+
+            if (extractionResult.couldExtractText) {
+                return ExtractionResultForExtractor(extractor, extractionResult)
+            }
+
+            if (mostSuitableError == null || mostSuitableError?.error == null ||
+                    listOf(ErrorType.ExtractorNotAvailable, ErrorType.FileTypeNotSupportedByExtractor).contains(mostSuitableError?.error?.type)) {
+                mostSuitableError = extractionResult
+                mostSuitableErrorTextExtractor = extractor
+            }
+        }
+
+        mostSuitableError?.let {
+            return ExtractionResultForExtractor(mostSuitableErrorTextExtractor, it.error)
+        }
+
+        return ExtractionResultForExtractor(null, ErrorInfo(ErrorType.NoExtractorFoundForFileType))
     }
 
 
