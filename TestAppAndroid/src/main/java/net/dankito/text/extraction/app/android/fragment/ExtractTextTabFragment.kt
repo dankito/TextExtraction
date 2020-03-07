@@ -99,6 +99,7 @@ abstract class ExtractTextTabFragment : Fragment() {
     protected open fun extractTextOfFileAndShowResult() {
         lastSelectedFile?.let { file ->
             prgbrIsExtractingText.visibility = View.VISIBLE
+            btnExtractSelectedFile.isEnabled = false
             txtErrorMessage.visibility = View.GONE
             val extractorName = getExtractorName() // as to be done before triggering asynchronous extractoin as user may in the mean while changes current tab
             val startTime = Date().time
@@ -117,6 +118,7 @@ abstract class ExtractTextTabFragment : Fragment() {
 
     protected open fun showExtractedTextOnUiThread(context: Context, fileToExtract: File, extractionResult: ExtractionResult, extractorName: String, durationMillis: Long) {
         prgbrIsExtractingText.visibility = View.GONE
+        btnExtractSelectedFile.isEnabled = true
         txtvwExtractionTime.text = String.format("%02d:%02d.%03d min", durationMillis / (60 * 1000),
             (durationMillis / 1000) % 60, durationMillis % 1000)
 
