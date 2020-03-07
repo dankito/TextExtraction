@@ -11,6 +11,8 @@ interface ITextExtractor {
     }
 
 
+    val name: String
+
     val isAvailable: Boolean
 
     val supportedFileTypes: List<String>

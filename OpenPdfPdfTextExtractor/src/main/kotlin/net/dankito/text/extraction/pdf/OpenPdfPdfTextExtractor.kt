@@ -17,6 +17,8 @@ open class OpenPdfPdfTextExtractor: TextExtractorBase() {
     }
 
 
+    override val name = "OpenPdf"
+
     override val isAvailable = true
 
     override val supportedFileTypes = listOf("pdf")

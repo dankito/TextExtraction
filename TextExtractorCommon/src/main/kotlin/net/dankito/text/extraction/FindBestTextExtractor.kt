@@ -7,6 +7,8 @@ import java.io.File
 
 open class FindBestTextExtractor(protected val extractorRegistry: ITextExtractorRegistry) : TextExtractorBase() {
 
+    override val name = "Find best extractor" // TODO: translate
+
     override val isAvailable = true
 
     override val supportedFileTypes: List<String>

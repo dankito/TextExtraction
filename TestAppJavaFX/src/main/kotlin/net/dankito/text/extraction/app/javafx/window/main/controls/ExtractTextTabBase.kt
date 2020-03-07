@@ -232,7 +232,7 @@ abstract class ExtractTextTabBase(protected val threadPool: IThreadPool) : View(
 
         if (extractionResult is ExtractionResultForExtractor) {
             showTextExtractorInfo.value = true
-            textExtractionInfo.value = String.format(messages["info.text.extracted.with"], extractionResult.extractor?.javaClass?.simpleName)
+            textExtractionInfo.value = String.format(messages["info.text.extracted.with"], extractionResult.extractor?.name)
         }
 
         didTextExtractionReturnAnError.value = extractionResult.errorOccurred
@@ -242,7 +242,7 @@ abstract class ExtractTextTabBase(protected val threadPool: IThreadPool) : View(
     }
 
     protected open fun getErrorMessage(fileToExtract: File, error: ErrorInfo): String {
-        val extractorName = getExtractorName()
+        val extractorName = getTextExtractor().name
         val fileType = fileToExtract.extension
 
         return when (error.type) {
@@ -251,18 +251,6 @@ abstract class ExtractTextTabBase(protected val threadPool: IThreadPool) : View(
             ErrorType.ParseError -> String.format(messages["error.message.could.not.parse.file"], error.exception?.localizedMessage)
             ErrorType.NoExtractorFoundForFileType -> String.format(messages["error.message.no.extractor.found.for.type"], fileType)
         }
-    }
-
-    protected open fun getExtractorName(): String {
-        // kind a hack to get Tab name
-        val tabPaneSkin = this.root.parent
-        val tabPane = tabPaneSkin?.parent as? TabPane
-
-        tabPane?.tabs?.firstOrNull { it.content == this.root }?.text?.let { tabName ->
-            return tabName
-        }
-
-        return getTextExtractor().javaClass.simpleName
     }
 
 

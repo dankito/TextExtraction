@@ -15,6 +15,8 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdf
     }
 
 
+    override val name = "pdftotext"
+
     // TODO: adjust for a) Windows b) if pdftotextExecutablePath is set
     protected val didFindPdftotextExecutable: Boolean =
         File(executeCommand("which", pdftotextExecutablePath).output).exists()

@@ -103,7 +103,6 @@ abstract class ExtractTextTabFragment : Fragment() {
             btnExtractSelectedFile.isEnabled = false
             txtInfoTextExtractedWith.visibility = View.GONE
             txtErrorMessage.visibility = View.GONE
-            val extractorName = getExtractorName() // as to be done before triggering asynchronous extractoin as user may in the mean while changes current tab
             val startTime = Date().time
 
             extractTextOfFileAsync(file) { extractedText ->
@@ -111,14 +110,14 @@ abstract class ExtractTextTabFragment : Fragment() {
 
                 activity?.let { context ->
                     context.runOnUiThread {
-                        showExtractedTextOnUiThread(context, file, extractedText, extractorName, durationMillis)
+                        showExtractedTextOnUiThread(context, file, extractedText, durationMillis)
                     }
                 }
             }
         }
     }
 
-    protected open fun showExtractedTextOnUiThread(context: Context, fileToExtract: File, extractionResult: ExtractionResult, extractorName: String, durationMillis: Long) {
+    protected open fun showExtractedTextOnUiThread(context: Context, fileToExtract: File, extractionResult: ExtractionResult, durationMillis: Long) {
         prgbrIsExtractingText.visibility = View.GONE
         btnExtractSelectedFile.isEnabled = true
         txtvwExtractionTime.text = String.format("%02d:%02d.%03d min", durationMillis / (60 * 1000),
@@ -128,16 +127,17 @@ abstract class ExtractTextTabFragment : Fragment() {
 
         if (extractionResult is ExtractionResultForExtractor) {
             txtInfoTextExtractedWith.visibility = View.VISIBLE
-            txtInfoTextExtractedWith.text = context.getString(R.string.fragment_extract_text_tab_info_text_extracted_with, extractionResult.extractor?.javaClass?.simpleName)
+            txtInfoTextExtractedWith.text = context.getString(R.string.fragment_extract_text_tab_info_text_extracted_with, extractionResult.extractor?.name)
         }
 
         txtErrorMessage.visibility = if (extractionResult.errorOccurred) View.VISIBLE else View.GONE
         extractionResult.error?.let { error ->
-            txtErrorMessage.text = getErrorMessage(context, fileToExtract, extractorName, error)
+            txtErrorMessage.text = getErrorMessage(context, fileToExtract, error)
         }
     }
 
-    protected open fun getErrorMessage(context: Context, fileToExtract: File, extractorName: String, error: ErrorInfo): String {
+    protected open fun getErrorMessage(context: Context, fileToExtract: File, error: ErrorInfo): String {
+        val extractorName = getTextExtractor().name
         val fileType = fileToExtract.extension
 
         return when (error.type) {
@@ -146,13 +146,6 @@ abstract class ExtractTextTabFragment : Fragment() {
             ErrorType.ParseError -> context.getString(R.string.fragment_extract_text_tab_error_message_could_not_parse_file, error.exception?.localizedMessage)
             ErrorType.NoExtractorFoundForFileType -> context.getString(R.string.fragment_extract_text_tab_error_message_no_extractor_found_for_type, fileType)
         }
-    }
-
-    protected open fun getExtractorName(): String {
-        // kind a hack to get Tab name
-        return activity?.findViewById<TabLayout>(R.id.tabs)?.let { tabLayout ->
-            tabLayout.getTabAt(tabLayout.selectedTabPosition)?.text?.toString() // get text of current selected Tab
-        } ?: getTextExtractor().javaClass.simpleName
     }
 
 

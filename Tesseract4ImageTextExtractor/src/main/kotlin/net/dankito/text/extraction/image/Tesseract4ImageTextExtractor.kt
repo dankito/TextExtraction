@@ -16,6 +16,8 @@ import java.io.File
 
 open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : TextExtractorBase(), AutoCloseable {
 
+    override val name = "Tesseract 4"
+
     override val isAvailable: Boolean
 
     override val supportedFileTypes = listOf("png", "jpg", "tif", "tiff") // set all supported file types

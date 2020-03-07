@@ -32,6 +32,8 @@ open class TikaTextExtractor(protected val settings: TikaSettings, protected val
 	constructor() : this(TikaSettings(PdfContentExtractorStrategy.OcrAndText, listOf(OcrLanguage.English, OcrLanguage.German), OcrOutputType.Text))
 
 
+	override val name = "Tika"
+
 	override val isAvailable: Boolean
 		get() = osHelper.isRunningOnAndroid == false
 

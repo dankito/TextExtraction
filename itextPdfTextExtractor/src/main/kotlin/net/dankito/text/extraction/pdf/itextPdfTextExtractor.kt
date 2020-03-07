@@ -18,6 +18,8 @@ open class itextPdfTextExtractor: TextExtractorBase() {
     }
 
 
+    override val name = "iText"
+
     override val isAvailable = true // TODO: is this true for all Android versions?
 
     override val supportedFileTypes = listOf("pdf")
