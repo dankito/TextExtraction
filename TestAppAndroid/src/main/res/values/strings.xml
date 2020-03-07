@@ -10,4 +10,8 @@
     <string name="fragment_extract_text_tab_select_file_label">File:</string>
     <string name="fragment_extract_text_tab_button_extract_selected_file_label">Extract</string>
 
+    <string name="fragment_extract_text_tab_error_message_extractor_does_not_support_extracting_file_type">%1$s does not support extracting files of type .%2$s.</string>
+    <string name="fragment_extract_text_tab_error_message_extractor_not_available">%1$s not found. Did you install %1$s?</string>
+    <string name="fragment_extract_text_tab_error_message_could_not_parse_file">Could not parse file:\n%s.</string>
+
 </resources>

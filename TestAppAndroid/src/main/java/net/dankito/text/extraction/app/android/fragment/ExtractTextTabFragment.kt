@@ -1,6 +1,8 @@
 package net.dankito.text.extraction.app.android.fragment
 
+import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,6 +17,8 @@ import net.dankito.filechooserdialog.model.FileChooserDialogConfig
 import net.dankito.text.extraction.ITextExtractor
 import net.dankito.text.extraction.app.android.MainActivity
 import net.dankito.text.extraction.app.android.R
+import net.dankito.text.extraction.model.ErrorInfo
+import net.dankito.text.extraction.model.ErrorType
 import net.dankito.text.extraction.model.ExtractionResult
 import org.slf4j.LoggerFactory
 import java.io.Closeable
@@ -92,39 +96,59 @@ abstract class ExtractTextTabFragment : Fragment() {
 
     protected open fun extractTextOfFileAndShowResult() {
         lastSelectedFile?.let { file ->
-            val startTime = Date().time
             prgbrIsExtractingText.visibility = View.VISIBLE
+            txtErrorMessage.visibility = View.GONE
+            val extractorName = getExtractorName() // as to be done before triggering asynchronous extractoin as user may in the mean while changes current tab
+            val startTime = Date().time
 
             extractTextOfFileAsync(file) { extractedText ->
                 val durationMillis = Date().time - startTime
 
-                activity?.runOnUiThread {
-                    showExtractedTextOnUiThread(extractedText, durationMillis)
+                activity?.let { context ->
+                    context.runOnUiThread {
+                        showExtractedTextOnUiThread(context, file, extractedText, extractorName, durationMillis)
+                    }
                 }
             }
         }
     }
 
-    protected open fun showExtractedTextOnUiThread(extractionResult: ExtractionResult?, durationMillis: Long) {
+    protected open fun showExtractedTextOnUiThread(context: Context, fileToExtract: File, extractionResult: ExtractionResult, extractorName: String, durationMillis: Long) {
         prgbrIsExtractingText.visibility = View.GONE
         txtvwExtractionTime.text = String.format("%02d:%02d.%03d min", durationMillis / (60 * 1000),
             (durationMillis / 1000) % 60, durationMillis % 1000)
 
-        extractionResult?.let {
-            txtvwExtractedText.text = extractionResult.text
-        }
+        txtvwExtractedText.text = extractionResult.text
 
-        // TODO: elsewise show error message
+        txtErrorMessage.visibility = if (extractionResult.error == null) View.GONE else View.VISIBLE
+        extractionResult.error?.let { error ->
+            txtErrorMessage.text = getErrorMessage(context, fileToExtract, extractorName, error)
+        }
+    }
+
+    protected open fun getErrorMessage(context: Context, fileToExtract: File, extractorName: String, error: ErrorInfo): String {
+        return when (error.type) {
+            ErrorType.FileTypeNotSupportedByExtractor -> context.getString(R.string.fragment_extract_text_tab_error_message_extractor_does_not_support_extracting_file_type, extractorName, fileToExtract.extension)
+            ErrorType.ExtractorNotAvailable -> context.getString(R.string.fragment_extract_text_tab_error_message_extractor_not_available, extractorName)
+            ErrorType.ParseError -> context.getString(R.string.fragment_extract_text_tab_error_message_could_not_parse_file, error.exception?.localizedMessage)
+        }
+    }
+
+    protected open fun getExtractorName(): String {
+        // kind a hack to get Tab name
+        return activity?.findViewById<TabLayout>(R.id.tabs)?.let { tabLayout ->
+            tabLayout.getTabAt(tabLayout.selectedTabPosition)?.text?.toString() // get text of current selected Tab
+        } ?: getTextExtractor().javaClass.simpleName
     }
 
 
-    protected open fun extractTextOfFileAsync(file: File, callback: (ExtractionResult?) -> Unit) {
+    protected open fun extractTextOfFileAsync(file: File, callback: (ExtractionResult) -> Unit) {
         thread { // TODO: use thread pool
             callback(extractTextOfFile(file))
         }
     }
 
-    protected open fun extractTextOfFile(file: File): ExtractionResult? {
+    protected open fun extractTextOfFile(file: File): ExtractionResult {
         try {
             val textExtractor = getTextExtractor()
 
@@ -137,9 +161,9 @@ abstract class ExtractTextTabFragment : Fragment() {
             return extractedText
         } catch (e: Exception) {
             log.error("Could not extract text of file $file", e)
-        }
 
-        return null // TODO: add error to ExtractedText instead of returning null
+            return ExtractionResult(ErrorInfo(ErrorType.ParseError, e)) // TODO: add suitable ErrorType
+        }
     }
 
     protected open fun getTextExtractor(): ITextExtractor {

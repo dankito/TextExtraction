@@ -94,11 +94,25 @@
 
     </RelativeLayout>
 
+    <TextView
+            android:id="@+id/txtErrorMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/lytExtractionControlBar"
+            android:paddingTop="@dimen/fragment_extract_text_tab_select_file_margin_bottom"
+            android:paddingBottom="@dimen/fragment_extract_text_tab_select_file_margin_bottom"
+            android:background="#FF0000"
+            android:textColor="#FFFFFF"
+            android:visibility="gone"
+    />
+
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_below="@+id/lytExtractionControlBar"
+            android:layout_below="@+id/txtErrorMessage"
             android:layout_marginTop="@dimen/fragment_extract_text_tab_select_file_margin_bottom"
     >
 
