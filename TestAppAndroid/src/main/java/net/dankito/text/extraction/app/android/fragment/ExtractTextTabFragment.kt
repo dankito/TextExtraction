@@ -85,6 +85,8 @@ abstract class ExtractTextTabFragment : Fragment() {
         edtxtSelectedFile.setText(file.absolutePath)
 
         existingFileSelected(file)
+
+        extractTextOfFileAndShowResult()
     }
 
     protected open fun existingFileSelected(file: File) {
