@@ -10,8 +10,4 @@ class itextExtractTextTabFragment : ExtractTextTabFragment() {
         return itextPdfTextExtractor()
     }
 
-    override fun getExtensionFilter(): List<String> {
-        return listOf(".pdf")
-    }
-
 }

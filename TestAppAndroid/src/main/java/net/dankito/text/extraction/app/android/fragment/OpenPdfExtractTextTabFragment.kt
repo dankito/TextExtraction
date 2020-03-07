@@ -10,8 +10,4 @@ class OpenPdfExtractTextTabFragment : ExtractTextTabFragment() {
         return OpenPdfPdfTextExtractor()
     }
 
-    override fun getExtensionFilter(): List<String> {
-        return listOf(".pdf")
-    }
-
 }

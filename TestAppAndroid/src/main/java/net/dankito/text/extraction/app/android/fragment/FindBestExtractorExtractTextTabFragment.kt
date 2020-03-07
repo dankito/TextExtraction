@@ -11,8 +11,4 @@ class FindBestExtractorExtractTextTabFragment(val extractorRegistry: ITextExtrac
         return FindBestTextExtractor(extractorRegistry)
     }
 
-    override fun getExtensionFilter(): List<String> {
-        return extractorRegistry.extractors.flatMap { it.supportedFileTypes }.toSet().toList()
-    }
-
 }

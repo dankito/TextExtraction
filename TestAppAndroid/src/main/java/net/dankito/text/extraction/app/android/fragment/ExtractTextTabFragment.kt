@@ -78,7 +78,7 @@ abstract class ExtractTextTabFragment : Fragment() {
     }
 
     protected open fun getExtensionFilter(): List<String> {
-        return listOf() // may overwritten in subclass
+        return getTextExtractor().supportedFileTypes
     }
 
 
