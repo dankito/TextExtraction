@@ -34,9 +34,14 @@ class OpenPdfPdfTextExtractor: ITextExtractor {
         val extractedText = ExtractedText(countPages)
 
         for (pageNum in 1..countPages) {
-            extractedText.addPage(Page(textExtractor.getTextFromPage(pageNum), pageNum))
+            try {
+                val text = textExtractor.getTextFromPage(pageNum)
+                extractedText.addPage(Page(text, pageNum))
 
-            log.debug("Extracted text of page $pageNum / $countPages")
+                log.debug("Extracted text of page $pageNum / $countPages")
+            } catch (e: Exception) {
+                log.error("Could not extract page $pageNum of $file", e)
+            }
         }
 
         reader.close()
