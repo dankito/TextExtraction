@@ -52,11 +52,11 @@ open class TikaTextExtractor(protected val settings: TikaSettings, protected val
 	}
 
 
-	override fun extractText(file: File): ExtractedText {
+	override fun extractText(file: File): ExtractionResult {
 		val extractedTextWriter = StringWriter()
 		extractText(file, extractedTextWriter)
 
-		val extractedText = ExtractedText()
+		val extractedText = ExtractionResult()
 
 		// TODO: try to get Hocr and ToHtmlContentHandler working to get aware of single pages
 		val extractionResult = extractedTextWriter.toString()

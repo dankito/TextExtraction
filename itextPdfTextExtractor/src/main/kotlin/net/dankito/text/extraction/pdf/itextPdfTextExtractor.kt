@@ -4,7 +4,7 @@ import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfReader
 import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor
 import net.dankito.text.extraction.ITextExtractor
-import net.dankito.text.extraction.model.ExtractedText
+import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -26,12 +26,12 @@ class itextPdfTextExtractor: ITextExtractor {
     }
 
 
-    override fun extractText(file: File): ExtractedText {
+    override fun extractText(file: File): ExtractionResult {
         val reader = PdfReader(file.inputStream())
         val pdfDocument = PdfDocument(reader)
 
         val countPages = pdfDocument.numberOfPages
-        val extractedText = ExtractedText(countPages)
+        val extractedText = ExtractionResult(countPages)
 
         for (pageNum in 1..countPages) {
             try {

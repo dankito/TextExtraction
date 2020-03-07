@@ -2,7 +2,7 @@ package net.dankito.text.extraction.image
 
 import net.dankito.text.extraction.ITextExtractor
 import net.dankito.text.extraction.image.model.Tesseract4Config
-import net.dankito.text.extraction.model.ExtractedText
+import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
 import org.bytedeco.javacpp.BytePointer
 import org.bytedeco.leptonica.global.lept.pixDestroy
@@ -44,7 +44,7 @@ open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : ITextExtract
     }
 
 
-    override fun extractText(file: File): ExtractedText {
+    override fun extractText(file: File): ExtractionResult {
         if (isAvailable) {
             try {
 
@@ -52,11 +52,11 @@ open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : ITextExtract
                 val image = pixRead(file.absolutePath)
 
                 if (image == null) {
-                    return ExtractedText() // image not found / openable / unsupported type
+                    return ExtractionResult() // image not found / openable / unsupported type
                 }
 
 
-                val result = ExtractedText()
+                val result = ExtractionResult()
 
                 api.SetImage(image)
 
@@ -75,11 +75,11 @@ open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : ITextExtract
                 return result
             } catch (e: Exception) {
                 log.error("Could not recognize text of file $file", e)
-                return ExtractedText() // TODO: add error info to ExtractedText
+                return ExtractionResult() // TODO: add error info to ExtractedText
             }
         }
 
-        return ExtractedText() // TODO: add error info to ExtractedText
+        return ExtractionResult() // TODO: add error info to ExtractedText
     }
 
 

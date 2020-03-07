@@ -1,7 +1,7 @@
 package net.dankito.text.extraction.pdf
 
 import net.dankito.text.extraction.ITextExtractor
-import net.dankito.text.extraction.model.ExtractedText
+import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -27,18 +27,18 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdf
     }
 
 
-    override fun extractText(file: File): ExtractedText {
+    override fun extractText(file: File): ExtractionResult {
         if (isAvailable) {
             // to extract all text at once:
             // result.addPage(Page(executeCommand(pdftotextExecutablePath, "-layout", file.absolutePath, "-").output))
             return extractTextPageByPage(file)
         }
 
-        return ExtractedText() // TODO: add error info to ExtractedText
+        return ExtractionResult() // TODO: add error info to ExtractedText
     }
 
-    protected open fun extractTextPageByPage(file: File): ExtractedText {
-        val result = ExtractedText()
+    protected open fun extractTextPageByPage(file: File): ExtractionResult {
+        val result = ExtractionResult()
 
         generateSequence(1) { it + 1 }.forEach { pageNum ->
             val pageResult = extractPageText(file, pageNum)

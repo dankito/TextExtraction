@@ -8,7 +8,7 @@ import javafx.scene.input.KeyEvent
 import javafx.scene.layout.Priority
 import javafx.stage.FileChooser
 import net.dankito.text.extraction.ITextExtractor
-import net.dankito.text.extraction.model.ExtractedText
+import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.utils.IThreadPool
 import net.dankito.utils.javafx.ui.extensions.ensureOnlyUsesSpaceIfVisible
 import org.slf4j.LoggerFactory
@@ -182,28 +182,28 @@ abstract class ExtractTextTabBase(protected val threadPool: IThreadPool) : View(
         }
     }
 
-    protected open fun showExtractedTextOnUiThread(extractedText: ExtractedText?, durationMillis: Long) {
+    protected open fun showExtractedTextOnUiThread(extractionResult: ExtractionResult?, durationMillis: Long) {
         isExtractingText.value = false
         extractionTime.value = String.format(
             "%02d:%02d.%03d min", durationMillis / (60 * 1000),
             (durationMillis / 1000) % 60, durationMillis % 1000
         )
 
-        extractedText?.let {
-            this.extractedText.value = extractedText.text
+        extractionResult?.let {
+            this.extractedText.value = extractionResult.text
         }
 
         // TODO: elsewise show error message
     }
 
 
-    protected open fun extractTextOfFileAsync(file: File, callback: (ExtractedText?) -> Unit) {
+    protected open fun extractTextOfFileAsync(file: File, callback: (ExtractionResult?) -> Unit) {
         threadPool.runAsync {
             callback(extractTextOfFile(file))
         }
     }
 
-    protected open fun extractTextOfFile(file: File): ExtractedText? {
+    protected open fun extractTextOfFile(file: File): ExtractionResult? {
         try {
             val textExtractor = getTextExtractor()
 

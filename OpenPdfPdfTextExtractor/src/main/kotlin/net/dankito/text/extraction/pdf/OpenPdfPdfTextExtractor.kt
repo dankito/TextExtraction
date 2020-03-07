@@ -3,7 +3,7 @@ package net.dankito.text.extraction.pdf
 import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.parser.PdfTextExtractor
 import net.dankito.text.extraction.ITextExtractor
-import net.dankito.text.extraction.model.ExtractedText
+import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -25,13 +25,13 @@ class OpenPdfPdfTextExtractor: ITextExtractor {
     }
 
 
-    override fun extractText(file: File): ExtractedText {
+    override fun extractText(file: File): ExtractionResult {
         val reader = PdfReader(file.inputStream())
 
         val textExtractor = PdfTextExtractor(reader)
 
         val countPages = reader.numberOfPages
-        val extractedText = ExtractedText(countPages)
+        val extractedText = ExtractionResult(countPages)
 
         for (pageNum in 1..countPages) {
             try {

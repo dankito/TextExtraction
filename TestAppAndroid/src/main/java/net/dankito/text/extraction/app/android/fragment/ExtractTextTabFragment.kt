@@ -15,7 +15,7 @@ import net.dankito.filechooserdialog.model.FileChooserDialogConfig
 import net.dankito.text.extraction.ITextExtractor
 import net.dankito.text.extraction.app.android.MainActivity
 import net.dankito.text.extraction.app.android.R
-import net.dankito.text.extraction.model.ExtractedText
+import net.dankito.text.extraction.model.ExtractionResult
 import org.slf4j.LoggerFactory
 import java.io.Closeable
 import java.io.File
@@ -105,26 +105,26 @@ abstract class ExtractTextTabFragment : Fragment() {
         }
     }
 
-    protected open fun showExtractedTextOnUiThread(extractedText: ExtractedText?, durationMillis: Long) {
+    protected open fun showExtractedTextOnUiThread(extractionResult: ExtractionResult?, durationMillis: Long) {
         prgbrIsExtractingText.visibility = View.GONE
         txtvwExtractionTime.text = String.format("%02d:%02d.%03d min", durationMillis / (60 * 1000),
             (durationMillis / 1000) % 60, durationMillis % 1000)
 
-        extractedText?.let {
-            txtvwExtractedText.text = extractedText.text
+        extractionResult?.let {
+            txtvwExtractedText.text = extractionResult.text
         }
 
         // TODO: elsewise show error message
     }
 
 
-    protected open fun extractTextOfFileAsync(file: File, callback: (ExtractedText?) -> Unit) {
+    protected open fun extractTextOfFileAsync(file: File, callback: (ExtractionResult?) -> Unit) {
         thread { // TODO: use thread pool
             callback(extractTextOfFile(file))
         }
     }
 
-    protected open fun extractTextOfFile(file: File): ExtractedText? {
+    protected open fun extractTextOfFile(file: File): ExtractionResult? {
         try {
             val textExtractor = getTextExtractor()
 
