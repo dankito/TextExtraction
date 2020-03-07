@@ -8,6 +8,9 @@ compileKotlin.kotlinOptions.jvmTarget = "1.6"
 compileTestKotlin.kotlinOptions.jvmTarget = "1.6"
 
 
+def mavenArtifactId = "tika-text-extractor"
+
+
 dependencies {
     api project(':TextExtractorCommon')
 
@@ -20,4 +23,16 @@ dependencies {
     testImplementation "org.assertj:assertj-core:$assertJVersion"
 
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
+}
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.project {
+                name = mavenArtifactId
+                artifactId = mavenArtifactId
+            }
+        }
+    }
 }

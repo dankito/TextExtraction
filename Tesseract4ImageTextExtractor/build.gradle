@@ -8,6 +8,9 @@ compileKotlin.kotlinOptions.jvmTarget = "1.6"
 compileTestKotlin.kotlinOptions.jvmTarget = "1.6"
 
 
+def mavenArtifactId = "tesseract4-text-extractor"
+
+
 dependencies {
     api project(':TextExtractorCommon')
 
@@ -25,4 +28,16 @@ dependencies {
 
     testCompile "ch.qos.logback:logback-classic:$logbackVersion"
 
+}
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.project {
+                name = mavenArtifactId
+                artifactId = mavenArtifactId
+            }
+        }
+    }
 }
