@@ -6,6 +6,13 @@ open class ExtractionResult(val error: ErrorInfo? = null) {
     protected val pagesField = mutableListOf<Page>()
 
 
+    open val errorOccurred: Boolean
+        get() = error != null
+
+    open val couldExtractText: Boolean
+        get() = errorOccurred == false && pages.isNotEmpty()
+
+
     open val pages: List<Page>
         get() = ArrayList(pagesField) // don't return pagesField as otherwise it would be manipulated on the outside of this class
 

@@ -214,7 +214,7 @@ abstract class ExtractTextTabBase(protected val threadPool: IThreadPool) : View(
 
         extractedText.value = extractionResult.text
 
-        didTextExtractionReturnAnError.value = extractionResult.error != null
+        didTextExtractionReturnAnError.value = extractionResult.errorOccurred
         extractionResult.error?.let { error ->
             texExtractionErrorMessage.value = getErrorMessage(fileToExtract, error)
         }

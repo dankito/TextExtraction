@@ -124,7 +124,7 @@ abstract class ExtractTextTabFragment : Fragment() {
 
         txtvwExtractedText.text = extractionResult.text
 
-        txtErrorMessage.visibility = if (extractionResult.error == null) View.GONE else View.VISIBLE
+        txtErrorMessage.visibility = if (extractionResult.errorOccurred) View.GONE else View.VISIBLE
         extractionResult.error?.let { error ->
             txtErrorMessage.text = getErrorMessage(context, fileToExtract, extractorName, error)
         }
