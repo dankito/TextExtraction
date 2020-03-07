@@ -11,12 +11,10 @@ import org.bytedeco.javacpp.BytePointer
 import org.bytedeco.leptonica.global.lept.pixDestroy
 import org.bytedeco.leptonica.global.lept.pixRead
 import org.bytedeco.tesseract.TessBaseAPI
-import org.slf4j.LoggerFactory
-import java.io.Closeable
 import java.io.File
 
 
-open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : TextExtractorBase(), Closeable {
+open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : TextExtractorBase(), AutoCloseable {
 
     override val isAvailable: Boolean
 
