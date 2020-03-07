@@ -21,7 +21,7 @@ import java.io.FileInputStream
 import java.io.StringWriter
 
 
-open class TikaTextExtractor(protected val settings: TikaSettings, protected val osHelper: OsHelper = OsHelper()): ITextExtractor {
+open class TikaTextExtractor(protected val settings: TikaSettings, protected val osHelper: OsHelper = OsHelper()): TextExtractorBase() {
 	
 	companion object {
 		private val SupportedFileTypes = listOf("pdf", "png", "jpg", "tif", "tiff", "odt", "docx", "ods", "xlsx", "csv") // TODO: set all supported file types
@@ -52,7 +52,7 @@ open class TikaTextExtractor(protected val settings: TikaSettings, protected val
 	}
 
 
-	override fun extractText(file: File): ExtractionResult {
+	override fun extractTextForSupportedFormat(file: File): ExtractionResult {
 		val extractedTextWriter = StringWriter()
 		extractText(file, extractedTextWriter)
 

@@ -2,16 +2,14 @@ package net.dankito.text.extraction.pdf
 
 import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.parser.PdfTextExtractor
-import net.dankito.text.extraction.ITextExtractor
-import net.dankito.text.extraction.model.ErrorInfo
-import net.dankito.text.extraction.model.ErrorType
+import net.dankito.text.extraction.TextExtractorBase
 import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
 import org.slf4j.LoggerFactory
 import java.io.File
 
 
-class OpenPdfPdfTextExtractor: ITextExtractor {
+open class OpenPdfPdfTextExtractor: TextExtractorBase() {
 
     companion object {
         private val log = LoggerFactory.getLogger(OpenPdfPdfTextExtractor::class.java)
@@ -27,36 +25,30 @@ class OpenPdfPdfTextExtractor: ITextExtractor {
     }
 
 
-    override fun extractText(file: File): ExtractionResult {
-        try {
-            file.inputStream().use { inputStream ->
-                PdfReader(inputStream).use { reader ->
+    override fun extractTextForSupportedFormat(file: File): ExtractionResult {
+        file.inputStream().use { inputStream ->
+            PdfReader(inputStream).use { reader ->
 
-                    val textExtractor = PdfTextExtractor(reader)
+                val textExtractor = PdfTextExtractor(reader)
 
-                    val countPages = reader.numberOfPages
-                    val extractedText = ExtractionResult()
+                val countPages = reader.numberOfPages
+                val extractedText = ExtractionResult()
 
-                    for (pageNum in 1..countPages) {
-                        try {
-                            val text = textExtractor.getTextFromPage(pageNum)
-                            extractedText.addPage(Page(text, pageNum))
+                for (pageNum in 1..countPages) {
+                    try {
+                        val text = textExtractor.getTextFromPage(pageNum)
+                        extractedText.addPage(Page(text, pageNum))
 
-                            log.debug("Extracted text of page $pageNum / $countPages")
-                        } catch (e: Exception) {
-                            log.error("Could not extract page $pageNum of $file", e)
-                        }
+                        log.debug("Extracted text of page $pageNum / $countPages")
+                    } catch (e: Exception) {
+                        log.error("Could not extract page $pageNum of $file", e)
                     }
-
-                    reader.close()
-
-                    return extractedText
                 }
-            }
-        } catch (e: Exception) {
-            log.error("Could not extract text of PDF '$file'", e)
 
-            return ExtractionResult(ErrorInfo(ErrorType.ParseError, e))
+                reader.close()
+
+                return extractedText
+            }
         }
     }
 

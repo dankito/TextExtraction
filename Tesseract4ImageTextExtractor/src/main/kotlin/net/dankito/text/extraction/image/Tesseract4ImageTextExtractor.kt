@@ -1,6 +1,6 @@
 package net.dankito.text.extraction.image
 
-import net.dankito.text.extraction.ITextExtractor
+import net.dankito.text.extraction.TextExtractorBase
 import net.dankito.text.extraction.image.model.Tesseract4Config
 import net.dankito.text.extraction.model.ErrorInfo
 import net.dankito.text.extraction.model.ErrorType
@@ -15,7 +15,7 @@ import java.io.Closeable
 import java.io.File
 
 
-open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : ITextExtractor, Closeable {
+open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : TextExtractorBase(), Closeable {
 
     companion object {
         private val SupportedFileTypes = listOf("png", "jpg", "tif", "tiff") // set all supported file types
@@ -46,42 +46,32 @@ open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : ITextExtract
     }
 
 
-    override fun extractText(file: File): ExtractionResult {
-        if (isAvailable) {
-            try {
+    override fun extractTextForSupportedFormat(file: File): ExtractionResult {
+        // Open input image with leptonica library
+        val image = pixRead(file.absolutePath)
 
-                // Open input image with leptonica library
-                val image = pixRead(file.absolutePath)
-
-                if (image == null) {
-                    return ExtractionResult(ErrorInfo(ErrorType.FileTypeNotSupportedByExtractor)) // image not found / openable / unsupported type
-                }
-
-
-                val result = ExtractionResult()
-
-                api.SetImage(image)
-
-                // Get OCR result
-                val outText: BytePointer? = api.GetUTF8Text()
-
-                outText?.string?.let {
-                    result.addPage(Page(it))
-
-                    outText.deallocate()
-                }
-
-                // Destroy used object and release memory
-                pixDestroy(image)
-
-                return result
-            } catch (e: Exception) {
-                log.error("Could not recognize text of file $file", e)
-                return ExtractionResult(ErrorInfo(ErrorType.ParseError, e))
-            }
+        if (image == null) {
+            return ExtractionResult(ErrorInfo(ErrorType.FileTypeNotSupportedByExtractor)) // image not found / openable / unsupported type
         }
 
-        return ExtractionResult(ErrorInfo(ErrorType.ExtractorNotAvailable))
+
+        val result = ExtractionResult()
+
+        api.SetImage(image)
+
+        // Get OCR result
+        val outText: BytePointer? = api.GetUTF8Text()
+
+        outText?.string?.let {
+            result.addPage(Page(it))
+
+            outText.deallocate()
+        }
+
+        // Destroy used object and release memory
+        pixDestroy(image)
+
+        return result
     }
 
 
