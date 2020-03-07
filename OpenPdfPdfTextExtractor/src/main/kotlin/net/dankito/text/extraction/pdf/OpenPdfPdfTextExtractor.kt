@@ -29,27 +29,30 @@ class OpenPdfPdfTextExtractor: ITextExtractor {
 
     override fun extractText(file: File): ExtractionResult {
         try {
-            val reader = PdfReader(file.inputStream())
+            file.inputStream().use { inputStream ->
+                PdfReader(inputStream).use { reader ->
 
-            val textExtractor = PdfTextExtractor(reader)
+                    val textExtractor = PdfTextExtractor(reader)
 
-            val countPages = reader.numberOfPages
-            val extractedText = ExtractionResult()
+                    val countPages = reader.numberOfPages
+                    val extractedText = ExtractionResult()
 
-            for (pageNum in 1..countPages) {
-                try {
-                    val text = textExtractor.getTextFromPage(pageNum)
-                    extractedText.addPage(Page(text, pageNum))
+                    for (pageNum in 1..countPages) {
+                        try {
+                            val text = textExtractor.getTextFromPage(pageNum)
+                            extractedText.addPage(Page(text, pageNum))
 
-                    log.debug("Extracted text of page $pageNum / $countPages")
-                } catch (e: Exception) {
-                    log.error("Could not extract page $pageNum of $file", e)
+                            log.debug("Extracted text of page $pageNum / $countPages")
+                        } catch (e: Exception) {
+                            log.error("Could not extract page $pageNum of $file", e)
+                        }
+                    }
+
+                    reader.close()
+
+                    return extractedText
                 }
             }
-
-            reader.close()
-
-            return extractedText
         } catch (e: Exception) {
             log.error("Could not extract text of PDF '$file'", e)
 
