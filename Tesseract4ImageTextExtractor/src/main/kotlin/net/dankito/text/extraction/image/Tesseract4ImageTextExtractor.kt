@@ -17,18 +17,11 @@ import java.io.File
 
 open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : TextExtractorBase(), Closeable {
 
-    companion object {
-        private val SupportedFileTypes = listOf("png", "jpg", "tif", "tiff") // set all supported file types
-    }
-
-
     override val isAvailable: Boolean
 
-    override val textExtractionQuality = 50
+    override val supportedFileTypes = listOf("png", "jpg", "tif", "tiff") // set all supported file types
 
-    override fun canExtractDataFromFile(file: File): Boolean {
-        return SupportedFileTypes.contains(file.extension.toLowerCase())
-    }
+    override val textExtractionQuality = 50
 
 
     protected val api = TessBaseAPI()

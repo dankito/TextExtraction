@@ -19,11 +19,9 @@ open class itextPdfTextExtractor: TextExtractorBase() {
 
     override val isAvailable = true // TODO: is this true for all Android versions?
 
-    override val textExtractionQuality = 95
+    override val supportedFileTypes = listOf("pdf")
 
-    override fun canExtractDataFromFile(file: File): Boolean {
-        return "pdf" == file.extension.toLowerCase()
-    }
+    override val textExtractionQuality = 95
 
 
     override fun extractTextForSupportedFormat(file: File): ExtractionResult {

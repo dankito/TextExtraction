@@ -24,8 +24,6 @@ import java.io.StringWriter
 open class TikaTextExtractor(protected val settings: TikaSettings, protected val osHelper: OsHelper = OsHelper()): TextExtractorBase() {
 	
 	companion object {
-		private val SupportedFileTypes = listOf("pdf", "png", "jpg", "tif", "tiff", "odt", "docx", "ods", "xlsx", "csv") // TODO: set all supported file types
-
 		private val log = LoggerFactory.getLogger(TikaTextExtractor::class.java)
 	}
 
@@ -36,11 +34,9 @@ open class TikaTextExtractor(protected val settings: TikaSettings, protected val
 	override val isAvailable: Boolean
 		get() = osHelper.isRunningOnAndroid == false
 
-	override val textExtractionQuality = 85
+	override val supportedFileTypes = listOf("pdf", "png", "jpg", "tif", "tiff", "odt", "docx", "ods", "xlsx", "csv") // TODO: set all supported file types
 
-	override fun canExtractDataFromFile(file: File): Boolean {
-		return SupportedFileTypes.contains(file.extension.toLowerCase())
-	}
+	override val textExtractionQuality = 85
 
 
 	protected lateinit var parser: Parser

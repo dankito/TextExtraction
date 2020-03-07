@@ -20,6 +20,10 @@ abstract class TextExtractorBase : ITextExtractor {
             return ExtractionResult(ErrorInfo(ErrorType.ExtractorNotAvailable))
         }
 
+        if (canExtractDataFromFile(file) == false) {
+            return ExtractionResult(ErrorInfo(ErrorType.FileTypeNotSupportedByExtractor))
+        }
+
         try {
             return extractTextForSupportedFormat(file)
         } catch (e: Exception) {

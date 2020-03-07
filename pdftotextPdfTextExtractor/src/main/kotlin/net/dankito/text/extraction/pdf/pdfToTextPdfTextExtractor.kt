@@ -20,11 +20,9 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdf
 
     override val isAvailable = didFindPdftotextExecutable
 
-    override val textExtractionQuality = 95
+    override val supportedFileTypes = listOf("pdf")
 
-    override fun canExtractDataFromFile(file: File): Boolean {
-        return "pdf" == file.extension.toLowerCase()
-    }
+    override val textExtractionQuality = 95
 
 
     override fun extractTextForSupportedFormat(file: File): ExtractionResult {
