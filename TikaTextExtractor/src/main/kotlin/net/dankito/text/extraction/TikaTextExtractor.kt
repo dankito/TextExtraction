@@ -1,5 +1,6 @@
 package net.dankito.text.extraction
 
+import net.dankito.text.extraction.ITextExtractor.Companion.TextExtractionQualityForUnsupportedFileType
 import net.dankito.text.extraction.model.*
 import net.dankito.utils.os.OsHelper
 import org.apache.tika.config.ServiceLoader
@@ -36,7 +37,16 @@ open class TikaTextExtractor(protected val settings: TikaSettings, protected val
 
 	override val supportedFileTypes = listOf("pdf", "png", "jpg", "tif", "tiff", "odt", "docx", "ods", "xlsx", "csv") // TODO: set all supported file types
 
-	override val textExtractionQuality = 85
+	override fun getTextExtractionQualityForFileType(file: File): Int {
+		if ("pdf" == file.extension.toLowerCase()) {
+			return 70
+		}
+		else if (isFileTypeSupported(file)) {
+			return 85
+		}
+
+		return TextExtractionQualityForUnsupportedFileType
+	}
 
 
 	protected lateinit var parser: Parser

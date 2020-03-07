@@ -1,5 +1,6 @@
 package net.dankito.text.extraction.image
 
+import net.dankito.text.extraction.ITextExtractor.Companion.TextExtractionQualityForUnsupportedFileType
 import net.dankito.text.extraction.TextExtractorBase
 import net.dankito.text.extraction.image.model.Tesseract4Config
 import net.dankito.text.extraction.model.ErrorInfo
@@ -21,7 +22,13 @@ open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : TextExtracto
 
     override val supportedFileTypes = listOf("png", "jpg", "tif", "tiff") // set all supported file types
 
-    override val textExtractionQuality = 50
+    override fun getTextExtractionQualityForFileType(file: File): Int {
+        if (isFileTypeSupported(file)) {
+            return 50
+        }
+
+        return TextExtractionQualityForUnsupportedFileType
+    }
 
 
     protected val api = TessBaseAPI()

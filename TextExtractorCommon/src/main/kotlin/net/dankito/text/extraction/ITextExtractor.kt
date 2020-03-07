@@ -6,6 +6,11 @@ import java.io.File
 
 interface ITextExtractor {
 
+    companion object {
+        const val TextExtractionQualityForUnsupportedFileType = -1
+    }
+
+
     val isAvailable: Boolean
 
     val supportedFileTypes: List<String>
@@ -14,11 +19,11 @@ interface ITextExtractor {
         return supportedFileTypes.contains(file.extension.toLowerCase())
     }
 
-    val textExtractionQuality: Int
-
     fun canExtractDataFromFile(file: File): Boolean {
         return isFileTypeSupported(file)
     }
+
+    fun getTextExtractionQualityForFileType(file: File): Int
 
     fun extractText(file: File): ExtractionResult
 

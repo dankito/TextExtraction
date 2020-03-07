@@ -2,6 +2,7 @@ package net.dankito.text.extraction.pdf
 
 import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.parser.PdfTextExtractor
+import net.dankito.text.extraction.ITextExtractor.Companion.TextExtractionQualityForUnsupportedFileType
 import net.dankito.text.extraction.TextExtractorBase
 import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
@@ -20,7 +21,13 @@ open class OpenPdfPdfTextExtractor: TextExtractorBase() {
 
     override val supportedFileTypes = listOf("pdf")
 
-    override val textExtractionQuality = 70
+    override fun getTextExtractionQualityForFileType(file: File): Int {
+        if (isFileTypeSupported(file)) {
+            return 70
+        }
+
+        return TextExtractionQualityForUnsupportedFileType
+    }
 
 
     override fun extractTextForSupportedFormat(file: File): ExtractionResult {

@@ -13,13 +13,13 @@ open class TextExtractorRegistry @JvmOverloads constructor(extractors: List<ITex
 
     override fun getAllExtractorsForFile(file: File): List<ITextExtractor> {
         return extractors
-            .sortedByDescending { it.textExtractionQuality }
+            .sortedByDescending { it.getTextExtractionQualityForFileType(file) }
             .filter { canExtractDataFromFile(it, file) }
     }
 
     override fun findBestExtractorForFile(file: File): ITextExtractor? {
         return extractors
-            .sortedByDescending { it.textExtractionQuality }
+            .sortedByDescending { it.getTextExtractionQualityForFileType(file) }
             .firstOrNull { canExtractDataFromFile(it, file) }
     }
 
