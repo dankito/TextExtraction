@@ -1,7 +1,7 @@
 package net.dankito.text.extraction.model
 
 
-open class ExtractionResult(var countPages: Int = 1) {
+open class ExtractionResult {
 
     protected val pagesField = mutableListOf<Page>()
 

@@ -31,7 +31,7 @@ class itextPdfTextExtractor: ITextExtractor {
         val pdfDocument = PdfDocument(reader)
 
         val countPages = pdfDocument.numberOfPages
-        val extractedText = ExtractionResult(countPages)
+        val extractedText = ExtractionResult()
 
         for (pageNum in 1..countPages) {
             try {

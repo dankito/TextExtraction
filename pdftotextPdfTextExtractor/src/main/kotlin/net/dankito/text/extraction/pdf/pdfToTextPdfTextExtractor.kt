@@ -47,7 +47,6 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdf
                 result.addPage(Page(pageResult.output, pageNum))
             }
             else { // if pageNum is out of range exitCode 99 gets returned and error message is 'Command Line Error: Wrong page range given: the first page (<count pages>) can not be after the last page (<count pages + 1>).'
-                result.countPages = pageNum - 1
                 return result
             }
         }
