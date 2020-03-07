@@ -4,6 +4,8 @@ import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfReader
 import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor
 import net.dankito.text.extraction.ITextExtractor
+import net.dankito.text.extraction.model.ErrorInfo
+import net.dankito.text.extraction.model.ErrorType
 import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
 import org.slf4j.LoggerFactory
@@ -27,28 +29,36 @@ class itextPdfTextExtractor: ITextExtractor {
 
 
     override fun extractText(file: File): ExtractionResult {
-        val reader = PdfReader(file.inputStream())
-        val pdfDocument = PdfDocument(reader)
+        try {
+            val reader = PdfReader(file.inputStream())
+            val pdfDocument = PdfDocument(reader)
 
-        val countPages = pdfDocument.numberOfPages
-        val extractedText = ExtractionResult()
+            val countPages = pdfDocument.numberOfPages
+            val extractedText = ExtractionResult()
 
-        for (pageNum in 1..countPages) {
-            try {
-                val page = pdfDocument.getPage(pageNum)
-                val text = PdfTextExtractor.getTextFromPage(page)
+            for (pageNum in 1..countPages) {
+                try {
+                    val page = pdfDocument.getPage(pageNum)
+                    val text = PdfTextExtractor.getTextFromPage(page)
 
-                extractedText.addPage(Page(text, pageNum))
+                    extractedText.addPage(Page(text, pageNum))
 
-                log.debug("Extracted text of page $pageNum / $countPages")
-            } catch (e: Exception) {
-                log.error("Could not extract page $pageNum of $file", e)
+                    log.debug("Extracted text of page $pageNum / $countPages")
+                } catch (e: Exception) {
+                    log.error("Could not extract page $pageNum of $file", e)
+
+
+                }
             }
+
+            reader.close()
+
+            return extractedText
+        } catch (e: Exception) {
+            log.error("Could not extract text of PDF '$file'", e)
+
+            return ExtractionResult(ErrorInfo(ErrorType.ParseError, e))
         }
-
-        reader.close()
-
-        return extractedText
     }
 
 }

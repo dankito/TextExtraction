@@ -1,6 +1,8 @@
 package net.dankito.text.extraction.pdf
 
 import net.dankito.text.extraction.ITextExtractor
+import net.dankito.text.extraction.model.ErrorInfo
+import net.dankito.text.extraction.model.ErrorType
 import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
 import org.slf4j.LoggerFactory
@@ -34,7 +36,7 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdf
             return extractTextPageByPage(file)
         }
 
-        return ExtractionResult() // TODO: add error info to ExtractedText
+        return ExtractionResult(ErrorInfo(ErrorType.ExtractorNotAvailable))
     }
 
     protected open fun extractTextPageByPage(file: File): ExtractionResult {

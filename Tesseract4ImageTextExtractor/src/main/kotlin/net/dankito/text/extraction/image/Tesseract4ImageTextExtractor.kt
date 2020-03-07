@@ -2,6 +2,8 @@ package net.dankito.text.extraction.image
 
 import net.dankito.text.extraction.ITextExtractor
 import net.dankito.text.extraction.image.model.Tesseract4Config
+import net.dankito.text.extraction.model.ErrorInfo
+import net.dankito.text.extraction.model.ErrorType
 import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
 import org.bytedeco.javacpp.BytePointer
@@ -52,7 +54,7 @@ open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : ITextExtract
                 val image = pixRead(file.absolutePath)
 
                 if (image == null) {
-                    return ExtractionResult() // image not found / openable / unsupported type
+                    return ExtractionResult(ErrorInfo(ErrorType.FileTypeNotSupportedByExtractor)) // image not found / openable / unsupported type
                 }
 
 
@@ -75,11 +77,11 @@ open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : ITextExtract
                 return result
             } catch (e: Exception) {
                 log.error("Could not recognize text of file $file", e)
-                return ExtractionResult() // TODO: add error info to ExtractedText
+                return ExtractionResult(ErrorInfo(ErrorType.ParseError, e))
             }
         }
 
-        return ExtractionResult() // TODO: add error info to ExtractedText
+        return ExtractionResult(ErrorInfo(ErrorType.ExtractorNotAvailable))
     }
 
 
