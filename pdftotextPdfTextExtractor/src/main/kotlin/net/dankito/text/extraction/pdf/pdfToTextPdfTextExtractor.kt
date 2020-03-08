@@ -1,5 +1,7 @@
 package net.dankito.text.extraction.pdf
 
+import net.dankito.text.extraction.ExecuteCommandResult
+import net.dankito.text.extraction.ExternalToolTextExtractorBase
 import net.dankito.text.extraction.ITextExtractor.Companion.TextExtractionQualityForUnsupportedFileType
 import net.dankito.text.extraction.TextExtractorBase
 import net.dankito.text.extraction.model.ExtractionResult
@@ -8,7 +10,7 @@ import org.slf4j.LoggerFactory
 import java.io.File
 
 
-open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdftotextExecutablePath: String = "pdftotext") : TextExtractorBase() {
+open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdftotextExecutablePath: String = "pdftotext") : ExternalToolTextExtractorBase() {
 
     companion object {
         private val log = LoggerFactory.getLogger(pdfToTextPdfTextExtractor::class.java)
@@ -73,37 +75,6 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdf
             file.absolutePath,
             "-"
         )
-    }
-
-
-    protected open fun executeCommand(vararg arguments: String): ExecuteCommandResult {
-        try {
-            // TODO: add "/bin/bash" or "cmd.exe" ?
-
-            val processBuilder = ProcessBuilder(*arguments)
-
-            val process = processBuilder.start()
-
-            val outputReader = process.inputStream.bufferedReader()
-
-            val processOutput = outputReader.readText().trim()
-
-            val errorReader = process.errorStream.bufferedReader()
-
-            val errors = errorReader.readText().trim()
-
-            val exitCode = process.waitFor()
-            log.debug("Command ${arguments.joinToString(" ")} exited with code $exitCode")
-
-            outputReader.close()
-            errorReader.close()
-
-            return ExecuteCommandResult(exitCode, processOutput, errors)
-        } catch (e: Exception) {
-            log.error("Could not execute command ${arguments.joinToString(" ")}", e)
-
-            return ExecuteCommandResult(-1, "", e.toString())
-        }
     }
 
 }

@@ -1,4 +1,4 @@
-package net.dankito.text.extraction.pdf
+package net.dankito.text.extraction
 
 
 open class ExecuteCommandResult(val exitCode: Int, val output: String, val errors: String) {
