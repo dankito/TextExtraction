@@ -2,7 +2,9 @@ package net.dankito.text.extraction.image
 
 import net.dankito.text.extraction.ITextExtractor.Companion.TextExtractionQualityForUnsupportedFileType
 import net.dankito.text.extraction.TextExtractorBase
-import net.dankito.text.extraction.image.model.Tesseract4Config
+import net.dankito.text.extraction.image.model.OcrOutputType
+import net.dankito.text.extraction.image.model.TesseractConfig
+import net.dankito.text.extraction.image.model.TesseractHelper
 import net.dankito.text.extraction.model.ErrorInfo
 import net.dankito.text.extraction.model.ErrorType
 import net.dankito.text.extraction.model.ExtractionResult
@@ -14,7 +16,11 @@ import org.bytedeco.tesseract.TessBaseAPI
 import java.io.File
 
 
-open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : TextExtractorBase(), AutoCloseable {
+open class Tesseract4ImageTextExtractor(
+    protected val config: TesseractConfig,
+    protected val tesseractHelper: TesseractHelper = TesseractHelper()
+) : TextExtractorBase(), AutoCloseable {
+
 
     override val name = "Tesseract 4"
 
@@ -58,6 +64,9 @@ open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : TextExtracto
         api.SetImage(image)
 
         // Get OCR result
+        // TODO: enable output type hOCR
+//        val outText: BytePointer? = if (config.ocrOutputType == OcrOutputType.Hocr) api.GetHOCRText() else api.GetUTF8Text()
+
         val outText: BytePointer? = api.GetUTF8Text()
 
         outText?.string?.let {
@@ -73,10 +82,11 @@ open class Tesseract4ImageTextExtractor(config: Tesseract4Config) : TextExtracto
     }
 
 
-    protected open fun initTesseract(api: TessBaseAPI, config: Tesseract4Config): Boolean {
-        val languagesString = config.languages?.joinToString("+")
+    protected open fun initTesseract(api: TessBaseAPI, config: TesseractConfig): Boolean {
+        val languagesString = tesseractHelper.getTesseractLanguageString(config.ocrLanguages)
+        val tessdataDirectory = config.tessdataDirectory ?: File("tessdata")
 
-        val isTesseract4Installed = api.Init(config.tessdataDirectory.absolutePath, languagesString) == 0
+        val isTesseract4Installed = api.Init(tessdataDirectory.absolutePath, languagesString) == 0
 
         config.pageSegMode?.let { pageSegMode ->
             api.SetPageSegMode(pageSegMode.mode)

@@ -8,22 +8,11 @@ compileKotlin.kotlinOptions.jvmTarget = "1.6"
 compileTestKotlin.kotlinOptions.jvmTarget = "1.6"
 
 
-def mavenArtifactId = "tika-text-extractor"
+def mavenArtifactId = "tesseract-common"
 
 
 dependencies {
     api project(':TextExtractorCommon')
-    api project(':TesseractCommon')
-
-    implementation"org.apache.tika:tika-java7:$tikaVersion"
-
-
-    testApi project(path: ':TextExtractorCommon', configuration: 'tests')
-
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.assertj:assertj-core:$assertJVersion"
-
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
 }
 
 

@@ -13,6 +13,7 @@ def mavenArtifactId = "tesseract4-text-extractor"
 
 dependencies {
     api project(':TextExtractorCommon')
+    api project(':TesseractCommon')
 
     implementation "org.bytedeco:tesseract-platform:$tesseract4Version"
 

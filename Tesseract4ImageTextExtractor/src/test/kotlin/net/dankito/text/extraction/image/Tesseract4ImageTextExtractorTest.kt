@@ -1,6 +1,6 @@
 package net.dankito.text.extraction.image
 
-import net.dankito.text.extraction.image.model.Tesseract4Config
+import net.dankito.text.extraction.image.model.TesseractConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Test
@@ -14,7 +14,7 @@ class Tesseract4ImageTextExtractorTest {
     }
 
 
-    private val underText = Tesseract4ImageTextExtractor(Tesseract4Config())
+    private val underText = Tesseract4ImageTextExtractor(TesseractConfig())
 
 
     @After

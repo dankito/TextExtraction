@@ -1,16 +1,23 @@
 package net.dankito.text.extraction.model
 
+import net.dankito.text.extraction.image.model.OcrLanguage
+import net.dankito.text.extraction.image.model.OcrOutputType
+import net.dankito.text.extraction.image.model.PageSegMode
+import net.dankito.text.extraction.image.model.TesseractConfig
+import java.io.File
 
-open class TikaSettings(
+
+open class TikaSettings @JvmOverloads constructor(
 	val pdfContentExtractorStrategy: PdfContentExtractorStrategy,
-	val ocrLanguages: List<OcrLanguage> = listOf(OcrLanguage.English),
-	val ocrOutputType: OcrOutputType = OcrOutputType.Text,
-	val tesseractPath: String? = null,
-	val tessdataPath: String? = null
-) {
+	ocrLanguages: List<OcrLanguage> = listOf(OcrLanguage.English),
+	ocrOutputType: OcrOutputType = OcrOutputType.Text,
+	tesseractPath: File? = null,
+	tessdataDirectory: File? = null,
+	pageSegMode: PageSegMode? = null
+) : TesseractConfig(ocrLanguages, ocrOutputType, tesseractPath, tessdataDirectory, pageSegMode) {
 
 	override fun toString(): String {
-		return "pdfContentExtractorStrategy=$pdfContentExtractorStrategy, ocrLanguages=$ocrLanguages, ocrOutputType=$ocrOutputType, tesseractPath=$tesseractPath, tessdataPath=$tessdataPath"
+		return "pdfContentExtractorStrategy=$pdfContentExtractorStrategy, ${super.toString()}"
 	}
 
 }

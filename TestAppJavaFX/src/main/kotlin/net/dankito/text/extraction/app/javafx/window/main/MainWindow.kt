@@ -7,7 +7,8 @@ import net.dankito.text.extraction.TextExtractorRegistry
 import net.dankito.text.extraction.TikaTextExtractor
 import net.dankito.text.extraction.app.javafx.window.main.controls.*
 import net.dankito.text.extraction.image.Tesseract4ImageTextExtractor
-import net.dankito.text.extraction.image.model.Tesseract4Config
+import net.dankito.text.extraction.image.model.OcrLanguage
+import net.dankito.text.extraction.image.model.TesseractConfig
 import net.dankito.text.extraction.pdf.OpenPdfPdfTextExtractor
 import net.dankito.text.extraction.pdf.itextPdfTextExtractor
 import net.dankito.text.extraction.pdf.pdfToTextPdfTextExtractor
@@ -23,7 +24,7 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
         OpenPdfPdfTextExtractor(),
         itextPdfTextExtractor(),
         pdfToTextPdfTextExtractor(),
-        Tesseract4ImageTextExtractor(Tesseract4Config()),
+        Tesseract4ImageTextExtractor(TesseractConfig(listOf(OcrLanguage.English, OcrLanguage.German))),
         TikaTextExtractor()
     ))
 

@@ -1,6 +1,9 @@
 package net.dankito.text.extraction
 
 import net.dankito.text.extraction.ITextExtractor.Companion.TextExtractionQualityForUnsupportedFileType
+import net.dankito.text.extraction.image.model.OcrLanguage
+import net.dankito.text.extraction.image.model.OcrOutputType
+import net.dankito.text.extraction.image.model.TesseractHelper
 import net.dankito.text.extraction.model.*
 import net.dankito.utils.os.OsHelper
 import org.apache.tika.config.ServiceLoader
@@ -22,14 +25,20 @@ import java.io.FileInputStream
 import java.io.StringWriter
 
 
-open class TikaTextExtractor(protected val settings: TikaSettings, protected val osHelper: OsHelper = OsHelper()): TextExtractorBase() {
+open class TikaTextExtractor(
+	protected val settings: TikaSettings,
+	protected val tesseractHelper: TesseractHelper = TesseractHelper(),
+	protected val osHelper: OsHelper = OsHelper()
+): TextExtractorBase() {
 	
 	companion object {
 		private val log = LoggerFactory.getLogger(TikaTextExtractor::class.java)
 	}
 
 
-	constructor() : this(TikaSettings(PdfContentExtractorStrategy.OcrAndText, listOf(OcrLanguage.English, OcrLanguage.German), OcrOutputType.Text))
+	constructor() : this(TikaSettings(PdfContentExtractorStrategy.OcrAndText,
+		listOf(OcrLanguage.English, OcrLanguage.German), OcrOutputType.Text
+	))
 
 
 	override val name = "Tika"
@@ -116,7 +125,7 @@ open class TikaTextExtractor(protected val settings: TikaSettings, protected val
 
 		val defaultParser = DefaultParser(MediaTypeRegistry.getDefaultRegistry(), ServiceLoader(), parserClassesToExclude)
 		val pdfParser = PDFParser()
-		pdfParser.setOcrStrategy(getTesseractOptionName(pdfContentExtractorStrategy))
+		pdfParser.setOcrStrategy(getPdfParserOptionName(pdfContentExtractorStrategy))
 		parser = AutoDetectParser(defaultParser, pdfParser)
 
 		context.set(Parser::class.java, parser)
@@ -124,42 +133,31 @@ open class TikaTextExtractor(protected val settings: TikaSettings, protected val
 
 	protected open fun initTesseractOCRConfig(context: ParseContext) {
 		log.debug("Configuring Tesseract:\n" +
-					"Tesseract path = '${settings.tesseractPath}'\ntessdata path = '${settings.tessdataPath}'\n" +
+					"Tesseract path = '${settings.tesseractPath}'\ntessdata directory = '${settings.tessdataDirectory}'\n" +
 					"OCR languages = '${settings.ocrLanguages}'\nOCR output type = '${settings.ocrOutputType}'")
 
 		val config = TesseractOCRConfig()
 
 		settings.tesseractPath?.let { tesseractPath ->
-			config.tesseractPath = tesseractPath
+			config.tesseractPath = tesseractPath.absolutePath
 		}
 
-		settings.tessdataPath?.let { tessdataPath ->
-			config.tessdataPath = tessdataPath
+		settings.tessdataDirectory?.let { tessdataDirectory ->
+			config.tessdataPath = tessdataDirectory.absolutePath
 		}
 
-		config.language = getTesseractLanguageString(settings.ocrLanguages)
+		config.language = tesseractHelper.getTesseractLanguageString(settings.ocrLanguages)
 
 		config.outputType = getTesseractOcrOutputType(settings.ocrOutputType)
 
 		context.set(TesseractOCRConfig::class.java, config)
 	}
 
-	protected open fun getTesseractOptionName(pdfContentExtractorStrategy: PdfContentExtractorStrategy): String {
+	protected open fun getPdfParserOptionName(pdfContentExtractorStrategy: PdfContentExtractorStrategy): String {
 		return when (pdfContentExtractorStrategy) {
 			PdfContentExtractorStrategy.NoOcr -> "no_ocr"
 			PdfContentExtractorStrategy.OcrOnly -> "ocr_only"
 			PdfContentExtractorStrategy.OcrAndText -> "ocr_and_text"
-		}
-	}
-
-	protected open fun getTesseractLanguageString(ocrLanguages: List<OcrLanguage>): String {
-		return ocrLanguages.map { getTesseractLanguageName(it) }.joinToString("+")
-	}
-
-	protected open fun getTesseractLanguageName(ocrLanguage: OcrLanguage): String {
-		return when (ocrLanguage) {
-			OcrLanguage.English -> "eng"
-			OcrLanguage.German -> "deu"
 		}
 	}
 

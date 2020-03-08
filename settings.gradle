@@ -3,9 +3,11 @@ include ':TextExtractorCommon'
 include ':pdftotextPdfTextExtractor'
 include ':OpenPdfPdfTextExtractor'
 include ':itextPdfTextExtractor'
-include ':TikaTextExtractor'
 
+include 'TesseractCommon'
 include ':Tesseract4ImageTextExtractor'
+
+include ':TikaTextExtractor'
 
 include ':TextInfoExtractor'
 
