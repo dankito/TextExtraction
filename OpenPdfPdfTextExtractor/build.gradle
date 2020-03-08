@@ -41,6 +41,7 @@ uploadArchives {
             pom.project {
                 name = mavenArtifactId
                 artifactId = mavenArtifactId
+                packaging 'jar'
             }
         }
     }

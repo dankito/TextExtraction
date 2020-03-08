@@ -59,33 +59,6 @@ allprojects {
 //                    authentication(userName: ossrhUsername, password: ossrhPassword)
 //                }
 //            }
-
-                    pom.project {
-                        packaging 'jar'
-                        description "Framework for extracting text from different file types like PDF, images, office files, ..."
-                        url 'https://github.com/dankito/TextExtraction'
-
-                        scm {
-                            connection 'scm:git:git://github.com/dankito/TextExtraction.git'
-                            developerConnection 'scm:git:git@github.com/dankito/TextExtraction.git'
-                            url 'https://github.com/dankito/TextExtraction'
-                        }
-
-                        licenses {
-                            license {
-                                name 'The Apache License, Version 2.0'
-                                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                            }
-                        }
-
-                        developers {
-                            developer {
-                                id 'dankito'
-                                name 'Christian Dankl'
-                                email 'maven@dankito.net'
-                            }
-                        }
-                    }
                 }
             }
         }
