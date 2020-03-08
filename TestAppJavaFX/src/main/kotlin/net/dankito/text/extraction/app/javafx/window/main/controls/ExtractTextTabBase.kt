@@ -3,31 +3,36 @@ package net.dankito.text.extraction.app.javafx.window.main.controls
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
-import javafx.scene.control.TabPane
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
+import kotlinx.coroutines.*
+import kotlinx.coroutines.javafx.JavaFx
 import net.dankito.text.extraction.ITextExtractor
 import net.dankito.text.extraction.model.ErrorInfo
 import net.dankito.text.extraction.model.ErrorType
 import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.ExtractionResultForExtractor
-import net.dankito.utils.IThreadPool
 import net.dankito.utils.javafx.ui.extensions.ensureOnlyUsesSpaceIfVisible
 import net.dankito.utils.javafx.ui.extensions.setBackgroundToColor
 import org.slf4j.LoggerFactory
 import tornadofx.*
 import java.io.File
 import java.util.*
+import kotlin.coroutines.CoroutineContext
 
 
-abstract class ExtractTextTabBase(protected val threadPool: IThreadPool) : View() {
+abstract class ExtractTextTabBase : View(), CoroutineScope {
 
     companion object {
         private val logger = LoggerFactory.getLogger(ExtractTextTabBase::class.java)
     }
+
+
+    override val coroutineContext: CoroutineContext
+        get() = SupervisorJob() + Dispatchers.JavaFx
 
 
     protected abstract fun createTextExtractor(): ITextExtractor
@@ -204,19 +209,20 @@ abstract class ExtractTextTabBase(protected val threadPool: IThreadPool) : View(
     }
 
 
-    protected open fun extractTextOfFileAndShowResult() {
+    protected open fun extractTextOfFileAndShowResult() = launch {
         lastSelectedFile?.let { file ->
             isExtractingText.value = true
             didTextExtractionReturnAnError.value = false
             showTextExtractorInfo.value = false
             val startTime = Date().time
 
-            extractTextOfFileAsync(file) { extractedText ->
+            val deferred = extractTextOfFileAsync(file)
+
+            withContext(Dispatchers.JavaFx) {
+                val extractionResult = deferred.await()
                 val durationMillis = Date().time - startTime
 
-                runLater {
-                    showExtractedTextOnUiThread(file, extractedText, durationMillis)
-                }
+                showExtractedTextOnUiThread(file, extractionResult, durationMillis)
             }
         }
     }
@@ -254,13 +260,13 @@ abstract class ExtractTextTabBase(protected val threadPool: IThreadPool) : View(
     }
 
 
-    protected open fun extractTextOfFileAsync(file: File, callback: (ExtractionResult) -> Unit) {
-        threadPool.runAsync {
-            callback(extractTextOfFile(file))
+    protected open fun extractTextOfFileAsync(file: File): Deferred<ExtractionResult> {
+        return async(Dispatchers.IO) {
+            extractTextOfFile(file)
         }
     }
 
-    protected open fun extractTextOfFile(file: File): ExtractionResult {
+    protected open suspend fun extractTextOfFile(file: File): ExtractionResult {
         try {
             val textExtractor = getTextExtractor()
 

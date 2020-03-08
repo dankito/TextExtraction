@@ -37,12 +37,12 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
 
 
         tabpane {
-            addTab("main.window.tab.openpdf", OpenPdfExtractTextTab(threadPool))
-            addTab("main.window.tab.itext", itextExtractTextTab(threadPool))
-            addTab("main.window.tab.pdftotext", pdfToTextPdfTextExtractorExtractTextTab(threadPool))
-            addTab("main.window.tab.tesseract4", Tesseract4ImageTextExtractorExtractTextTab(threadPool))
-            addTab("main.window.tab.tika", TikaTextExtractorExtractTextTab(threadPool))
-            addTab("main.window.tab.find.best.extractor.for.type", FindBestTextExtractorExtractTextTab(extractorRegistry, threadPool))
+            addTab("main.window.tab.openpdf", OpenPdfExtractTextTab())
+            addTab("main.window.tab.itext", itextExtractTextTab())
+            addTab("main.window.tab.pdftotext", pdfToTextPdfTextExtractorExtractTextTab())
+            addTab("main.window.tab.tesseract4", Tesseract4ImageTextExtractorExtractTextTab())
+            addTab("main.window.tab.tika", TikaTextExtractorExtractTextTab())
+            addTab("main.window.tab.find.best.extractor.for.type", FindBestTextExtractorExtractTextTab(extractorRegistry))
 
             vboxConstraints {
                 vGrow = Priority.ALWAYS

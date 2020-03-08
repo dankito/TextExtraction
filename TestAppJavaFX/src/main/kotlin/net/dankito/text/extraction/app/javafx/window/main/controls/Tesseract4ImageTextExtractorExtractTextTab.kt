@@ -4,11 +4,9 @@ import net.dankito.text.extraction.ITextExtractor
 import net.dankito.text.extraction.image.Tesseract4ImageTextExtractor
 import net.dankito.text.extraction.image.model.OcrLanguage
 import net.dankito.text.extraction.image.model.TesseractConfig
-import net.dankito.utils.IThreadPool
-import java.io.File
 
 
-class Tesseract4ImageTextExtractorExtractTextTab(threadPool: IThreadPool) : ExtractTextTabBase(threadPool) {
+class Tesseract4ImageTextExtractorExtractTextTab : ExtractTextTabBase() {
 
     override fun createTextExtractor(): ITextExtractor {
         return Tesseract4ImageTextExtractor(TesseractConfig(listOf(OcrLanguage.English, OcrLanguage.German)))

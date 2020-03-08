@@ -16,6 +16,7 @@ compileTestKotlin.kotlinOptions.jvmTarget = "1.8"
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-javafx:$kotlinCoroutinesVersion"
 
     compile project(':TextExtractorCommon')
     compile project(':OpenPdfPdfTextExtractor')

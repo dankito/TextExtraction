@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.fragment_extract_text_tab.*
 import kotlinx.android.synthetic.main.fragment_extract_text_tab.view.*
+import kotlinx.coroutines.*
 import net.dankito.filechooserdialog.FileChooserDialog
 import net.dankito.filechooserdialog.model.FileChooserDialogConfig
 import net.dankito.text.extraction.ITextExtractor
@@ -28,7 +29,7 @@ import java.util.*
 import kotlin.concurrent.thread
 
 
-abstract class ExtractTextTabFragment : Fragment() {
+abstract class ExtractTextTabFragment : Fragment(), CoroutineScope by MainScope() {
 
     companion object {
         private val log = LoggerFactory.getLogger(ExtractTextTabFragment::class.java)
@@ -97,7 +98,7 @@ abstract class ExtractTextTabFragment : Fragment() {
     }
 
 
-    protected open fun extractTextOfFileAndShowResult() {
+    protected open fun extractTextOfFileAndShowResult() = launch {
         lastSelectedFile?.let { file ->
             prgbrIsExtractingText.visibility = View.VISIBLE
             btnExtractSelectedFile.isEnabled = false
@@ -105,13 +106,14 @@ abstract class ExtractTextTabFragment : Fragment() {
             txtErrorMessage.visibility = View.GONE
             val startTime = Date().time
 
-            extractTextOfFileAsync(file) { extractedText ->
+            val deferred = extractTextOfFileAsync(file)
+
+            withContext(Dispatchers.Main) {
+                val extractionResult = deferred.await()
                 val durationMillis = Date().time - startTime
 
                 activity?.let { context ->
-                    context.runOnUiThread {
-                        showExtractedTextOnUiThread(context, file, extractedText, durationMillis)
-                    }
+                    showExtractedTextOnUiThread(context, file, extractionResult, durationMillis)
                 }
             }
         }
@@ -149,13 +151,13 @@ abstract class ExtractTextTabFragment : Fragment() {
     }
 
 
-    protected open fun extractTextOfFileAsync(file: File, callback: (ExtractionResult) -> Unit) {
-        thread { // TODO: use thread pool
-            callback(extractTextOfFile(file))
+    protected open fun extractTextOfFileAsync(file: File): Deferred<ExtractionResult> {
+        return async(Dispatchers.IO) {
+            extractTextOfFile(file)
         }
     }
 
-    protected open fun extractTextOfFile(file: File): ExtractionResult {
+    protected open suspend fun extractTextOfFile(file: File): ExtractionResult {
         try {
             val textExtractor = getTextExtractor()
 
