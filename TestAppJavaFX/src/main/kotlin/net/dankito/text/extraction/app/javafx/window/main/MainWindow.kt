@@ -6,14 +6,13 @@ import net.dankito.text.extraction.ITextExtractorRegistry
 import net.dankito.text.extraction.TextExtractorRegistry
 import net.dankito.text.extraction.TikaTextExtractor
 import net.dankito.text.extraction.app.javafx.window.main.controls.*
-import net.dankito.text.extraction.image.Tesseract4ImageTextExtractor
+import net.dankito.text.extraction.image.Tesseract4JniImageTextExtractor
 import net.dankito.text.extraction.image.model.OcrLanguage
 import net.dankito.text.extraction.image.model.TesseractConfig
 import net.dankito.text.extraction.pdf.OpenPdfPdfTextExtractor
 import net.dankito.text.extraction.pdf.itextPdfTextExtractor
 import net.dankito.text.extraction.pdf.pdfToTextPdfTextExtractor
 import net.dankito.utils.PackageInfo
-import net.dankito.utils.ThreadPool
 import tornadofx.*
 
 
@@ -24,11 +23,9 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
         OpenPdfPdfTextExtractor(),
         itextPdfTextExtractor(),
         pdfToTextPdfTextExtractor(),
-        Tesseract4ImageTextExtractor(TesseractConfig(listOf(OcrLanguage.English, OcrLanguage.German))),
+        Tesseract4JniImageTextExtractor(TesseractConfig(listOf(OcrLanguage.English, OcrLanguage.German))),
         TikaTextExtractor()
     ))
-
-    private val threadPool = ThreadPool()
 
 
     override val root = vbox {
@@ -40,7 +37,7 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
             addTab("main.window.tab.openpdf", OpenPdfExtractTextTab())
             addTab("main.window.tab.itext", itextExtractTextTab())
             addTab("main.window.tab.pdftotext", pdfToTextPdfTextExtractorExtractTextTab())
-            addTab("main.window.tab.tesseract4", Tesseract4ImageTextExtractorExtractTextTab())
+            addTab("main.window.tab.tesseract4jni", Tesseract4JniImageTextExtractorExtractTextTab())
             addTab("main.window.tab.tika", TikaTextExtractorExtractTextTab())
             addTab("main.window.tab.find.best.extractor.for.type", FindBestTextExtractorExtractTextTab(extractorRegistry))
 

@@ -7,14 +7,14 @@ import org.junit.Test
 import java.io.File
 
 
-class Tesseract4ImageTextExtractorTest {
+class Tesseract4JniImageTextExtractorTest {
 
     companion object {
         private val TestPdfFile = File("<insert path to your test pdf here>")
     }
 
 
-    private val underText = Tesseract4ImageTextExtractor(TesseractConfig())
+    private val underText = Tesseract4JniImageTextExtractor(TesseractConfig())
 
 
     @After
