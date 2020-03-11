@@ -23,8 +23,8 @@ allprojects {
 
 
     repositories {
-        mavenLocal()
         mavenCentral()
+        mavenLocal()
         jcenter()
         google()
     }

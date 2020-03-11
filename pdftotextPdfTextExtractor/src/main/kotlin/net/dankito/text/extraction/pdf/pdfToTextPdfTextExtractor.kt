@@ -1,27 +1,22 @@
 package net.dankito.text.extraction.pdf
 
-import net.dankito.text.extraction.ExecuteCommandResult
 import net.dankito.text.extraction.ExternalToolTextExtractorBase
 import net.dankito.text.extraction.ITextExtractor.Companion.TextExtractionQualityForUnsupportedFileType
-import net.dankito.text.extraction.TextExtractorBase
 import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
-import org.slf4j.LoggerFactory
+import net.dankito.utils.process.CommandConfig
+import net.dankito.utils.process.ExecuteCommandResult
 import java.io.File
 
 
 open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdftotextExecutablePath: String = "pdftotext") : ExternalToolTextExtractorBase() {
-
-    companion object {
-        private val log = LoggerFactory.getLogger(pdfToTextPdfTextExtractor::class.java)
-    }
 
 
     override val name = "pdftotext"
 
     // TODO: adjust for a) Windows b) if pdftotextExecutablePath is set
     protected val didFindPdftotextExecutable: Boolean =
-        File(executeCommand("which", pdftotextExecutablePath).output).exists()
+        File(executeCommandWithLittleOutput(pdftotextExecutablePath).output).exists()
 
     override val isAvailable = didFindPdftotextExecutable
 
@@ -65,7 +60,7 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdf
          *  - (last parameter): print to console instead of to file
          */
         // TODO: add .exe to pdftotext / pdftotextExecutablePath on Windows
-        return executeCommand(
+        return executeCommand(CommandConfig(listOf(
             pdftotextExecutablePath,
             "-f",
             pageNum.toString(),
@@ -74,7 +69,7 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdf
             "-layout",
             file.absolutePath,
             "-"
-        )
+        )))
     }
 
 }
