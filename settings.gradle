@@ -5,6 +5,7 @@ include ':OpenPdfPdfTextExtractor'
 include ':itextPdfTextExtractor'
 
 include ':TesseractCommon'
+include ':Tesseract4CommandLineImageTextExtractor'
 include ':Tesseract4JniImageTextExtractor'
 
 include ':TikaTextExtractor'

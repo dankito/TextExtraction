@@ -22,11 +22,11 @@ open class Tesseract4JniImageTextExtractor(
 ) : TextExtractorBase(), AutoCloseable {
 
 
-    override val name = "Tesseract 4"
+    override val name = "Tesseract 4 JNI"
 
     override val isAvailable: Boolean
 
-    override val supportedFileTypes = listOf("png", "jpg", "tif", "tiff") // set all supported file types
+    override val supportedFileTypes = TesseractHelper.SupportedFileTypes
 
     override fun getTextExtractionQualityForFileType(file: File): Int {
         if (isFileTypeSupported(file)) {
