@@ -54,7 +54,7 @@ open class TikaTextExtractor @JvmOverloads constructor(
 
 	override fun getTextExtractionQualityForFileType(file: File): Int {
 		if ("pdf" == file.extension.toLowerCase()) {
-			return 70
+			return 60
 		}
 		else if (isFileTypeSupported(file)) {
 			return 85

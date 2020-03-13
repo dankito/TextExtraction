@@ -31,7 +31,7 @@ open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
 
     override fun getTextExtractionQualityForFileType(file: File): Int {
         if (isFileTypeSupported(file)) {
-            return 50
+            return 70
         }
 
         return TextExtractionQualityForUnsupportedFileType

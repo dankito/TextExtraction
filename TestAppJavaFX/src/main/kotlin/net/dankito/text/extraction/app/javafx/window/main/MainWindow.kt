@@ -14,9 +14,7 @@ import net.dankito.text.extraction.image.model.TesseractConfig
 import net.dankito.text.extraction.image.model.TesseractHelper
 import net.dankito.text.extraction.model.PdfContentExtractorStrategy
 import net.dankito.text.extraction.model.TikaSettings
-import net.dankito.text.extraction.pdf.OpenPdfPdfTextExtractor
-import net.dankito.text.extraction.pdf.itextPdfTextExtractor
-import net.dankito.text.extraction.pdf.pdfToTextPdfTextExtractor
+import net.dankito.text.extraction.pdf.*
 import net.dankito.utils.PackageInfo
 import net.dankito.utils.process.CommandExecutor
 import tornadofx.*
@@ -42,6 +40,8 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
 
     private val tesseract4JniImageTextExtractor = Tesseract4JniImageTextExtractor(tesseractConfig, tesseractHelper)
 
+    private val imageBasedPdfTextExtractor = ImageBasedPdfTextExtractor(tesseract4CommandlineImageTextExtractor, pdfimagesImagesFromPdfExtractor(commandExecutor))
+
     private val tikaTextExtractor = TikaTextExtractor(TikaSettings(PdfContentExtractorStrategy.OcrAndText, tesseractConfig), tesseractHelper)
 
     private val extractorRegistry: ITextExtractorRegistry = TextExtractorRegistry(listOf(
@@ -50,6 +50,7 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
         pdfToTextPdfTextExtractor,
         tesseract4CommandlineImageTextExtractor,
         tesseract4JniImageTextExtractor,
+        imageBasedPdfTextExtractor,
         tikaTextExtractor
     ))
 
@@ -65,6 +66,7 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
             addTab("main.window.tab.pdftotext", TextExtractorTab(pdfToTextPdfTextExtractor))
             addTab("main.window.tab.tesseract4.commandline", TextExtractorTab(tesseract4CommandlineImageTextExtractor))
             addTab("main.window.tab.tesseract4.jni", TextExtractorTab(tesseract4JniImageTextExtractor))
+            addTab("main.window.tab.image.based.pdf.text.extractor", TextExtractorTab(imageBasedPdfTextExtractor))
             addTab("main.window.tab.tika", TextExtractorTab(tikaTextExtractor))
             addTab("main.window.tab.find.best.extractor.for.type", TextExtractorTab(FindBestTextExtractor(extractorRegistry)))
 
