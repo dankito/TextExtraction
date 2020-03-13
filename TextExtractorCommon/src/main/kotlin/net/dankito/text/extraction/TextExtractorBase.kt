@@ -9,7 +9,9 @@ import java.io.File
 
 abstract class TextExtractorBase : ITextExtractor {
 
-    private val log = LoggerFactory.getLogger(this.javaClass) // so that extractor's real class name gets logged
+    companion object {
+        private val log = LoggerFactory.getLogger(TextExtractorBase::class.java)
+    }
 
 
     abstract fun extractTextForSupportedFormat(file: File): ExtractionResult
