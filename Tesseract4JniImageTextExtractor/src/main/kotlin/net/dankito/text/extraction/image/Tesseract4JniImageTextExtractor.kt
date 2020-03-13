@@ -15,7 +15,7 @@ import org.bytedeco.tesseract.TessBaseAPI
 import java.io.File
 
 
-open class Tesseract4JniImageTextExtractor(
+open class Tesseract4JniImageTextExtractor @JvmOverloads constructor(
     protected val config: TesseractConfig,
     protected val tesseractHelper: TesseractHelper = TesseractHelper()
 ) : TextExtractorBase(), IImageTextExtractor, AutoCloseable {

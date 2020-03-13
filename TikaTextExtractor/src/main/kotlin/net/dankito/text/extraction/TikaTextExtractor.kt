@@ -29,7 +29,7 @@ import java.io.FileInputStream
 import java.io.StringWriter
 
 
-open class TikaTextExtractor(
+open class TikaTextExtractor @JvmOverloads constructor(
 	protected val settings: TikaSettings,
 	protected val tesseractHelper: TesseractHelper = TesseractHelper(),
 	protected val osHelper: OsHelper = OsHelper()

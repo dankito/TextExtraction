@@ -13,7 +13,7 @@ import net.dankito.utils.process.CommandConfig
 import java.io.File
 
 
-open class Tesseract4CommandlineImageTextExtractor(
+open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
     protected val config: TesseractConfig,
     protected val tesseractHelper: TesseractHelper = TesseractHelper()
 ) : ExternalToolTextExtractorBase(), IImageTextExtractor {
