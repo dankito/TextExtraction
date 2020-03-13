@@ -16,6 +16,11 @@ open class TikaSettings @JvmOverloads constructor(
 	pageSegMode: PageSegMode? = null
 ) : TesseractConfig(ocrLanguages, ocrOutputType, tesseractPath, tessdataDirectory, pageSegMode) {
 
+	constructor(pdfContentExtractorStrategy: PdfContentExtractorStrategy, tesseractConfig: TesseractConfig)
+		: this(pdfContentExtractorStrategy, tesseractConfig.ocrLanguages, tesseractConfig.ocrOutputType,
+			tesseractConfig.tesseractPath, tesseractConfig.tessdataDirectory, tesseractConfig.pageSegMode)
+
+
 	override fun toString(): String {
 		return "pdfContentExtractorStrategy=$pdfContentExtractorStrategy, ${super.toString()}"
 	}
