@@ -8,14 +8,14 @@ import org.junit.Test
 import java.io.File
 
 
-class Tesseract4CommandLineImageTextExtractorTest {
+class Tesseract4CommandlineImageTextExtractorTest {
 
     companion object {
         private val TestImageFile = File("<insert path to your test pdf here>")
     }
 
 
-    private val underText = Tesseract4CommandLineImageTextExtractor(TesseractConfig(listOf(OcrLanguage.English, OcrLanguage.German)))
+    private val underText = Tesseract4CommandlineImageTextExtractor(TesseractConfig(listOf(OcrLanguage.English, OcrLanguage.German)))
 
 
     @Ignore
