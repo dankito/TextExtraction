@@ -24,18 +24,15 @@ import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 
-abstract class ExtractTextTabBase : View(), CoroutineScope {
+open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), CoroutineScope {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(ExtractTextTabBase::class.java)
+        private val logger = LoggerFactory.getLogger(TextExtractorTab::class.java)
     }
 
 
     override val coroutineContext: CoroutineContext
         get() = SupervisorJob() + Dispatchers.JavaFx
-
-
-    protected abstract fun createTextExtractor(): ITextExtractor
 
 
     protected val lastSelectedFilePath = SimpleStringProperty("")
@@ -56,8 +53,6 @@ abstract class ExtractTextTabBase : View(), CoroutineScope {
 
     protected val extractedText = SimpleStringProperty("")
 
-
-    protected var textExtractorField: ITextExtractor? = null
 
     protected var lastSelectedFile: File? = null
 
@@ -248,7 +243,7 @@ abstract class ExtractTextTabBase : View(), CoroutineScope {
     }
 
     protected open fun getErrorMessage(fileToExtract: File, error: ErrorInfo): String {
-        val extractorName = getTextExtractor().name
+        val extractorName = textExtractor.name
         val fileType = fileToExtract.extension
 
         return when (error.type) {
@@ -268,8 +263,6 @@ abstract class ExtractTextTabBase : View(), CoroutineScope {
 
     protected open suspend fun extractTextOfFile(file: File): ExtractionResult {
         try {
-            val textExtractor = getTextExtractor()
-
             val startTime = Date()
             val extractedText = textExtractor.extractText(file)
             val timeElapsed = Date().time - startTime.time
@@ -282,18 +275,6 @@ abstract class ExtractTextTabBase : View(), CoroutineScope {
 
             return ExtractionResult(ErrorInfo(ErrorType.ParseError, e)) // TODO: add suitable ErrorType
         }
-    }
-
-    protected open fun getTextExtractor(): ITextExtractor {
-        textExtractorField?.let {
-            return it
-        }
-
-        val newTextExtractor = createTextExtractor()
-
-        this.textExtractorField = newTextExtractor
-
-        return newTextExtractor
     }
 
 }
