@@ -35,6 +35,9 @@ dependencies {
 
 
 jar {
+    // thanks so much to Andreas Volkmann and Robert for explaining this issue to me: https://stackoverflow.com/questions/51455197/gradle-fatjar-could-not-find-or-load-main-class
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+
     manifest {
         attributes  'Main-Class': mainClassName,
                 'Implementation-Title': title,
