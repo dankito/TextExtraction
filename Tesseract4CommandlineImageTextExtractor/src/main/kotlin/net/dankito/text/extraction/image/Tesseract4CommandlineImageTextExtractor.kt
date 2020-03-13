@@ -16,7 +16,7 @@ import java.io.File
 open class Tesseract4CommandlineImageTextExtractor(
     protected val config: TesseractConfig,
     protected val tesseractHelper: TesseractHelper = TesseractHelper()
-) : ExternalToolTextExtractorBase() {
+) : ExternalToolTextExtractorBase(), IImageTextExtractor {
 
 
     override val name = "Tesseract 4"

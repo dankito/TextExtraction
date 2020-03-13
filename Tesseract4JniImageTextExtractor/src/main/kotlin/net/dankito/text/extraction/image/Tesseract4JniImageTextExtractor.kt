@@ -2,7 +2,6 @@ package net.dankito.text.extraction.image
 
 import net.dankito.text.extraction.ITextExtractor.Companion.TextExtractionQualityForUnsupportedFileType
 import net.dankito.text.extraction.TextExtractorBase
-import net.dankito.text.extraction.image.model.OcrOutputType
 import net.dankito.text.extraction.image.model.TesseractConfig
 import net.dankito.text.extraction.image.model.TesseractHelper
 import net.dankito.text.extraction.model.ErrorInfo
@@ -19,7 +18,7 @@ import java.io.File
 open class Tesseract4JniImageTextExtractor(
     protected val config: TesseractConfig,
     protected val tesseractHelper: TesseractHelper = TesseractHelper()
-) : TextExtractorBase(), AutoCloseable {
+) : TextExtractorBase(), IImageTextExtractor, AutoCloseable {
 
 
     override val name = "Tesseract 4 JNI"

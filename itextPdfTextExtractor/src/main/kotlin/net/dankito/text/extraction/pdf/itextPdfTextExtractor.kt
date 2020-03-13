@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
 import java.io.File
 
 
-open class itextPdfTextExtractor: TextExtractorBase() {
+open class itextPdfTextExtractor: TextExtractorBase(), ISearchablePdfTextExtractor {
 
     companion object {
         private val log = LoggerFactory.getLogger(itextPdfTextExtractor::class.java)

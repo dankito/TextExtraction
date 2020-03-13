@@ -4,7 +4,11 @@ import net.dankito.text.extraction.ITextExtractor.Companion.TextExtractionQualit
 import net.dankito.text.extraction.image.model.OcrLanguage
 import net.dankito.text.extraction.image.model.OcrOutputType
 import net.dankito.text.extraction.image.model.TesseractHelper
-import net.dankito.text.extraction.model.*
+import net.dankito.text.extraction.model.ExtractionResult
+import net.dankito.text.extraction.model.Page
+import net.dankito.text.extraction.model.PdfContentExtractorStrategy
+import net.dankito.text.extraction.model.TikaSettings
+import net.dankito.text.extraction.pdf.ISearchablePdfTextExtractor
 import net.dankito.utils.os.OsHelper
 import org.apache.tika.config.ServiceLoader
 import org.apache.tika.metadata.Metadata
@@ -29,7 +33,7 @@ open class TikaTextExtractor(
 	protected val settings: TikaSettings,
 	protected val tesseractHelper: TesseractHelper = TesseractHelper(),
 	protected val osHelper: OsHelper = OsHelper()
-): TextExtractorBase() {
+): TextExtractorBase(), ISearchablePdfTextExtractor {
 	
 	companion object {
 		private val log = LoggerFactory.getLogger(TikaTextExtractor::class.java)

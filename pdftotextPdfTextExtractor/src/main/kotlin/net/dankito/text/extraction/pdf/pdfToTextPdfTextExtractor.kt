@@ -9,7 +9,9 @@ import net.dankito.utils.process.ExecuteCommandResult
 import java.io.File
 
 
-open class pdfToTextPdfTextExtractor @JvmOverloads constructor(protected val pdftotextExecutablePath: String = "pdftotext") : ExternalToolTextExtractorBase() {
+open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
+    protected val pdftotextExecutablePath: String = "pdftotext"
+) : ExternalToolTextExtractorBase(), ISearchablePdfTextExtractor {
 
 
     override val name = "pdftotext"
