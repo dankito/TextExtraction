@@ -23,6 +23,7 @@ dependencies {
     compile project(':itextPdfTextExtractor')
     compile project(':pdftotextPdfTextExtractor')
     compile project(':TikaTextExtractor')
+    compile project(':Tesseract4CommandlineImageTextExtractor')
     compile project(':Tesseract4JniImageTextExtractor')
 
     compile "net.dankito.utils:java-fx-utils:$javaFxUtilsVersion"
