@@ -6,7 +6,7 @@ import java.io.File
 open class TesseractConfig @JvmOverloads constructor(
     val ocrLanguages: List<OcrLanguage> = listOf(OcrLanguage.English),
     val ocrOutputType: OcrOutputType = OcrOutputType.Text,
-    val tesseractPath: File? = File("tessdata"),
+    val tesseractPath: File? = null,
     val tessdataDirectory: File? = null,
     val pageSegMode: PageSegMode? = null
 ) {
