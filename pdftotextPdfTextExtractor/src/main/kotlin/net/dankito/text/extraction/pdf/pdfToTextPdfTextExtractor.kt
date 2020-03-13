@@ -5,13 +5,16 @@ import net.dankito.text.extraction.ITextExtractor.Companion.TextExtractionQualit
 import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
 import net.dankito.utils.process.CommandConfig
+import net.dankito.utils.process.CommandExecutor
 import net.dankito.utils.process.ExecuteCommandResult
+import net.dankito.utils.process.ICommandExecutor
 import java.io.File
 
 
 open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
-    protected val pdftotextExecutablePath: String = "pdftotext"
-) : ExternalToolTextExtractorBase(), ISearchablePdfTextExtractor {
+    protected val pdftotextExecutablePath: String = "pdftotext",
+    commandExecutor: ICommandExecutor = CommandExecutor()
+) : ExternalToolTextExtractorBase(commandExecutor), ISearchablePdfTextExtractor {
 
 
     override val name = "pdftotext"

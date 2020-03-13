@@ -10,13 +10,16 @@ import net.dankito.text.extraction.model.ErrorType
 import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
 import net.dankito.utils.process.CommandConfig
+import net.dankito.utils.process.CommandExecutor
+import net.dankito.utils.process.ICommandExecutor
 import java.io.File
 
 
 open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
     protected val config: TesseractConfig,
-    protected val tesseractHelper: TesseractHelper = TesseractHelper()
-) : ExternalToolTextExtractorBase(), IImageTextExtractor {
+    protected val tesseractHelper: TesseractHelper = TesseractHelper(),
+    commandExecutor: ICommandExecutor = CommandExecutor()
+) : ExternalToolTextExtractorBase(commandExecutor), IImageTextExtractor {
 
 
     override val name = "Tesseract 4"
