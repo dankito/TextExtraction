@@ -56,6 +56,9 @@ open class TikaTextExtractor @JvmOverloads constructor(
 		if ("pdf" == file.extension.toLowerCase()) {
 			return 60
 		}
+		else if (TesseractHelper.SupportedFileTypes.contains(file.extension.toLowerCase())) {
+			return 60 // try Tesseract4CommandlineImageTextExtractor - if available - first
+		}
 		else if (isFileTypeSupported(file)) {
 			return 85
 		}
