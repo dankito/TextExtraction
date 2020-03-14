@@ -11,6 +11,7 @@ import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
 import net.dankito.utils.process.CommandConfig
 import net.dankito.utils.process.CommandExecutor
+import net.dankito.utils.process.ExecuteCommandResult
 import net.dankito.utils.process.ICommandExecutor
 import java.io.File
 
@@ -40,6 +41,14 @@ open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
 
 
     override fun extractTextForSupportedFormat(file: File): ExtractionResult {
+        val commandConfig = createCommandConfig(file)
+
+        val executeCommandResult = executeCommand(commandConfig)
+
+        return mapExecuteCommandResult(executeCommandResult)
+    }
+
+    protected open fun createCommandConfig(file: File): CommandConfig {
         val commandArgs = mutableListOf<String>()
 
         commandArgs.add(config.tesseractPath?.absolutePath ?: "tesseract")
@@ -71,8 +80,10 @@ open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
         // these block each other so that command never returns. To fix this limit count threads to 1
         val environmentVariables = mapOf("OMP_THREAD_LIMIT" to "1")
 
-        val executeCommandResult = executeCommand(CommandConfig(commandArgs, null, environmentVariables))
+        return CommandConfig(commandArgs, null, environmentVariables)
+    }
 
+    protected open fun mapExecuteCommandResult(executeCommandResult: ExecuteCommandResult): ExtractionResult {
         return if (executeCommandResult.successful) {
             val result = ExtractionResult()
             result.addPage(Page(executeCommandResult.output))
