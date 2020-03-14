@@ -60,7 +60,7 @@ open class TikaTextExtractor @JvmOverloads constructor(
 			return 60 // try Tesseract4CommandlineImageTextExtractor - if available - first
 		}
 		else if (isFileTypeSupported(file)) {
-			return 85
+			return 95
 		}
 
 		return TextExtractionQualityForUnsupportedFileType
