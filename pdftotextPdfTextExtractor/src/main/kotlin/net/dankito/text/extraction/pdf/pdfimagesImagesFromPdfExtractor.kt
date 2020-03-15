@@ -44,7 +44,7 @@ open class pdfimagesImagesFromPdfExtractor(
     }
 
     protected open fun mapResult(result: ExecuteCommandResult, tmpDir: File): ExtractedImages {
-        val extractedImages = tmpDir.listFiles().toList()
+        val extractedImages = tmpDir.listFiles().sortedBy { it.lastModified() }
 
         extractedImages.forEach { it.deleteOnExit() }
 
