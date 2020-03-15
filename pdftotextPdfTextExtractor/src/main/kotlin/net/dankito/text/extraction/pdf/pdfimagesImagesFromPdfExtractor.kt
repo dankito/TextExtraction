@@ -44,11 +44,15 @@ open class pdfimagesImagesFromPdfExtractor(
     }
 
     protected open fun mapResult(result: ExecuteCommandResult, tmpDir: File): ExtractedImages {
+        val extractedImages = tmpDir.listFiles().toList()
+
+        extractedImages.forEach { it.deleteOnExit() }
+
         if (result.successful == false) {
             return ExtractedImages(listOf(), Exception(result.errors))
         }
 
-        return ExtractedImages(tmpDir.listFiles().toList())
+        return ExtractedImages(extractedImages)
     }
 
 }

@@ -2,10 +2,8 @@ package net.dankito.text.extraction.pdf
 
 import net.dankito.text.extraction.TextExtractorBase
 import net.dankito.text.extraction.image.IImageTextExtractor
-import net.dankito.text.extraction.model.ErrorInfo
-import net.dankito.text.extraction.model.ErrorType
-import net.dankito.text.extraction.model.ExtractionResult
-import net.dankito.text.extraction.model.Page
+import net.dankito.text.extraction.model.*
+import org.slf4j.LoggerFactory
 import java.io.File
 
 
@@ -17,6 +15,10 @@ open class ImageBasedPdfTextExtractor(
     protected val imageTextExtractor: IImageTextExtractor,
     protected val imagesFromPdfExtractor: IImagesFromPdfExtractor
 ) : TextExtractorBase(), IImageBasedPdfTextExtractor {
+
+    companion object {
+        private val log = LoggerFactory.getLogger(ImageBasedPdfTextExtractor::class.java)
+    }
 
 
     override val name: String
@@ -37,6 +39,7 @@ open class ImageBasedPdfTextExtractor(
         val extractedImages = imagesFromPdfExtractor.extractImages(file)
 
         if (extractedImages.isSuccessful == false) {
+            deleteExtractedImages(extractedImages)
             return ExtractionResult(ErrorInfo(ErrorType.ParseError, extractedImages.error))
         }
 
@@ -56,11 +59,24 @@ open class ImageBasedPdfTextExtractor(
             }
         }
 
+        deleteExtractedImages(extractedImages)
+
         if (firstError != null) {
             return ExtractionResult(ErrorInfo(ErrorType.ParseError, firstError))
         }
 
         return result
+    }
+
+
+    protected open fun deleteExtractedImages(extractedImages: ExtractedImages) {
+        extractedImages.extractedImages.forEach { imageFile ->
+            try {
+                imageFile.delete()
+            } catch (e: Exception) {
+                log.warn("Could not delete extracted image file $imageFile", e)
+            }
+        }
     }
 
 }
