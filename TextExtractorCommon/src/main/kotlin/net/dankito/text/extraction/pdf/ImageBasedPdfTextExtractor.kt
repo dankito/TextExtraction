@@ -43,11 +43,20 @@ open class ImageBasedPdfTextExtractor(
             return ExtractionResult(ErrorInfo(ErrorType.ParseError, extractedImages.error))
         }
 
+        val extractedTexts = extractedImages.extractedImages.map { imageFile ->
+            imageTextExtractor.extractText(imageFile)
+        }
+
+        return mapToExtractionResult(extractedImages, extractedTexts)
+    }
+
+
+    protected open fun mapToExtractionResult(extractedImages: ExtractedImages,
+                                             extractedTexts: List<ExtractionResult>): ExtractionResult {
         val result = ExtractionResult()
         var firstError: Exception? = null
 
-        extractedImages.extractedImages.forEachIndexed { pageNum, imageFile -> // usually there's one image per page in PDF -> we can use index as page number
-            val extractedText = imageTextExtractor.extractText(imageFile)
+        extractedTexts.forEachIndexed { pageNum, extractedText -> // usually there's one image per page in PDF -> we can use index as page number
 
             if (extractedText.couldExtractText) {
                 extractedText.pages.forEach { page ->
@@ -67,7 +76,6 @@ open class ImageBasedPdfTextExtractor(
 
         return result
     }
-
 
     protected open fun deleteExtractedImages(extractedImages: ExtractedImages) {
         extractedImages.extractedImages.forEach { imageFile ->
