@@ -13,7 +13,13 @@ abstract class ExternalToolTextExtractorBase(
     /**
      * Do not call this for commands that have a large standard or error output!
      *
-     * This method will block forever while trying to read a large standard or error output.
+     * This method does not read process' standard and error output on extra threads like [executeCommand] does.
+     *
+     * Standard and error output are being read on same thread after process ended. Therefore if standard and error
+     * InputStream reader's buffer is not large enough, the call to Process.waitFor() will hang forever.
+     *
+     * So it has slightly better performance than [executeCommand] has as it doesn't create two new threads but at the
+     * cost that app may hangs forever.
      */
     protected open fun executeCommandWithLittleOutput(vararg arguments: String): ExecuteCommandResult {
         return commandExecutor.executeCommandWithLittleOutput(*arguments)
