@@ -3,6 +3,7 @@ package net.dankito.text.extraction.pdf
 import net.dankito.text.extraction.model.ExtractedImages
 import net.dankito.utils.process.CommandConfig
 import net.dankito.utils.process.CommandExecutor
+import net.dankito.utils.process.ExecuteCommandResult
 import net.dankito.utils.process.ICommandExecutor
 import java.io.File
 
@@ -13,9 +14,24 @@ open class pdfimagesImagesFromPdfExtractor(
 
 
     override fun extractImages(pdfFile: File): ExtractedImages {
-        val tmpDir = createTempDir("ExtractImagesFrom${pdfFile.nameWithoutExtension}")
+        val tmpDir = createTempImagesDestinationDirectory(pdfFile)
+
+        val config = createCommandConfig(pdfFile, tmpDir)
+
+        val result = commandExecutor.executeCommand(config)
+
+        return mapResult(result, tmpDir)
+    }
+
+
+    protected open fun createTempImagesDestinationDirectory(pdfFile: File): File {
+        val tmpDir = createTempDir("ExtractImagesFrom${pdfFile.nameWithoutExtension}", "")
         tmpDir.deleteOnExit()
 
+        return tmpDir
+    }
+
+    protected open fun createCommandConfig(pdfFile: File, tmpDir: File): CommandConfig {
         val commandArgs = listOf(
             "pdfimages",
             "-p", // add page number to file name
@@ -24,8 +40,10 @@ open class pdfimagesImagesFromPdfExtractor(
             File(tmpDir, pdfFile.nameWithoutExtension).absolutePath
         )
 
-        val result = commandExecutor.executeCommand(CommandConfig(commandArgs))
+        return CommandConfig(commandArgs)
+    }
 
+    protected open fun mapResult(result: ExecuteCommandResult, tmpDir: File): ExtractedImages {
         if (result.successful == false) {
             return ExtractedImages(listOf(), Exception(result.errors))
         }
