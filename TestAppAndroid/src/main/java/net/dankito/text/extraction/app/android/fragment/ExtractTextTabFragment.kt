@@ -21,10 +21,10 @@ import net.dankito.text.extraction.model.ErrorInfo
 import net.dankito.text.extraction.model.ErrorType
 import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.ExtractionResultForExtractor
+import net.dankito.utils.Stopwatch
 import org.slf4j.LoggerFactory
 import java.io.Closeable
 import java.io.File
-import java.util.*
 
 
 abstract class ExtractTextTabFragment : Fragment(), CoroutineScope by MainScope() {
@@ -102,25 +102,24 @@ abstract class ExtractTextTabFragment : Fragment(), CoroutineScope by MainScope(
             btnExtractSelectedFile.isEnabled = false
             txtInfoTextExtractedWith.visibility = View.GONE
             txtErrorMessage.visibility = View.GONE
-            val startTime = Date().time
+            val stopwatch = Stopwatch()
 
             val extractionResult = extractTextOfFile(file)
 
-            withContext(Dispatchers.Main) {
-                val durationMillis = Date().time - startTime
+            stopwatch.stop()
 
+            withContext(Dispatchers.Main) {
                 activity?.let { context ->
-                    showExtractedTextOnUiThread(context, file, extractionResult, durationMillis)
+                    showExtractedTextOnUiThread(context, file, extractionResult, stopwatch)
                 }
             }
         }
     }
 
-    protected open fun showExtractedTextOnUiThread(context: Context, fileToExtract: File, extractionResult: ExtractionResult, durationMillis: Long) {
+    protected open fun showExtractedTextOnUiThread(context: Context, fileToExtract: File, extractionResult: ExtractionResult, stopwatch: Stopwatch) {
         prgbrIsExtractingText.visibility = View.GONE
         btnExtractSelectedFile.isEnabled = true
-        txtvwExtractionTime.text = String.format("%02d:%02d.%03d min", durationMillis / (60 * 1000),
-            (durationMillis / 1000) % 60, durationMillis % 1000)
+        txtvwExtractionTime.text = stopwatch.formatElapsedTime()
 
         txtvwExtractedText.text = extractionResult.text
 
@@ -152,11 +151,10 @@ abstract class ExtractTextTabFragment : Fragment(), CoroutineScope by MainScope(
         try {
             val textExtractor = getTextExtractor()
 
-            val startTime = Date()
+            val stopwatch = Stopwatch()
             val extractedText = textExtractor.extractTextSuspendable(file)
-            val timeElapsed = (Date().time - startTime.time) / 1000
 
-            log.info("Extracting text of file $file took $timeElapsed seconds")
+            stopwatch.stopAndLog("Extracting text of file $file", log)
 
             return extractedText
         } catch (e: Exception) {

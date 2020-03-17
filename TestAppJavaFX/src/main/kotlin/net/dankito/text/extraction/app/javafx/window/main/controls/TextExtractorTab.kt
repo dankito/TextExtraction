@@ -15,12 +15,12 @@ import net.dankito.text.extraction.model.ErrorInfo
 import net.dankito.text.extraction.model.ErrorType
 import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.ExtractionResultForExtractor
+import net.dankito.utils.Stopwatch
 import net.dankito.utils.javafx.ui.extensions.ensureOnlyUsesSpaceIfVisible
 import net.dankito.utils.javafx.ui.extensions.setBackgroundToColor
 import org.slf4j.LoggerFactory
 import tornadofx.*
 import java.io.File
-import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 
@@ -209,24 +209,21 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
             isExtractingText.value = true
             didTextExtractionReturnAnError.value = false
             showTextExtractorInfo.value = false
-            val startTime = Date().time
+            val stopwatch = Stopwatch()
 
             val extractionResult = extractTextOfFile(file)
 
-            withContext(Dispatchers.JavaFx) {
-                val durationMillis = Date().time - startTime
+            stopwatch.stop()
 
-                showExtractedTextOnUiThread(file, extractionResult, durationMillis)
+            withContext(Dispatchers.JavaFx) {
+                showExtractedTextOnUiThread(file, extractionResult, stopwatch)
             }
         }
     }
 
-    protected open fun showExtractedTextOnUiThread(fileToExtract: File, extractionResult: ExtractionResult, durationMillis: Long) {
+    protected open fun showExtractedTextOnUiThread(fileToExtract: File, extractionResult: ExtractionResult, stopwatch: Stopwatch) {
         isExtractingText.value = false
-        extractionTime.value = String.format(
-            "%02d:%02d.%03d min", durationMillis / (60 * 1000),
-            (durationMillis / 1000) % 60, durationMillis % 1000
-        )
+        extractionTime.value = stopwatch.formatElapsedTime()
 
         extractedText.value = extractionResult.text
 
@@ -256,12 +253,11 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
 
     protected open suspend fun extractTextOfFile(file: File): ExtractionResult {
         try {
-            val startTime = Date()
+            val stopwatch = Stopwatch()
 
             val extractedText = textExtractor.extractTextSuspendable(file)
-            val timeElapsed = Date().time - startTime.time
 
-            logger.info("Extracting text of file $file took ${timeElapsed / 1000} seconds and ${timeElapsed % 1000} milliseconds")
+            stopwatch.stopAndLog("Extracting text of file $file", logger)
 
             return extractedText
         } catch (e: Exception) {
