@@ -1,5 +1,6 @@
 package net.dankito.text.extraction.commandline
 
+import net.dankito.utils.os.OsHelper
 import net.dankito.utils.process.CommandConfig
 import net.dankito.utils.process.CommandExecutor
 import net.dankito.utils.process.ExecuteCommandResult
@@ -8,7 +9,8 @@ import net.dankito.utils.process.ICommandExecutor
 
 open class CommandlineProgram(
     osIndependentDefaultExecutableName: String,
-    protected val commandExecutor: ICommandExecutor = CommandExecutor()
+    protected val commandExecutor: ICommandExecutor = CommandExecutor(),
+    protected val osHelper: OsHelper = OsHelper()
 ) {
 
     open var programExecutablePath: String = ""
@@ -28,10 +30,7 @@ open class CommandlineProgram(
 
 
     protected open fun getOsDependentExecutableName(executableName: String): String {
-        val osName = System.getProperty("os.name")
-        val isRunningOnWindows = osName.toLowerCase().startsWith("windows")
-
-        if (isRunningOnWindows && executableName.toLowerCase().endsWith(".exe") == false) {
+        if (osHelper.isRunningOnWindows && executableName.toLowerCase().endsWith(".exe") == false) {
             return executableName + ".exe"
         }
 
