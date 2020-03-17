@@ -21,10 +21,9 @@ open class ImageBasedPdfTextExtractor(
     }
 
 
-    override val name: String
-        get() = "Extract text from images embedded in PDFs"
+    override val name = "Extract text from images embedded in PDFs"
 
-    override val isAvailable = true
+    override val isAvailable = imageTextExtractor.isAvailable && imagesFromPdfExtractor.isAvailable
 
     override val supportedFileTypes = listOf("pdf")
 

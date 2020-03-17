@@ -15,6 +15,9 @@ open class pdfimagesImagesFromPdfExtractor(
 
     protected val commandlineProgram = CommandlineProgram("pdfimages", commandExecutor)
 
+    override val isAvailable: Boolean
+        get() = commandlineProgram.isAvailable
+
 
     override fun extractImages(pdfFile: File): ExtractedImages {
         val tmpDir = createTempImagesDestinationDirectory(pdfFile)

@@ -6,6 +6,9 @@ import java.io.File
 
 interface IImagesFromPdfExtractor {
 
+    val isAvailable: Boolean
+
+
     fun extractImages(pdfFile: File): ExtractedImages
 
     suspend fun extractImagesSuspendable(pdfFile: File): ExtractedImages
