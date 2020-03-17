@@ -180,8 +180,10 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
     protected open fun selectFile() {
         val fileChooser = FileChooser()
 
-        lastSelectedFile?.let {
-            fileChooser.initialDirectory = lastSelectedFile?.parentFile
+        lastSelectedFile?.let { lastSelectedFile ->
+            if (lastSelectedFile.parentFile.exists()) {
+                fileChooser.initialDirectory = lastSelectedFile.parentFile
+            }
         }
 
         fileChooser.showOpenDialog(FX.primaryStage)?.let { selectedFile ->
