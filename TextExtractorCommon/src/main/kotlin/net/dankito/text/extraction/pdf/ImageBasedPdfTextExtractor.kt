@@ -35,6 +35,7 @@ open class ImageBasedPdfTextExtractor(
         return imageTextExtractor.getTextExtractionQualityForFileType(virtualImageFromPdf) // text extraction quality has to be measured for images, not PDFs
     }
 
+
     override fun extractTextForSupportedFormat(file: File): ExtractionResult {
         val extractedImages = imagesFromPdfExtractor.extractImages(file)
 
@@ -43,8 +44,26 @@ open class ImageBasedPdfTextExtractor(
             return ExtractionResult(ErrorInfo(ErrorType.ParseError, extractedImages.error))
         }
 
+
         val extractedTexts = extractedImages.extractedImages.map { imageFile ->
             imageTextExtractor.extractText(imageFile)
+        }
+
+        return mapToExtractionResult(extractedImages, extractedTexts)
+    }
+
+    // TODO: how to get rid of duplicated code?
+    override suspend fun extractTextForSupportedFormatSuspendable(file: File): ExtractionResult {
+        val extractedImages = imagesFromPdfExtractor.extractImagesSuspendable(file)
+
+        if (extractedImages.isSuccessful == false) {
+            deleteExtractedImages(extractedImages)
+            return ExtractionResult(ErrorInfo(ErrorType.ParseError, extractedImages.error))
+        }
+
+
+        val extractedTexts = extractedImages.extractedImages.map { imageFile ->
+            imageTextExtractor.extractTextSuspendable(imageFile)
         }
 
         return mapToExtractionResult(extractedImages, extractedTexts)

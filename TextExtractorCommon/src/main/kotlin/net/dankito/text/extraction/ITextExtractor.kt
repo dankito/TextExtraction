@@ -27,6 +27,9 @@ interface ITextExtractor {
 
     fun getTextExtractionQualityForFileType(file: File): Int
 
+
     fun extractText(file: File): ExtractionResult
+
+    suspend fun extractTextSuspendable(file: File): ExtractionResult
 
 }

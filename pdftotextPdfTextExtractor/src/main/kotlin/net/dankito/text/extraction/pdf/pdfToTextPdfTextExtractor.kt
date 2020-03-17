@@ -6,7 +6,6 @@ import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
 import net.dankito.utils.process.CommandConfig
 import net.dankito.utils.process.CommandExecutor
-import net.dankito.utils.process.ExecuteCommandResult
 import net.dankito.utils.process.ICommandExecutor
 import java.io.File
 
@@ -43,7 +42,7 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
         // result.addPage(Page(executeCommand(pdftotextExecutablePath, "-layout", file.absolutePath, "-").output))
 
         generateSequence(1) { it + 1 }.forEach { pageNum ->
-            val pageResult = extractPageText(file, pageNum)
+            val pageResult = executeCommand(createCommandConfig(file, pageNum))
 
             if (pageResult.successful) {
                 result.addPage(Page(pageResult.output, pageNum))
@@ -56,7 +55,28 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
         return result // should never come to this
     }
 
-    protected open fun extractPageText(file: File, pageNum: Int): ExecuteCommandResult {
+    // TODO: how to get rid of duplicated code?
+    override suspend fun extractTextForSupportedFormatSuspendable(file: File): ExtractionResult {
+        val result = ExtractionResult()
+
+        // to extract all text at once:
+        // result.addPage(Page(executeCommand(pdftotextExecutablePath, "-layout", file.absolutePath, "-").output))
+
+        generateSequence(1) { it + 1 }.forEach { pageNum ->
+            val pageResult = executeCommandSuspendable(createCommandConfig(file, pageNum))
+
+            if (pageResult.successful) {
+                result.addPage(Page(pageResult.output, pageNum))
+            }
+            else { // if pageNum is out of range exitCode 99 gets returned and error message is 'Command Line Error: Wrong page range given: the first page (<count pages>) can not be after the last page (<count pages + 1>).'
+                return result
+            }
+        }
+
+        return result // should never come to this
+    }
+
+    protected open fun createCommandConfig(file: File, pageNum: Int): CommandConfig {
         /**
          * pdftotext command line arguments:
          *  -f <int>: first page to convert
@@ -65,7 +85,7 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
          *  - (last parameter): print to console instead of to file
          */
         // TODO: add .exe to pdftotext / pdftotextExecutablePath on Windows
-        return executeCommand(CommandConfig(listOf(
+        return CommandConfig(listOf(
             pdftotextExecutablePath,
             "-f",
             pageNum.toString(),
@@ -74,7 +94,7 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
             "-layout",
             file.absolutePath,
             "-"
-        )))
+        ))
     }
 
 }

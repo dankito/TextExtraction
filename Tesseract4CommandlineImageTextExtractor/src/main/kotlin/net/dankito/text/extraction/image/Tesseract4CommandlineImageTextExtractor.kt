@@ -48,6 +48,14 @@ open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
         return mapExecuteCommandResult(executeCommandResult)
     }
 
+    override suspend fun extractTextForSupportedFormatSuspendable(file: File): ExtractionResult {
+        val commandConfig = createCommandConfig(file)
+
+        val executeCommandResult = executeCommandSuspendable(commandConfig)
+
+        return mapExecuteCommandResult(executeCommandResult)
+    }
+
     protected open fun createCommandConfig(file: File): CommandConfig {
         val commandArgs = mutableListOf<String>()
 

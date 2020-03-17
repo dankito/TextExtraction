@@ -2,7 +2,6 @@ package net.dankito.text.extraction.app.android.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
@@ -26,7 +25,6 @@ import org.slf4j.LoggerFactory
 import java.io.Closeable
 import java.io.File
 import java.util.*
-import kotlin.concurrent.thread
 
 
 abstract class ExtractTextTabFragment : Fragment(), CoroutineScope by MainScope() {
@@ -106,10 +104,9 @@ abstract class ExtractTextTabFragment : Fragment(), CoroutineScope by MainScope(
             txtErrorMessage.visibility = View.GONE
             val startTime = Date().time
 
-            val deferred = extractTextOfFileAsync(file)
+            val extractionResult = extractTextOfFile(file)
 
             withContext(Dispatchers.Main) {
-                val extractionResult = deferred.await()
                 val durationMillis = Date().time - startTime
 
                 activity?.let { context ->
@@ -151,18 +148,12 @@ abstract class ExtractTextTabFragment : Fragment(), CoroutineScope by MainScope(
     }
 
 
-    protected open fun extractTextOfFileAsync(file: File): Deferred<ExtractionResult> {
-        return async(Dispatchers.IO) {
-            extractTextOfFile(file)
-        }
-    }
-
     protected open suspend fun extractTextOfFile(file: File): ExtractionResult {
         try {
             val textExtractor = getTextExtractor()
 
             val startTime = Date()
-            val extractedText = textExtractor.extractText(file)
+            val extractedText = textExtractor.extractTextSuspendable(file)
             val timeElapsed = (Date().time - startTime.time) / 1000
 
             log.info("Extracting text of file $file took $timeElapsed seconds")

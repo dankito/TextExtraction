@@ -30,4 +30,8 @@ abstract class ExternalToolTextExtractorBase(
         return commandExecutor.executeCommand(config)
     }
 
+    open suspend fun executeCommandSuspendable(config: CommandConfig): ExecuteCommandResult {
+        return commandExecutor.executeCommandSuspendable(config)
+    }
+
 }

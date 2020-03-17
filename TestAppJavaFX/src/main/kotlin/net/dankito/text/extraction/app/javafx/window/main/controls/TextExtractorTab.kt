@@ -211,10 +211,9 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
             showTextExtractorInfo.value = false
             val startTime = Date().time
 
-            val deferred = extractTextOfFileAsync(file)
+            val extractionResult = extractTextOfFile(file)
 
             withContext(Dispatchers.JavaFx) {
-                val extractionResult = deferred.await()
                 val durationMillis = Date().time - startTime
 
                 showExtractedTextOnUiThread(file, extractionResult, durationMillis)
@@ -255,16 +254,11 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
     }
 
 
-    protected open fun extractTextOfFileAsync(file: File): Deferred<ExtractionResult> {
-        return async(Dispatchers.IO) {
-            extractTextOfFile(file)
-        }
-    }
-
     protected open suspend fun extractTextOfFile(file: File): ExtractionResult {
         try {
             val startTime = Date()
-            val extractedText = textExtractor.extractText(file)
+
+            val extractedText = textExtractor.extractTextSuspendable(file)
             val timeElapsed = Date().time - startTime.time
 
             logger.info("Extracting text of file $file took ${timeElapsed / 1000} seconds and ${timeElapsed % 1000} milliseconds")

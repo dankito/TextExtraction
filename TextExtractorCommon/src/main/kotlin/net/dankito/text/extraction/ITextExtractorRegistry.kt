@@ -12,6 +12,9 @@ interface ITextExtractorRegistry {
 
     fun findBestExtractorForFile(file: File): ITextExtractor?
 
+
     fun extractTextWithBestExtractorForFile(file: File): ExtractionResultForExtractor
+
+    suspend fun extractTextWithBestExtractorForFileSuspendable(file: File): ExtractionResultForExtractor
 
 }

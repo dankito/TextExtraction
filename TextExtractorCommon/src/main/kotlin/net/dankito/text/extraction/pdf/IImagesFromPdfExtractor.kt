@@ -8,4 +8,6 @@ interface IImagesFromPdfExtractor {
 
     fun extractImages(pdfFile: File): ExtractedImages
 
+    suspend fun extractImagesSuspendable(pdfFile: File): ExtractedImages
+
 }

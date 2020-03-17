@@ -23,6 +23,16 @@ open class pdfimagesImagesFromPdfExtractor(
         return mapResult(result, tmpDir)
     }
 
+    override suspend fun extractImagesSuspendable(pdfFile: File): ExtractedImages {
+        val tmpDir = createTempImagesDestinationDirectory(pdfFile)
+
+        val config = createCommandConfig(pdfFile, tmpDir)
+
+        val result = commandExecutor.executeCommandSuspendable(config)
+
+        return mapResult(result, tmpDir)
+    }
+
 
     protected open fun createTempImagesDestinationDirectory(pdfFile: File): File {
         val tmpDir = createTempDir("ExtractImagesFrom${pdfFile.nameWithoutExtension}", "")

@@ -27,6 +27,7 @@ open class TextExtractorRegistry @JvmOverloads constructor(extractors: List<ITex
             .firstOrNull { canExtractDataFromFile(it, file) }
     }
 
+
     override fun extractTextWithBestExtractorForFile(file: File): ExtractionResultForExtractor {
         var mostSuitableError: ExtractionResult? = null
         var mostSuitableErrorTextExtractor: ITextExtractor? = null
@@ -39,7 +40,33 @@ open class TextExtractorRegistry @JvmOverloads constructor(extractors: List<ITex
             }
 
             if (mostSuitableError == null || mostSuitableError?.error == null ||
-                    listOf(ErrorType.ExtractorNotAvailable, ErrorType.FileTypeNotSupportedByExtractor).contains(mostSuitableError?.error?.type)) {
+                listOf(ErrorType.ExtractorNotAvailable, ErrorType.FileTypeNotSupportedByExtractor).contains(mostSuitableError?.error?.type)) {
+                mostSuitableError = extractionResult
+                mostSuitableErrorTextExtractor = extractor
+            }
+        }
+
+        mostSuitableError?.let {
+            return ExtractionResultForExtractor(mostSuitableErrorTextExtractor, it.error)
+        }
+
+        return ExtractionResultForExtractor(null, ErrorInfo(ErrorType.NoExtractorFoundForFileType))
+    }
+
+    // TODO: how to get rid of duplicated code?
+    override suspend fun extractTextWithBestExtractorForFileSuspendable(file: File): ExtractionResultForExtractor {
+        var mostSuitableError: ExtractionResult? = null
+        var mostSuitableErrorTextExtractor: ITextExtractor? = null
+
+        getAllExtractorsForFile(file).forEach { extractor ->
+            val extractionResult = extractor.extractTextSuspendable(file)
+
+            if (extractionResult.couldExtractText) {
+                return ExtractionResultForExtractor(extractor, extractionResult)
+            }
+
+            if (mostSuitableError == null || mostSuitableError?.error == null ||
+                listOf(ErrorType.ExtractorNotAvailable, ErrorType.FileTypeNotSupportedByExtractor).contains(mostSuitableError?.error?.type)) {
                 mostSuitableError = extractionResult
                 mostSuitableErrorTextExtractor = extractor
             }

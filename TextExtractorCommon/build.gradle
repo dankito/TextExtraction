@@ -14,6 +14,7 @@ def mavenArtifactId = "text-extractor-common"
 dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     api "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"
     
     api "net.dankito.utils:java-utils:$javaUtilsVersion"
 
