@@ -11,18 +11,11 @@ import java.io.File
 
 
 open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
-    protected val pdftotextExecutablePath: String = "pdftotext",
     commandExecutor: ICommandExecutor = CommandExecutor()
-) : ExternalToolTextExtractorBase(commandExecutor), ISearchablePdfTextExtractor {
+) : ExternalToolTextExtractorBase("pdftotext", commandExecutor), ISearchablePdfTextExtractor {
 
 
     override val name = "pdftotext"
-
-    // TODO: adjust for a) Windows b) if pdftotextExecutablePath is set
-    protected val didFindPdftotextExecutable: Boolean =
-        File(executeCommandWithLittleOutput(pdftotextExecutablePath).output).exists()
-
-    override val isAvailable = didFindPdftotextExecutable
 
     override val supportedFileTypes = listOf("pdf")
 
@@ -86,7 +79,7 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
          */
         // TODO: add .exe to pdftotext / pdftotextExecutablePath on Windows
         return CommandConfig(listOf(
-            pdftotextExecutablePath,
+            commandlineProgram.programExecutablePath,
             "-f",
             pageNum.toString(),
             "-l",

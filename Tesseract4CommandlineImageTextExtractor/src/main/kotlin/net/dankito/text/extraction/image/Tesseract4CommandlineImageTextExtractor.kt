@@ -20,13 +20,10 @@ open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
     protected val config: TesseractConfig,
     protected val tesseractHelper: TesseractHelper = TesseractHelper(),
     commandExecutor: ICommandExecutor = CommandExecutor()
-) : ExternalToolTextExtractorBase(commandExecutor), IImageTextExtractor {
+) : ExternalToolTextExtractorBase("tesseract", commandExecutor), IImageTextExtractor {
 
 
     override val name = "Tesseract 4"
-
-    override val isAvailable: Boolean =
-        File(executeCommandWithLittleOutput("tesseract").output).exists() // TODO
 
     override val supportedFileTypes = TesseractHelper.SupportedFileTypes
 
@@ -59,7 +56,7 @@ open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
     protected open fun createCommandConfig(file: File): CommandConfig {
         val commandArgs = mutableListOf<String>()
 
-        commandArgs.add(config.tesseractPath?.absolutePath ?: "tesseract")
+        commandArgs.add(config.tesseractPath?.absolutePath ?: commandlineProgram.programExecutablePath)
 
         commandArgs.add(file.absolutePath)
 

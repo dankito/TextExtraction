@@ -1,5 +1,6 @@
 package net.dankito.text.extraction.pdf
 
+import net.dankito.text.extraction.commandline.CommandlineProgram
 import net.dankito.text.extraction.model.ExtractedImages
 import net.dankito.utils.process.CommandConfig
 import net.dankito.utils.process.CommandExecutor
@@ -11,6 +12,8 @@ import java.io.File
 open class pdfimagesImagesFromPdfExtractor(
     protected val commandExecutor: ICommandExecutor = CommandExecutor()
 ) : IImagesFromPdfExtractor {
+
+    protected val commandlineProgram = CommandlineProgram("pdfimages", commandExecutor)
 
 
     override fun extractImages(pdfFile: File): ExtractedImages {
@@ -43,7 +46,7 @@ open class pdfimagesImagesFromPdfExtractor(
 
     protected open fun createCommandConfig(pdfFile: File, tmpDir: File): CommandConfig {
         val commandArgs = listOf(
-            "pdfimages",
+            commandlineProgram.programExecutablePath,
             "-p", // add page number to file name
             "-tiff", // change the default output format to TIFF
             pdfFile.absolutePath,
