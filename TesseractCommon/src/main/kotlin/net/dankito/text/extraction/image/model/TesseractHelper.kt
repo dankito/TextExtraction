@@ -4,7 +4,7 @@ package net.dankito.text.extraction.image.model
 open class TesseractHelper {
 
     companion object {
-        val SupportedFileTypes = listOf("png", "jpg", "tif", "tiff") // set all supported file types
+        val SupportedFileTypes = listOf("png", "jpg", "jpeg", "tif", "tiff", "gif", "webp") // are there additional supported image formats?
     }
 
 
