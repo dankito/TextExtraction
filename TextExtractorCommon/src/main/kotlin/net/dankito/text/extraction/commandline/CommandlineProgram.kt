@@ -16,16 +16,12 @@ open class CommandlineProgram(
     open var programExecutablePath: String = ""
         protected set
 
-    protected open var lastCheckIsProgramAvailableResult: Boolean = false
-
-    open val isAvailable: Boolean
-        get() = lastCheckIsProgramAvailableResult
+    open var isAvailable: Boolean = false
+        protected set
 
 
     init {
-        programExecutablePath = getOsDependentExecutableName(osIndependentDefaultExecutableName)
-
-        checkIsProgramAvailable(programExecutablePath)
+        setProgramExecutablePathTo(getOsDependentExecutableName(osIndependentDefaultExecutableName))
     }
 
 
@@ -38,12 +34,18 @@ open class CommandlineProgram(
     }
 
 
+    open fun setProgramExecutablePathTo(programExecutablePath: String) {
+        this.programExecutablePath = programExecutablePath
+
+        checkIsProgramAvailable(programExecutablePath)
+    }
+
     protected open fun checkIsProgramAvailable(programExecutablePath: String): Boolean {
         val executionResult = executeCheckIfProgramIsAvailable(getCommandArgsToCheckIfProgramIsAvailable(programExecutablePath))
 
-        lastCheckIsProgramAvailableResult = evaluateIfProgramIsAvailable(executionResult)
+        isAvailable = evaluateIfProgramIsAvailable(executionResult)
 
-        return lastCheckIsProgramAvailableResult
+        return isAvailable
     }
 
     protected open fun getCommandArgsToCheckIfProgramIsAvailable(programExecutablePath: String): List<String> {

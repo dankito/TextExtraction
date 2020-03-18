@@ -18,6 +18,14 @@ abstract class ExternalToolTextExtractorBase(
     override val isAvailable: Boolean
         get() = commandlineProgram.isAvailable
 
+    open val programExecutablePath: String
+        get() = commandlineProgram.programExecutablePath
+
+
+    open fun setProgramExecutablePathTo(programExecutablePath: String) {
+        commandlineProgram.setProgramExecutablePathTo(programExecutablePath)
+    }
+
 
     open fun executeCommand(config: CommandConfig): ExecuteCommandResult {
         return commandExecutor.executeCommand(config)

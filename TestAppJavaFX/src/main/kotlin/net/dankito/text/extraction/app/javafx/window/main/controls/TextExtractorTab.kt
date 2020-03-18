@@ -10,6 +10,7 @@ import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import kotlinx.coroutines.*
 import kotlinx.coroutines.javafx.JavaFx
+import net.dankito.text.extraction.ExternalToolTextExtractorBase
 import net.dankito.text.extraction.ITextExtractor
 import net.dankito.text.extraction.model.ErrorInfo
 import net.dankito.text.extraction.model.ErrorType
@@ -35,11 +36,17 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
         get() = SupervisorJob() + Dispatchers.JavaFx
 
 
+    protected val userMustSelectProgramExecutablePath = SimpleBooleanProperty(false)
+
+    protected val programExecutablePath = SimpleStringProperty("")
+
     protected val lastSelectedFilePath = SimpleStringProperty("")
 
     protected val extractionTime = SimpleStringProperty("")
 
     protected val isExistingFileSelected = SimpleBooleanProperty(false)
+
+    protected val canExtractText = SimpleBooleanProperty(false)
 
     protected val isExtractingText = SimpleBooleanProperty(false)
 
@@ -58,12 +65,53 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
 
 
     init {
+        programExecutablePath.addListener { _, _, newValue -> checkIfProgramExecutableExists(newValue) }
+
         lastSelectedFilePath.addListener { _, _, newValue -> checkIfFileExists(newValue) }
+
+        if (textExtractor is ExternalToolTextExtractorBase) {
+            programExecutablePath.value = textExtractor.programExecutablePath
+        }
+
+        userMustSelectProgramExecutablePath.value = textExtractor is ExternalToolTextExtractorBase && textExtractor.isAvailable == false
     }
 
 
     override val root = vbox {
         useMaxHeight = true
+
+        hbox {
+            prefHeight = 34.0
+            alignment = Pos.CENTER_LEFT
+
+            visibleWhen(userMustSelectProgramExecutablePath)
+            ensureOnlyUsesSpaceIfVisible()
+
+            vboxConstraints {
+                marginTopBottom(8.0)
+            }
+
+
+            label(messages["extract.text.tab.select.program.executable.label"])
+
+            textfield(programExecutablePath) {
+                useMaxHeight = true
+
+                hboxConstraints {
+                    hGrow = Priority.ALWAYS
+
+                    marginLeftRight(6.0)
+                }
+            }
+
+            button(messages["open.file.button.label"]) {
+                useMaxHeight = true
+                prefWidth = 45.0
+
+                action { selectProgramExecutablePath() }
+            }
+
+        }
 
         hbox {
             prefHeight = 34.0
@@ -113,7 +161,7 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
                 useMaxHeight = true
                 prefWidth = 125.0
 
-                enableWhen(isExistingFileSelected.and(isExtractingText.not()))
+                enableWhen(canExtractText.and(isExtractingText.not()))
 
                 action { extractTextOfFileAndShowResult() }
             }
@@ -152,6 +200,37 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
                 vGrow = Priority.ALWAYS
             }
         }
+    }
+
+
+    protected open fun checkIfProgramExecutableExists(programExecutablePath: String) {
+        if (textExtractor is ExternalToolTextExtractorBase) {
+            textExtractor.setProgramExecutablePathTo(programExecutablePath)
+
+            updateCanExtractText()
+        }
+    }
+
+    protected open fun selectProgramExecutablePath() {
+        val fileChooser = FileChooser()
+
+        val programExecutablePathAsFile = File(programExecutablePath.value)
+
+        if (programExecutablePathAsFile.parentFile?.exists() == true) {
+            fileChooser.initialDirectory = programExecutablePathAsFile.parentFile
+        }
+
+        fileChooser.showOpenDialog(FX.primaryStage)?.let { selectedProgramExecutablePath ->
+            selectedProgramExecutablePath(selectedProgramExecutablePath.absolutePath)
+        }
+    }
+
+    protected fun selectedProgramExecutablePath(selectedProgramExecutablePath: String) {
+        programExecutablePath.value = selectedProgramExecutablePath
+
+        checkIfProgramExecutableExists(selectedProgramExecutablePath)
+
+        ifPossibleExtractTextOfFileAndShowResult()
     }
 
 
@@ -196,13 +275,25 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
 
         existingFileSelected(file)
 
-        extractTextOfFileAndShowResult()
+        ifPossibleExtractTextOfFileAndShowResult()
+    }
+
+    protected open fun ifPossibleExtractTextOfFileAndShowResult() {
+        if (canExtractText.value) {
+            extractTextOfFileAndShowResult()
+        }
     }
 
     protected open fun existingFileSelected(file: File) {
         lastSelectedFile = file
 
         isExistingFileSelected.value = true
+
+        updateCanExtractText()
+    }
+
+    protected open fun updateCanExtractText() {
+        canExtractText.value = isExistingFileSelected.value && textExtractor.isAvailable
     }
 
 
