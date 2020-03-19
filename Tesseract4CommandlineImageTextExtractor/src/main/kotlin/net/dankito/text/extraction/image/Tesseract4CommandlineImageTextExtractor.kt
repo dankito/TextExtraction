@@ -60,7 +60,7 @@ open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
 
         commandArgs.add(file.absolutePath)
 
-        commandArgs.add("stdout")
+        commandArgs.add("stdout") // if 'stdout' is being removed from parameters list, detection if a Tesseract instance is already running will not work anymore
 
         config.tessdataDirectory?.let { tessdataDir ->
             commandArgs.add("--tessdata-dir")
@@ -83,13 +83,29 @@ open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
 
         val environmentVariables = mutableMapOf<String, String>()
 
-        if (config.willMultipleTesseractInstancesRunInParallel) {
+        if (config.willMultipleTesseractInstancesRunInParallel || isAnotherTesseractInstanceRunning()) {
             // Tesseract 4 uses 4 threads by default; when multiple Tesseract process are run in parallel
             // these block each other so that command never returns. To fix this limit count threads to 1
             environmentVariables["OMP_THREAD_LIMIT"] = "1"
         }
 
         return CommandConfig(commandArgs, null, environmentVariables)
+    }
+
+    protected open fun isAnotherTesseractInstanceRunning(): Boolean {
+        val executableName = File(programExecutablePath).name
+
+        val commandArgs = if (osHelper.isRunningOnWindows) {
+            listOf("tasklist.exe")
+        }
+        else {
+            // "To execute a pipeline, you have to invoke a shell, and then run your commands inside that shell", see https://stackoverflow.com/a/3776277
+            listOf("/bin/sh", "-c", "ps aux | grep stdout")
+        }
+
+        val executionResult = commandExecutor.executeCommand(CommandConfig(commandArgs))
+
+        return executionResult.outputLines.firstOrNull { it.contains(executableName, true) } != null
     }
 
     protected open fun mapExecuteCommandResult(executeCommandResult: ExecuteCommandResult): ExtractionResult {
