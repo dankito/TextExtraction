@@ -81,9 +81,13 @@ open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
             commandArgs.add(tesseractHelper.getTesseractOptionName(config.ocrOutputType))
         }
 
-        // Tesseract 4 uses 4 threads by default; when multiple Tesseract process are run in parallel
-        // these block each other so that command never returns. To fix this limit count threads to 1
-        val environmentVariables = mapOf("OMP_THREAD_LIMIT" to "1")
+        val environmentVariables = mutableMapOf<String, String>()
+
+        if (config.willMultipleTesseractInstancesRunInParallel) {
+            // Tesseract 4 uses 4 threads by default; when multiple Tesseract process are run in parallel
+            // these block each other so that command never returns. To fix this limit count threads to 1
+            environmentVariables["OMP_THREAD_LIMIT"] = "1"
+        }
 
         return CommandConfig(commandArgs, null, environmentVariables)
     }

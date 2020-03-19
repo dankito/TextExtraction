@@ -8,7 +8,12 @@ open class TesseractConfig @JvmOverloads constructor(
     val ocrOutputType: OcrOutputType = OcrOutputType.Text,
     val tesseractPath: File? = null,
     val tessdataDirectory: File? = null,
-    val pageSegMode: PageSegMode? = null
+    val pageSegMode: PageSegMode? = null,
+    /**
+     * Tesseract by default uses 4 threads when recognizing an image. If multiple Tesseract instances
+     * run in parallel, this will lead to that threads block each other and Tesseract never completes
+     */
+    val willMultipleTesseractInstancesRunInParallel: Boolean = false
 ) {
 
     override fun toString(): String {
