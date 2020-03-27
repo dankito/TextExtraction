@@ -78,9 +78,11 @@ open class TikaTextExtractor @JvmOverloads constructor(
 
 	override fun extractTextForSupportedFormat(file: File): ExtractionResult {
 		val extractedTextWriter = StringWriter()
-		extractText(file, extractedTextWriter)
+		val tikaMetadata = Metadata()
 
-		val extractedText = ExtractionResult()
+		extractText(file, extractedTextWriter, tikaMetadata)
+
+		val extractedText = ExtractionResult(metadata = mapMetadata(tikaMetadata, file))
 
 		// TODO: try to get Hocr and ToHtmlContentHandler working to get aware of single pages
 		val extractionResult = extractedTextWriter.toString()
@@ -91,8 +93,7 @@ open class TikaTextExtractor @JvmOverloads constructor(
 		return extractedText
 	}
 
-	protected open fun extractText(file: File, extractedTextWriter: StringWriter) {
-		val metadata = Metadata()
+	protected open fun extractText(file: File, extractedTextWriter: StringWriter, metadata: Metadata) {
 		metadata[Metadata.RESOURCE_NAME_KEY] = file.name
 
 		val handler = WriteOutContentHandler(extractedTextWriter) // may add a limit in count of chars as second parameter
@@ -104,6 +105,28 @@ open class TikaTextExtractor @JvmOverloads constructor(
 				log.error("Could not extract content of file $file", e)
 			}
 		}
+	}
+
+	protected open fun mapMetadata(tikaMetadata: Metadata, file: File): net.dankito.text.extraction.model.Metadata? {
+		val title = getMetadataForKeys(tikaMetadata, "title", "dc:title", "pdf:docinfo:title", "xmpDM:artist", "description", "dc:description", "creator", "dc:creator", "subject", "dc:subject")
+		val author = getMetadataForKeys(tikaMetadata, "author", "Author", "dc:author", "meta:author")
+		val length = getMetadataForKeys(tikaMetadata, "xmpTPg:NPages", "meta:page-count", "Page-Count", "xmpDM:duration")?.toFloatOrNull()?.toInt()
+		val category = getMetadataForKeys(tikaMetadata, "xmpDM:genre")
+		val language = getMetadataForKeys(tikaMetadata, "language", "dc:language", "Content-Language")
+		val series = getMetadataForKeys(tikaMetadata, "xmpDM:album")
+		val keywords = getMetadataForKeys(tikaMetadata, "keywords", "Keywords", "pdf:docinfo:keywords", "meta:keyword")
+
+		return net.dankito.text.extraction.model.Metadata(title, author, length, category, language, series, keywords?.split(",") ?: listOf()) // split with ';', ' / '
+	}
+
+	protected open fun getMetadataForKeys(tikaMetadata: Metadata, vararg keys: String): String? {
+		for (key in keys) {
+			tikaMetadata[key]?.let { value ->
+				return value
+			}
+		}
+
+		return null
 	}
 
 

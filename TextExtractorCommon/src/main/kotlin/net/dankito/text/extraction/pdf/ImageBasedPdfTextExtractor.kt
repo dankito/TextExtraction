@@ -82,7 +82,7 @@ open class ImageBasedPdfTextExtractor(
                 }
             }
             else if (firstError == null && extractedText.error != null) {
-                firstError = extractedText.error.exception
+                firstError = extractedText.error?.exception
             }
         }
 

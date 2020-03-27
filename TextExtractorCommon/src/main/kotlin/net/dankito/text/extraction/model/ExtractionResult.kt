@@ -1,7 +1,10 @@
 package net.dankito.text.extraction.model
 
 
-open class ExtractionResult(val error: ErrorInfo? = null) {
+open class ExtractionResult(
+    open val error: ErrorInfo? = null,
+    open var metadata: Metadata? = null
+) {
 
     protected val pagesField = mutableListOf<Page>()
 

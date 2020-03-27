@@ -27,6 +27,14 @@ abstract class ExternalToolTextExtractorBase(
     }
 
 
+    open fun executeCommandWithLittleOutput(vararg arguments: String): ExecuteCommandResult {
+        return commandExecutor.executeCommandWithLittleOutput(*arguments)
+    }
+
+    open fun executeCommandWithLittleOutput(config: CommandConfig): ExecuteCommandResult {
+        return commandExecutor.executeCommandWithLittleOutput(config)
+    }
+
     open fun executeCommand(config: CommandConfig): ExecuteCommandResult {
         return commandExecutor.executeCommand(config)
     }

@@ -6,6 +6,7 @@ import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor
 import net.dankito.text.extraction.ITextExtractor.Companion.TextExtractionQualityForUnsupportedFileType
 import net.dankito.text.extraction.TextExtractorBase
 import net.dankito.text.extraction.model.ExtractionResult
+import net.dankito.text.extraction.model.Metadata
 import net.dankito.text.extraction.model.Page
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -39,7 +40,7 @@ open class itextPdfTextExtractor: TextExtractorBase(), ISearchablePdfTextExtract
                 val pdfDocument = PdfDocument(reader)
 
                 val countPages = pdfDocument.numberOfPages
-                val extractedText = ExtractionResult()
+                val extractedText = ExtractionResult(metadata = getMetadata(pdfDocument, file))
 
                 for (pageNum in 1..countPages) {
                     try {
@@ -59,6 +60,20 @@ open class itextPdfTextExtractor: TextExtractorBase(), ISearchablePdfTextExtract
                 return extractedText
             }
         }
+    }
+
+    protected open fun getMetadata(pdfDocument: PdfDocument, file: File): Metadata? {
+        try {
+            val title = pdfDocument.documentInfo.title
+            val author = pdfDocument.documentInfo.author
+            val keywords = pdfDocument.documentInfo.keywords
+
+            return Metadata(title, author, pdfDocument.numberOfPages, keywords = keywords?.split(",") ?: listOf())
+        } catch (e: Exception) {
+            log.error("Could not extract metadata of file $file", e)
+        }
+
+        return null
     }
 
 }
