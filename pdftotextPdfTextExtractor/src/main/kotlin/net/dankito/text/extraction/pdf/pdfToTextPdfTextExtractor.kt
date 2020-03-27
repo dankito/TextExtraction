@@ -110,7 +110,7 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
             val length = getMetadataField(metadataResult, "Pages")?.toInt()
             val keywords = getMetadataField(metadataResult, "Keywords")
 
-            return Metadata(title, author, length, keywords = keywords?.split(",") ?: listOf())
+            return Metadata(title, author, length, keywords = keywords)
         } catch (e: Exception) {
             log.error("Could not get PDF metadata of file $file", e)
         }

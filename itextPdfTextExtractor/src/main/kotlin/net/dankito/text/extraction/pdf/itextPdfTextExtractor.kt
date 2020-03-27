@@ -68,7 +68,7 @@ open class itextPdfTextExtractor: TextExtractorBase(), ISearchablePdfTextExtract
             val author = pdfDocument.documentInfo.author
             val keywords = pdfDocument.documentInfo.keywords
 
-            return Metadata(title, author, pdfDocument.numberOfPages, keywords = keywords?.split(",") ?: listOf())
+            return Metadata(title, author, pdfDocument.numberOfPages, keywords = keywords)
         } catch (e: Exception) {
             log.error("Could not extract metadata of file $file", e)
         }

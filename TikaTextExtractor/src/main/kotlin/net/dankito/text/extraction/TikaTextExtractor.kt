@@ -116,7 +116,7 @@ open class TikaTextExtractor @JvmOverloads constructor(
 		val series = getMetadataForKeys(tikaMetadata, "xmpDM:album")
 		val keywords = getMetadataForKeys(tikaMetadata, "keywords", "Keywords", "pdf:docinfo:keywords", "meta:keyword")
 
-		return net.dankito.text.extraction.model.Metadata(title, author, length, category, language, series, keywords?.split(",") ?: listOf()) // split with ';', ' / '
+		return net.dankito.text.extraction.model.Metadata(title, author, length, category, language, series, keywords)
 	}
 
 	protected open fun getMetadataForKeys(tikaMetadata: Metadata, vararg keys: String): String? {

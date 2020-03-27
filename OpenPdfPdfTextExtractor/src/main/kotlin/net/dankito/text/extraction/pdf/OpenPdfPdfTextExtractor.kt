@@ -5,6 +5,7 @@ import com.lowagie.text.pdf.parser.PdfTextExtractor
 import net.dankito.text.extraction.ITextExtractor.Companion.TextExtractionQualityForUnsupportedFileType
 import net.dankito.text.extraction.TextExtractorBase
 import net.dankito.text.extraction.model.ExtractionResult
+import net.dankito.text.extraction.model.Metadata
 import net.dankito.text.extraction.model.Page
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -52,9 +53,25 @@ open class OpenPdfPdfTextExtractor: TextExtractorBase(), ISearchablePdfTextExtra
                     }
                 }
 
+                extractedText.metadata = getMetadata(reader, file)
+
                 return extractedText
             }
         }
+    }
+
+    protected open fun getMetadata(reader: PdfReader, file: File): Metadata? {
+        try {
+            val title = reader.info["Title"]
+            val author = reader.info["Author"]
+            val keywords = reader.info["Keywords"]
+
+            return Metadata(title, author, reader.numberOfPages, keywords = keywords)
+        } catch (e: Exception) {
+            log.error("Could not extract metadata of file $file", e)
+        }
+
+        return null
     }
 
 }
