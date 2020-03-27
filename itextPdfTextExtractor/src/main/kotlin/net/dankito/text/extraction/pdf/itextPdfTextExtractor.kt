@@ -40,7 +40,7 @@ open class itextPdfTextExtractor: TextExtractorBase(), ISearchablePdfTextExtract
                 val pdfDocument = PdfDocument(reader)
 
                 val countPages = pdfDocument.numberOfPages
-                val extractedText = ExtractionResult(metadata = getMetadata(pdfDocument, file))
+                val extractedText = ExtractionResult(null, "application/pdf", getMetadata(pdfDocument, file))
 
                 for (pageNum in 1..countPages) {
                     try {

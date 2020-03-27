@@ -82,7 +82,9 @@ open class TikaTextExtractor @JvmOverloads constructor(
 
 		extractText(file, extractedTextWriter, tikaMetadata)
 
-		val extractedText = ExtractionResult(metadata = mapMetadata(tikaMetadata, file))
+		val extractedText = ExtractionResult(null,
+			getMetadataForKeys(tikaMetadata, "Content-Type", "Content-Type-Hint", "dc:format"),
+			mapMetadata(tikaMetadata, file))
 
 		// TODO: try to get Hocr and ToHtmlContentHandler working to get aware of single pages
 		val extractionResult = extractedTextWriter.toString()

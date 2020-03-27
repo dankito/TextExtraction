@@ -57,7 +57,7 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
 
     // TODO: how to get rid of duplicated code?
     override suspend fun extractTextForSupportedFormatSuspendable(file: File): ExtractionResult {
-        val result = ExtractionResult(metadata = getPdfMetadata(file))
+        val result = ExtractionResult(null, "application/pdf", getPdfMetadata(file))
 
         // to extract all text at once:
         // result.addPage(Page(executeCommand(pdftotextExecutablePath, "-layout", file.absolutePath, "-").output))

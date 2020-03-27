@@ -110,7 +110,7 @@ open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
 
     protected open fun mapExecuteCommandResult(executeCommandResult: ExecuteCommandResult): ExtractionResult {
         return if (executeCommandResult.successful) {
-            val result = ExtractionResult()
+            val result = ExtractionResult() // TODO: set mime type
             result.addPage(Page(executeCommandResult.output))
 
             result

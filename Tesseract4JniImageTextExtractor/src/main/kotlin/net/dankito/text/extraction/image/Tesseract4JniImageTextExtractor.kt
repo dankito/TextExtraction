@@ -58,7 +58,7 @@ open class Tesseract4JniImageTextExtractor @JvmOverloads constructor(
         }
 
 
-        val result = ExtractionResult()
+        val result = ExtractionResult() // TODO: set mime type
 
         api.SetImage(image)
 
