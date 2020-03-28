@@ -4,10 +4,11 @@ package net.dankito.text.extraction.model
 open class ExtractionResult(
     open val error: ErrorInfo? = null,
     open val contentType: String? = null,
-    open var metadata: Metadata? = null
+    open var metadata: Metadata? = null,
+    pages: List<Page> = listOf()
 ) {
 
-    protected val pagesField = mutableListOf<Page>()
+    protected val pagesField = pages.toMutableList()
 
 
     open val errorOccurred: Boolean

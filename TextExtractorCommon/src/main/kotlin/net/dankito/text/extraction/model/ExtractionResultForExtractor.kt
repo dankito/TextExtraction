@@ -7,11 +7,12 @@ open class ExtractionResultForExtractor(
     val extractor: ITextExtractor?,
     error: ErrorInfo? = null,
     contentType: String? = null,
-    metadata: Metadata? = null
-): ExtractionResult(error, contentType, metadata) {
+    metadata: Metadata? = null,
+    pages: List<Page> = listOf()
+): ExtractionResult(error, contentType, metadata, pages) {
 
     constructor(extractor: ITextExtractor?, extractionResult: ExtractionResult) :
-            this(extractor, extractionResult.error, extractionResult.contentType, extractionResult.metadata)
+            this(extractor, extractionResult.error, extractionResult.contentType, extractionResult.metadata, extractionResult.pages)
 
 
     override fun toString(): String {
