@@ -318,7 +318,7 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
         isExtractingText.value = false
         extractionTime.value = stopwatch.formatElapsedTime()
 
-        extractedText.value = extractionResult.text
+        extractedText.value = extractionResult.text ?: ""
 
         if (extractionResult is ExtractionResultForExtractor) {
             showTextExtractorInfo.value = true

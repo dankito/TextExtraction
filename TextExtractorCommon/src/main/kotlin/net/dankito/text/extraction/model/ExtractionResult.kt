@@ -14,14 +14,14 @@ open class ExtractionResult(
         get() = error != null
 
     open val couldExtractText: Boolean
-        get() = errorOccurred == false && pages.isNotEmpty() && text.isNotBlank()
+        get() = errorOccurred == false && pages.isNotEmpty() && text != null
 
 
     open val pages: List<Page>
         get() = ArrayList(pagesField) // don't return pagesField as otherwise it would be manipulated on the outside of this class
 
-    open val text: String
-        get() = pages.joinToString("\n")
+    open val text: String?
+        get() = if (pages.isEmpty()) null else pages.joinToString("\n")
 
 
     open fun addPage(page: Page) {

@@ -121,7 +121,7 @@ abstract class ExtractTextTabFragment : Fragment(), CoroutineScope by MainScope(
         btnExtractSelectedFile.isEnabled = true
         txtvwExtractionTime.text = stopwatch.formatElapsedTime()
 
-        txtvwExtractedText.text = extractionResult.text
+        txtvwExtractedText.text = extractionResult.text ?: ""
 
         if (extractionResult is ExtractionResultForExtractor) {
             txtInfoTextExtractedWith.visibility = View.VISIBLE
