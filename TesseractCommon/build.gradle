@@ -8,22 +8,11 @@ compileKotlin.kotlinOptions.jvmTarget = "1.6"
 compileTestKotlin.kotlinOptions.jvmTarget = "1.6"
 
 
-def mavenArtifactId = "tesseract-common"
-
-
 dependencies {
     api project(':TextExtractorCommon')
 }
 
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            pom.project {
-                name = mavenArtifactId
-                artifactId = mavenArtifactId
-                packaging 'jar'
-            }
-        }
-    }
+publishing.publications.mavenJava {
+    artifactId = "tesseract-common"
 }

@@ -8,9 +8,6 @@ compileKotlin.kotlinOptions.jvmTarget = "1.6"
 compileTestKotlin.kotlinOptions.jvmTarget = "1.6"
 
 
-def mavenArtifactId = "pdftotext-text-extractor"
-
-
 dependencies {
     api project(':TextExtractorCommon')
 
@@ -29,14 +26,6 @@ dependencies {
 }
 
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            pom.project {
-                name = mavenArtifactId
-                artifactId = mavenArtifactId
-                packaging 'jar'
-            }
-        }
-    }
+publishing.publications.mavenJava {
+    artifactId = "pdftotext-text-extractor"
 }

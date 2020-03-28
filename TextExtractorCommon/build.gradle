@@ -8,9 +8,6 @@ compileKotlin.kotlinOptions.jvmTarget = "1.6"
 compileTestKotlin.kotlinOptions.jvmTarget = "1.6"
 
 
-def mavenArtifactId = "text-extractor-common"
-
-
 dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     api "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
@@ -43,19 +40,7 @@ configurations {
     tests
 }
 
-artifacts {
-    tests testsJar
-    archives testsJar
-}
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            pom.project {
-                name = mavenArtifactId
-                artifactId = mavenArtifactId
-                packaging 'jar'
-            }
-        }
-    }
+publishing.publications.mavenJava {
+    artifactId = "text-extractor-common"
 }

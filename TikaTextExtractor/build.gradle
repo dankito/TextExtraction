@@ -8,9 +8,6 @@ compileKotlin.kotlinOptions.jvmTarget = "1.6"
 compileTestKotlin.kotlinOptions.jvmTarget = "1.6"
 
 
-def mavenArtifactId = "tika-text-extractor"
-
-
 dependencies {
     api project(':TextExtractorCommon')
     api project(':TesseractCommon')
@@ -27,14 +24,6 @@ dependencies {
 }
 
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            pom.project {
-                name = mavenArtifactId
-                artifactId = mavenArtifactId
-                packaging 'jar'
-            }
-        }
-    }
+publishing.publications.mavenJava {
+    artifactId = "tika-text-extractor"
 }
