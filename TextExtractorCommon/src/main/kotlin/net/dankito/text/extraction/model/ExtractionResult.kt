@@ -3,7 +3,7 @@ package net.dankito.text.extraction.model
 
 open class ExtractionResult(
     open val error: ErrorInfo? = null,
-    open val mimeType: String? = null,
+    open val contentType: String? = null,
     open var metadata: Metadata? = null
 ) {
 

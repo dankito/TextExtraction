@@ -6,12 +6,12 @@ import net.dankito.text.extraction.ITextExtractor
 open class ExtractionResultForExtractor(
     val extractor: ITextExtractor?,
     error: ErrorInfo? = null,
-    mimeType: String? = null,
+    contentType: String? = null,
     metadata: Metadata? = null
-): ExtractionResult(error, mimeType, metadata) {
+): ExtractionResult(error, contentType, metadata) {
 
     constructor(extractor: ITextExtractor?, extractionResult: ExtractionResult) :
-            this(extractor, extractionResult.error, extractionResult.mimeType, extractionResult.metadata)
+            this(extractor, extractionResult.error, extractionResult.contentType, extractionResult.metadata)
 
 
     override fun toString(): String {

@@ -118,8 +118,9 @@ open class TikaTextExtractor @JvmOverloads constructor(
 		val series = getMetadataForKeys(tikaMetadata, "xmpDM:album")
 		val keywords = getMetadataForKeys(tikaMetadata, "keywords", "Keywords", "pdf:docinfo:keywords", "meta:keyword")
 
-		val mimeType = getMetadataForKeys(tikaMetadata, "Content-Type", "Content-Type-Hint", "dc:format")
-		if (mimeType == "audio/mpeg" && length != null && length > 10_000) { // for .mp3s length seems to be returned in milliseconds
+		val contentType = getMetadataForKeys(tikaMetadata, "Content-Type", "Content-Type-Hint", "dc:format")
+
+		if (contentType == "audio/mpeg" && length != null && length > 10_000) { // for .mp3s length seems to be returned in milliseconds
 			length = length / 1_000 // -> make seconds out of it
 		}
 
