@@ -112,11 +112,16 @@ open class TikaTextExtractor @JvmOverloads constructor(
 	protected open fun mapMetadata(tikaMetadata: Metadata, file: File): net.dankito.text.extraction.model.Metadata? {
 		val title = getMetadataForKeys(tikaMetadata, "title", "dc:title", "pdf:docinfo:title", "xmpDM:artist", "description", "dc:description", "creator", "dc:creator", "subject", "dc:subject")
 		val author = getMetadataForKeys(tikaMetadata, "author", "Author", "dc:author", "meta:author")
-		val length = getMetadataForKeys(tikaMetadata, "xmpTPg:NPages", "meta:page-count", "Page-Count", "xmpDM:duration")?.toFloatOrNull()?.toInt()
+		var length = getMetadataForKeys(tikaMetadata, "xmpTPg:NPages", "meta:page-count", "Page-Count", "xmpDM:duration")?.toFloatOrNull()?.toInt()
 		val category = getMetadataForKeys(tikaMetadata, "xmpDM:genre")
 		val language = getMetadataForKeys(tikaMetadata, "language", "dc:language", "Content-Language")
 		val series = getMetadataForKeys(tikaMetadata, "xmpDM:album")
 		val keywords = getMetadataForKeys(tikaMetadata, "keywords", "Keywords", "pdf:docinfo:keywords", "meta:keyword")
+
+		val mimeType = getMetadataForKeys(tikaMetadata, "Content-Type", "Content-Type-Hint", "dc:format")
+		if (mimeType == "audio/mpeg" && length != null && length > 10_000) { // for .mp3s length seems to be returned in milliseconds
+			length = length / 1_000 // -> make seconds out of it
+		}
 
 		return net.dankito.text.extraction.model.Metadata(title, author, length, category, language, series, keywords)
 	}
