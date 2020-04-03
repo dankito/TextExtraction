@@ -53,7 +53,7 @@ open class itextPdfTextExtractor: TextExtractorBase(), ISearchablePdfTextExtract
                     } catch (e: Exception) {
                         log.error("Could not extract page $pageNum of $file", e)
 
-
+                        extractedText.addPage(Page("", pageNum)) // add empty page
                     }
                 }
 

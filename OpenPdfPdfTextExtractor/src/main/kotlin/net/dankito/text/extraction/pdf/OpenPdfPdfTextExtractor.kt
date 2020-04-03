@@ -50,6 +50,8 @@ open class OpenPdfPdfTextExtractor: TextExtractorBase(), ISearchablePdfTextExtra
                         log.debug("Extracted text of page $pageNum / $countPages")
                     } catch (e: Exception) {
                         log.error("Could not extract page $pageNum of $file", e)
+
+                        extractedText.addPage(Page("", pageNum)) // add empty page
                     }
                 }
 
