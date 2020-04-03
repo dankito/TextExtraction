@@ -3,23 +3,17 @@ package net.dankito.text.extraction.pdf
 import net.dankito.text.extraction.ExternalToolTextExtractorBase
 import net.dankito.text.extraction.ITextExtractor.Companion.TextExtractionQualityForUnsupportedFileType
 import net.dankito.text.extraction.model.ExtractionResult
-import net.dankito.text.extraction.model.Metadata
 import net.dankito.text.extraction.model.Page
 import net.dankito.utils.process.CommandConfig
 import net.dankito.utils.process.CommandExecutor
-import net.dankito.utils.process.ExecuteCommandResult
 import net.dankito.utils.process.ICommandExecutor
-import org.slf4j.LoggerFactory
 import java.io.File
 
 
 open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
-    commandExecutor: ICommandExecutor = CommandExecutor()
+    commandExecutor: ICommandExecutor = CommandExecutor(),
+    protected val metadataExtractor: IPdfMetadataExtractor = pdfinfoPdfMetadataExtractor(commandExecutor)
 ) : ExternalToolTextExtractorBase("pdftotext", commandExecutor), ISearchablePdfTextExtractor {
-
-    companion object {
-        private val log = LoggerFactory.getLogger(pdfToTextPdfTextExtractor::class.java)
-    }
 
 
     override val name = "pdftotext"
@@ -36,7 +30,8 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
 
 
     override fun extractTextForSupportedFormat(file: File): ExtractionResult {
-        val result = ExtractionResult(metadata = getPdfMetadata(file))
+        val metadata = metadataExtractor.extractMetadata(file)
+        val result = ExtractionResult(null, "application/pdf", metadata)
 
         // to extract all text at once:
         // result.addPage(Page(executeCommand(pdftotextExecutablePath, "-layout", file.absolutePath, "-").output))
@@ -57,7 +52,8 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
 
     // TODO: how to get rid of duplicated code?
     override suspend fun extractTextForSupportedFormatSuspendable(file: File): ExtractionResult {
-        val result = ExtractionResult(null, "application/pdf", getPdfMetadata(file))
+        val metadata = metadataExtractor.extractMetadata(file)
+        val result = ExtractionResult(null, "application/pdf", metadata)
 
         // to extract all text at once:
         // result.addPage(Page(executeCommand(pdftotextExecutablePath, "-layout", file.absolutePath, "-").output))
@@ -95,34 +91,6 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
             file.absolutePath,
             "-"
         ))
-    }
-
-
-    protected open fun getPdfMetadata(file: File): Metadata? {
-        try {
-            val metadataResult = executeCommandWithLittleOutput(
-                "pdfinfo",
-                file.absolutePath
-            )
-
-            val title = getMetadataField(metadataResult, "Title")
-            val author = getMetadataField(metadataResult, "Author")
-            val length = getMetadataField(metadataResult, "Pages")?.toInt()
-            val keywords = getMetadataField(metadataResult, "Keywords")
-
-            return Metadata(title, author, length, keywords = keywords)
-        } catch (e: Exception) {
-            log.error("Could not get PDF metadata of file $file", e)
-        }
-
-        return null
-    }
-
-    protected open fun getMetadataField(metadataResult: ExecuteCommandResult, fieldName: String): String? {
-        return metadataResult.outputLines
-            .firstOrNull { it.startsWith(fieldName) }
-            ?.replace("$fieldName:", "")
-            ?.trim()
     }
 
 }

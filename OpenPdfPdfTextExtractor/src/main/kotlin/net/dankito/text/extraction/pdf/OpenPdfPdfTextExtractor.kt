@@ -11,7 +11,9 @@ import org.slf4j.LoggerFactory
 import java.io.File
 
 
-open class OpenPdfPdfTextExtractor: TextExtractorBase(), ISearchablePdfTextExtractor {
+open class OpenPdfPdfTextExtractor(
+    protected val metadataExtractor: IPdfMetadataExtractor = OpenPdfPdfMetadataExtractor()
+): TextExtractorBase(), ISearchablePdfTextExtractor {
 
     companion object {
         private val log = LoggerFactory.getLogger(OpenPdfPdfTextExtractor::class.java)
@@ -61,17 +63,12 @@ open class OpenPdfPdfTextExtractor: TextExtractorBase(), ISearchablePdfTextExtra
     }
 
     protected open fun getMetadata(reader: PdfReader, file: File): Metadata? {
-        try {
-            val title = reader.info["Title"]
-            val author = reader.info["Author"]
-            val keywords = reader.info["Keywords"]
-
-            return Metadata(title, author, reader.numberOfPages, keywords = keywords)
-        } catch (e: Exception) {
-            log.error("Could not extract metadata of file $file", e)
+        return if (metadataExtractor is OpenPdfPdfMetadataExtractor) {
+            metadataExtractor.extractMetadata(reader, file)
         }
-
-        return null
+        else {
+            metadataExtractor.extractMetadata(file)
+        }
     }
 
 }

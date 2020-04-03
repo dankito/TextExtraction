@@ -12,7 +12,9 @@ import org.slf4j.LoggerFactory
 import java.io.File
 
 
-open class itextPdfTextExtractor: TextExtractorBase(), ISearchablePdfTextExtractor {
+open class itextPdfTextExtractor(
+    protected val metadataExtractor: IPdfMetadataExtractor = itextPdfMetadataExtractor()
+): TextExtractorBase(), ISearchablePdfTextExtractor {
 
     companion object {
         private val log = LoggerFactory.getLogger(itextPdfTextExtractor::class.java)
@@ -39,8 +41,8 @@ open class itextPdfTextExtractor: TextExtractorBase(), ISearchablePdfTextExtract
             PdfReader(inputStream).use { reader ->
                 val pdfDocument = PdfDocument(reader)
 
-                val countPages = pdfDocument.numberOfPages
                 val extractedText = ExtractionResult(null, "application/pdf", getMetadata(pdfDocument, file))
+                val countPages = pdfDocument.numberOfPages
 
                 for (pageNum in 1..countPages) {
                     try {
@@ -63,17 +65,12 @@ open class itextPdfTextExtractor: TextExtractorBase(), ISearchablePdfTextExtract
     }
 
     protected open fun getMetadata(pdfDocument: PdfDocument, file: File): Metadata? {
-        try {
-            val title = pdfDocument.documentInfo.title
-            val author = pdfDocument.documentInfo.author
-            val keywords = pdfDocument.documentInfo.keywords
-
-            return Metadata(title, author, pdfDocument.numberOfPages, keywords = keywords)
-        } catch (e: Exception) {
-            log.error("Could not extract metadata of file $file", e)
+        return if (metadataExtractor is itextPdfMetadataExtractor) {
+            metadataExtractor.extractMetadata(pdfDocument, file)
         }
-
-        return null
+        else {
+            metadataExtractor.extractMetadata(file)
+        }
     }
 
 }
