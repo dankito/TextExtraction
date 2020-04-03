@@ -17,7 +17,7 @@ open class ExtractionResult(
         get() = error != null
 
     open val couldExtractText: Boolean
-        get() = errorOccurred == false && pagesField.isNotEmpty() && text != null
+        get() = errorOccurred == false && pagesField.isNotEmpty() && text.isNullOrBlank() == false
 
 
     open val pages: List<Page>
