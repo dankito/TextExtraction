@@ -1,6 +1,6 @@
 include ':TextExtractorCommon'
 
-include ':pdftotextPdfTextExtractor'
+include ':PopplerPdfTextExtractor'
 include ':OpenPdfPdfTextExtractor'
 include ':itextPdfTextExtractor'
 

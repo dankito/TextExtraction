@@ -30,6 +30,8 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
 
     override val supportedFileTypes = listOf("pdf")
 
+    override val installHint = getInstallHintForOsType("error.message.poppler.utils.application.not.found.")
+
     override fun getTextExtractionQualityForFileType(file: File): Int {
         if (isFileTypeSupported(file)) {
             return 99
@@ -124,7 +126,6 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
          *  -layout: maintain original physical layout
          *  - (last parameter): print to console instead of to file
          */
-        // TODO: add .exe to pdftotext / pdftotextExecutablePath on Windows
         return CommandConfig(listOf(
             commandlineProgram.programExecutablePath,
             "-f",
