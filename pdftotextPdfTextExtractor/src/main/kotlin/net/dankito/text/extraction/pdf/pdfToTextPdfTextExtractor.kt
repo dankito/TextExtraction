@@ -1,19 +1,29 @@
 package net.dankito.text.extraction.pdf
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import net.dankito.text.extraction.ExternalToolTextExtractorBase
 import net.dankito.text.extraction.ITextExtractor.Companion.TextExtractionQualityForUnsupportedFileType
 import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
 import net.dankito.utils.process.CommandConfig
 import net.dankito.utils.process.CommandExecutor
+import net.dankito.utils.process.CpuInfo
 import net.dankito.utils.process.ICommandExecutor
 import java.io.File
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 
 open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
     commandExecutor: ICommandExecutor = CommandExecutor(),
     protected val metadataExtractor: IPdfMetadataExtractor = pdfinfoPdfMetadataExtractor(commandExecutor)
-) : ExternalToolTextExtractorBase("pdftotext", commandExecutor), ISearchablePdfTextExtractor {
+) : ExternalToolTextExtractorBase("pdftotext", commandExecutor, 0), ISearchablePdfTextExtractor {
+
+
+    protected val extractPagesParallelExecutor: ExecutorService = Executors.newFixedThreadPool(CpuInfo.CountCores * 20)
 
 
     override val name = "pdftotext"
@@ -35,9 +45,7 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
         val extractedLength = metadata?.length ?: 0
 
         if (extractedLength > 0) {
-            for (pageNum in 1..extractedLength) {
-                extractPage(file, result, pageNum)
-            }
+            extractPagesInParallel(extractedLength, file, result)
         }
         else {
             generateSequence(1) { it + 1 }.forEach { pageNum ->
@@ -48,6 +56,20 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
         }
 
         return result // should never come to this
+    }
+
+    protected open fun extractPagesInParallel(countPages: Int, file: File, result: ExtractionResult) {
+        val countDownLatch = CountDownLatch(countPages)
+
+        for (pageNum in 1..countPages) {
+            extractPagesParallelExecutor.submit {
+                extractPage(file, result, pageNum)
+
+                countDownLatch.countDown()
+            }
+        }
+
+        try { countDownLatch.await(3, TimeUnit.MINUTES) } catch (ignored: Exception) { }
     }
 
     protected open fun extractPage(file: File, result: ExtractionResult, pageNum: Int): Boolean {
@@ -67,8 +89,10 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
         val extractedLength = metadata?.length ?: 0
 
         if (extractedLength > 0) {
-            for (pageNum in 1..extractedLength) {
-                extractPage(file, result, pageNum)
+            coroutineScope {
+                for (pageNum in 1..extractedLength) {
+                    async { extractPageSuspendable(file, result, pageNum) }
+                }
             }
         }
         else {
