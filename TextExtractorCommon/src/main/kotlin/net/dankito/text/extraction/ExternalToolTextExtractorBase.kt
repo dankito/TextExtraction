@@ -20,6 +20,8 @@ abstract class ExternalToolTextExtractorBase(
 ) : TextExtractorBase() {
 
     companion object {
+        const val UnlimitedParallelExecutions = -1
+
         const val CountMillisToSleepWhenThereAreTooManyParallelExecutions = 100L
     }
 

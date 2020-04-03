@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
     commandExecutor: ICommandExecutor = CommandExecutor(),
     protected val metadataExtractor: IPdfMetadataExtractor = pdfinfoPdfMetadataExtractor(commandExecutor)
-) : ExternalToolTextExtractorBase("pdftotext", commandExecutor, 0), ISearchablePdfTextExtractor {
+) : ExternalToolTextExtractorBase("pdftotext", commandExecutor, UnlimitedParallelExecutions), ISearchablePdfTextExtractor {
 
 
     protected val extractPagesParallelExecutor: ExecutorService = Executors.newFixedThreadPool(CpuInfo.CountCores * 20)
