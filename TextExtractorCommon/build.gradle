@@ -20,9 +20,10 @@ dependencies {
 
     testApi project(':TesseractCommon')
 
-    testApi "junit:junit:$junitVersion"
-    testApi "org.assertj:assertj-core:$assertJVersion"
+    testImplementation("org.junit.jupiter:junit-jupiter:$junit5Version")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit5Version")
 
+    testApi "org.assertj:assertj-core:$assertJVersion"
     testApi "org.mockito:mockito-core:$mockitoVersion"
 
     testApi "ch.qos.logback:logback-classic:$logbackVersion"

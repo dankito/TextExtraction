@@ -6,7 +6,7 @@ import net.dankito.text.extraction.model.Page
 import net.dankito.utils.io.FileUtils
 import net.dankito.utils.resources.ResourceFilesExtractor
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.io.File
 
 
