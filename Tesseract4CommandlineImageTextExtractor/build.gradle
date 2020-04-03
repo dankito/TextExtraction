@@ -13,14 +13,7 @@ dependencies {
     api project(':TesseractCommon')
 
 
-    testApi project(path: ':TextExtractorCommon', configuration: 'tests')
-
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.assertj:assertj-core:$assertJVersion"
-
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
-
-    testImplementation "ch.qos.logback:logback-classic:$logbackVersion"
+    testImplementation project(path: ':TextExtractorCommon', configuration: 'tests')
 
 }
 
