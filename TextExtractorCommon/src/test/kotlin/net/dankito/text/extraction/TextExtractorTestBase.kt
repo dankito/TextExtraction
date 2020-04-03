@@ -147,6 +147,18 @@ abstract class TextExtractorTestBase {
     }
 
 
+    protected open fun testTextExtractionOfFile(extractor: ITextExtractor, file: File, countExpectedPages: Int = 1): ExtractionResult {
+
+        // when
+        val result = extractor.extractText(file)
+
+        // then
+        assertCountPagesAndTextIsNotEmpty(result, countExpectedPages)
+
+        return result
+    }
+
+
     protected open fun getCountExpectedPages(countPagesInWholePdf: Int): Int {
         return if (textExtractorType == TextExtractorType.Image) 1 // for images only first page gets extracted
             else countPagesInWholePdf
@@ -154,6 +166,10 @@ abstract class TextExtractorTestBase {
 
 
     protected open fun assertCountPagesAndTextIsNotEmpty(result: ExtractionResult, countPages: Int) {
+        assertThat(result.couldExtractText).isTrue()
+        assertThat(result.errorOccurred).isFalse()
+        assertThat(result.error).isNull()
+
         assertThat(result.pages).hasSize(countPages)
 
         assertThat(result.text?.trim()).isNotEmpty()
