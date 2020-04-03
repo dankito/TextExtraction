@@ -1,19 +1,33 @@
 package net.dankito.text.extraction
 
+import kotlinx.coroutines.delay
 import net.dankito.text.extraction.commandline.CommandlineProgram
-import net.dankito.utils.process.CommandConfig
-import net.dankito.utils.process.CommandExecutor
-import net.dankito.utils.process.ExecuteCommandResult
-import net.dankito.utils.process.ICommandExecutor
+import net.dankito.utils.process.*
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
 
 
 abstract class ExternalToolTextExtractorBase(
     osIndependentDefaultExecutableName: String,
-    protected val commandExecutor: ICommandExecutor = CommandExecutor()
+    protected val commandExecutor: ICommandExecutor = CommandExecutor(),
+    /**
+     * Some programs like Tesseract would completely block your cpus and therefore your system when
+     * there are too many parallel executions of it.
+     * Set to a value less or equal to zero to disable max parallel executions check and to run
+     * unlimited instances in parallel.
+     */
+    protected val maxCountParallelExecutions: Int = CpuInfo.CountCores
 ) : TextExtractorBase() {
+
+    companion object {
+        const val CountMillisToSleepWhenThereAreTooManyParallelExecutions = 100L
+    }
 
 
     protected val commandlineProgram = CommandlineProgram(osIndependentDefaultExecutableName, commandExecutor)
+
+    protected val countParallelExecutions = AtomicInteger(0)
+
 
     override val isAvailable: Boolean
         get() = commandlineProgram.isAvailable
@@ -36,11 +50,35 @@ abstract class ExternalToolTextExtractorBase(
     }
 
     open fun executeCommand(config: CommandConfig): ExecuteCommandResult {
-        return commandExecutor.executeCommand(config)
+        if (maxCountParallelExecutions > 0) {
+            while (countParallelExecutions.get() > maxCountParallelExecutions) {
+                try { TimeUnit.MILLISECONDS.sleep(CountMillisToSleepWhenThereAreTooManyParallelExecutions) } catch (ignored: Exception) { }
+            }
+
+            countParallelExecutions.incrementAndGet()
+        }
+
+        val result = commandExecutor.executeCommand(config)
+
+        countParallelExecutions.decrementAndGet()
+
+        return result
     }
 
     open suspend fun executeCommandSuspendable(config: CommandConfig): ExecuteCommandResult {
-        return commandExecutor.executeCommandSuspendable(config)
+        if (maxCountParallelExecutions > 0) {
+            while (countParallelExecutions.get() > maxCountParallelExecutions) {
+                delay(CountMillisToSleepWhenThereAreTooManyParallelExecutions)
+            }
+
+            countParallelExecutions.incrementAndGet()
+        }
+
+        val result = commandExecutor.executeCommandSuspendable(config)
+
+        countParallelExecutions.decrementAndGet()
+
+        return result
     }
 
 }
