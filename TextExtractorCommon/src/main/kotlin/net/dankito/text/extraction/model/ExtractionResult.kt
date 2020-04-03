@@ -1,5 +1,7 @@
 package net.dankito.text.extraction.model
 
+import java.util.concurrent.CopyOnWriteArrayList
+
 
 open class ExtractionResult(
     open val error: ErrorInfo? = null,
@@ -8,7 +10,7 @@ open class ExtractionResult(
     pages: List<Page> = listOf()
 ) {
 
-    protected val pagesField = pages.toMutableList()
+    protected val pagesField = CopyOnWriteArrayList(pages)
 
 
     open val errorOccurred: Boolean
@@ -19,7 +21,7 @@ open class ExtractionResult(
 
 
     open val pages: List<Page>
-        get() = ArrayList(pagesField) // don't return pagesField as otherwise it would be manipulated on the outside of this class
+        get() = ArrayList(pagesField).sortedBy { it.pageNum } // don't return pagesField as otherwise it would be manipulated on the outside of this class
 
     open val text: String?
         get() = if (pagesField.isEmpty()) null else pagesField.joinToString("\n")
