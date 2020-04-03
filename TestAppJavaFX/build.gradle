@@ -21,7 +21,7 @@ dependencies {
     compile project(':TextExtractorCommon')
     compile project(':OpenPdfPdfTextExtractor')
     compile project(':itextPdfTextExtractor')
-    compile project(':pdftotextPdfTextExtractor')
+    compile project(':PopplerPdfTextExtractor')
     compile project(':TikaTextExtractor')
     compile project(':Tesseract4CommandlineImageTextExtractor')
     compile project(':Tesseract4JniImageTextExtractor')
