@@ -32,44 +32,64 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
     override fun extractTextForSupportedFormat(file: File): ExtractionResult {
         val metadata = metadataExtractor.extractMetadata(file)
         val result = ExtractionResult(null, "application/pdf", metadata)
+        val extractedLength = metadata?.length ?: 0
 
-        // to extract all text at once:
-        // result.addPage(Page(executeCommand(pdftotextExecutablePath, "-layout", file.absolutePath, "-").output))
-
-        generateSequence(1) { it + 1 }.forEach { pageNum ->
-            val pageResult = executeCommand(createCommandConfig(file, pageNum))
-
-            if (pageResult.successful) {
-                result.addPage(Page(pageResult.output, pageNum))
+        if (extractedLength > 0) {
+            for (pageNum in 1..extractedLength) {
+                extractPage(file, result, pageNum)
             }
-            else { // if pageNum is out of range exitCode 99 gets returned and error message is 'Command Line Error: Wrong page range given: the first page (<count pages>) can not be after the last page (<count pages + 1>).'
-                return result
+        }
+        else {
+            generateSequence(1) { it + 1 }.forEach { pageNum ->
+                if (extractPage(file, result, pageNum) == false) { // if pageNum is out of range exitCode 99 gets returned and error message is 'Command Line Error: Wrong page range given: the first page (<count pages>) can not be after the last page (<count pages + 1>).'
+                    return result
+                }
             }
         }
 
         return result // should never come to this
     }
 
+    protected open fun extractPage(file: File, result: ExtractionResult, pageNum: Int): Boolean {
+        val pageResult = executeCommand(createCommandConfig(file, pageNum))
+
+        if (pageResult.successful) {
+            result.addPage(Page(pageResult.output, pageNum))
+        }
+
+        return pageResult.successful
+    }
+
     // TODO: how to get rid of duplicated code?
     override suspend fun extractTextForSupportedFormatSuspendable(file: File): ExtractionResult {
         val metadata = metadataExtractor.extractMetadata(file)
         val result = ExtractionResult(null, "application/pdf", metadata)
+        val extractedLength = metadata?.length ?: 0
 
-        // to extract all text at once:
-        // result.addPage(Page(executeCommand(pdftotextExecutablePath, "-layout", file.absolutePath, "-").output))
-
-        generateSequence(1) { it + 1 }.forEach { pageNum ->
-            val pageResult = executeCommandSuspendable(createCommandConfig(file, pageNum))
-
-            if (pageResult.successful) {
-                result.addPage(Page(pageResult.output, pageNum))
+        if (extractedLength > 0) {
+            for (pageNum in 1..extractedLength) {
+                extractPage(file, result, pageNum)
             }
-            else { // if pageNum is out of range exitCode 99 gets returned and error message is 'Command Line Error: Wrong page range given: the first page (<count pages>) can not be after the last page (<count pages + 1>).'
-                return result
+        }
+        else {
+            generateSequence(1) { it + 1 }.forEach { pageNum ->
+                if (extractPageSuspendable(file, result, pageNum) == false) { // if pageNum is out of range exitCode 99 gets returned and error message is 'Command Line Error: Wrong page range given: the first page (<count pages>) can not be after the last page (<count pages + 1>).'
+                    return result
+                }
             }
         }
 
         return result // should never come to this
+    }
+
+    protected open suspend fun extractPageSuspendable(file: File, result: ExtractionResult, pageNum: Int): Boolean {
+        val pageResult = executeCommandSuspendable(createCommandConfig(file, pageNum))
+
+        if (pageResult.successful) {
+            result.addPage(Page(pageResult.output, pageNum))
+        }
+
+        return pageResult.successful
     }
 
     protected open fun createCommandConfig(file: File, pageNum: Int): CommandConfig {
