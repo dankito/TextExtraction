@@ -57,7 +57,7 @@ open class TikaTextExtractor @JvmOverloads constructor(
 			return false
 		}
 
-		return super<TextExtractorBase>.isFileTypeSupported(file)
+		return true
 	}
 
 	override fun getTextExtractionQualityForFileType(file: File): Int {
@@ -67,11 +67,8 @@ open class TikaTextExtractor @JvmOverloads constructor(
 		else if (settings.enableOcrForImages == false && isTesseractCompatibleImageFileType(file)) {
 			return TextExtractionQualityForUnsupportedFileType
 		}
-		else if (isFileTypeSupported(file)) {
-			return 95
-		}
 
-		return TextExtractionQualityForUnsupportedFileType
+		return 95
 	}
 
 	protected open fun isTesseractCompatibleImageFileType(file: File): Boolean {
