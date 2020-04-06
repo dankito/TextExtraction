@@ -1,5 +1,6 @@
 package net.dankito.text.extraction.pdf
 
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import net.dankito.text.extraction.ExternalToolTextExtractorBase
@@ -19,11 +20,18 @@ import java.util.concurrent.TimeUnit
 
 open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
     commandExecutor: ICommandExecutor = CommandExecutor(),
-    protected val metadataExtractor: IPdfMetadataExtractor = pdfinfoPdfMetadataExtractor(commandExecutor)
+    protected val metadataExtractor: IPdfMetadataExtractor = pdfinfoPdfMetadataExtractor(commandExecutor),
+    /**
+     * To speed up processing pdfToTextPdfTextExtractor by default reads a PDF's pages in parallel. If now multiple
+     * pdfToTextPdfTextExtractor instances run in parallel, this would consume to many CPU resources and your system
+     * therefore would go down.
+     */
+    val willMultipleInstancesRunInParallel: Boolean = false
 ) : ExternalToolTextExtractorBase("pdftotext", commandExecutor, UnlimitedParallelExecutions), ISearchablePdfTextExtractor {
 
 
-    protected val extractPagesParallelExecutor: ExecutorService = Executors.newFixedThreadPool(CpuInfo.CountCores * 20)
+
+    protected val extractPagesParallelExecutor: ExecutorService = Executors.newFixedThreadPool(CpuInfo.CountCores * 10)
 
 
     override val name = "pdftotext"
@@ -46,10 +54,17 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
         val result = ExtractionResult(null, "application/pdf", metadata)
         val extractedLength = metadata?.length ?: 0
 
-        if (extractedLength > 0) {
-            extractPagesInParallel(extractedLength, file, result)
+        if (extractedLength > 0) { // then we now how many pages the PDF has
+            if (willMultipleInstancesRunInParallel == false) {
+                extractPagesInParallel(extractedLength, file, result)
+            }
+            else {
+                for (pageNum in 1..extractedLength) {
+                    extractPage(file, result, pageNum)
+                }
+            }
         }
-        else {
+        else { // otherwise we will have to guess / find out the hard way how many pages it has
             generateSequence(1) { it + 1 }.forEach { pageNum ->
                 if (extractPage(file, result, pageNum) == false) { // if pageNum is out of range exitCode 99 gets returned and error message is 'Command Line Error: Wrong page range given: the first page (<count pages>) can not be after the last page (<count pages + 1>).'
                     return result
@@ -90,14 +105,22 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
         val result = ExtractionResult(null, "application/pdf", metadata)
         val extractedLength = metadata?.length ?: 0
 
-        if (extractedLength > 0) {
-            coroutineScope {
+        if (extractedLength > 0) { // then we now how many pages the PDF has
+            if (willMultipleInstancesRunInParallel) {
                 for (pageNum in 1..extractedLength) {
-                    async { extractPageSuspendable(file, result, pageNum) }
+                    extractPageSuspendable(file, result, pageNum)
+                }
+            }
+            else {
+                val dispatcher = extractPagesParallelExecutor.asCoroutineDispatcher()
+                coroutineScope {
+                    for (pageNum in 1..extractedLength) {
+                        async(dispatcher) { extractPageSuspendable(file, result, pageNum) }
+                    }
                 }
             }
         }
-        else {
+        else { // otherwise we will have to guess / find out the hard way how many pages it has
             generateSequence(1) { it + 1 }.forEach { pageNum ->
                 if (extractPageSuspendable(file, result, pageNum) == false) { // if pageNum is out of range exitCode 99 gets returned and error message is 'Command Line Error: Wrong page range given: the first page (<count pages>) can not be after the last page (<count pages + 1>).'
                     return result
