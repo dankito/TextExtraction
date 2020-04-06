@@ -1,7 +1,5 @@
 package net.dankito.text.extraction
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import net.dankito.text.extraction.model.ErrorInfo
 import net.dankito.text.extraction.model.ErrorType
 import net.dankito.text.extraction.model.ExtractionResult
@@ -20,14 +18,12 @@ abstract class TextExtractorBase : ITextExtractor {
 
     // default implementation, may be overridden in subclasses with real suspendable functions
     open suspend fun extractTextForSupportedFormatSuspendable(file: File): ExtractionResult {
-        return withContext(Dispatchers.IO) {
-            try {
-                extractTextForSupportedFormat(file)
-            } catch (e: Exception) {
-                log.error("Could not extract text of file '$file' with extractor ${this@TextExtractorBase.javaClass.name}", e)
+        try {
+            return extractTextForSupportedFormat(file)
+        } catch (e: Exception) {
+            log.error("Could not extract text of file '$file' with extractor ${this@TextExtractorBase.javaClass.name}", e)
 
-                ExtractionResult(ErrorInfo(ErrorType.ParseError, e))
-            }
+            return ExtractionResult(ErrorInfo(ErrorType.ParseError, e))
         }
     }
 
