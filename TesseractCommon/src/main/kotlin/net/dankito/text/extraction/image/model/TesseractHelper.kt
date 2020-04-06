@@ -6,7 +6,7 @@ import java.io.File
 open class TesseractHelper {
 
     companion object {
-        val SupportedFileTypes = listOf("png", "jpg", "jpeg", "tif", "tiff", "gif", "webp") // are there additional supported image formats?
+        val SupportedFileTypes = listOf("png", "jpg", "jpeg", "jpe", "tif", "tiff", "gif", "webp") // are there additional supported image formats?
     }
 
 
