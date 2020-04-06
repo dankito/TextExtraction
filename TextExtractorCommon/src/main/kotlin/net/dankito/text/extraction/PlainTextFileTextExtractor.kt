@@ -14,6 +14,8 @@ open class PlainTextFileTextExtractor : TextExtractorBase() {
 
     override val isAvailable = true
 
+    // TODO: Tika has XHtml renderers for file types like .java, .groovy and .cpp (see SourceCodeParser / XhtmlRendererFactory)
+    //  -> use these if planning to support formatted output
     override val supportedFileTypes = listOf("txt", "csv", "yml", "yaml", "json", "js", "css",
         "kt", "java", "gradle", "gradle.kts", "properties", "gitignore", "md", "asciidoc", "adoc", "sh", "bat", "sql", "php", "log")
 
