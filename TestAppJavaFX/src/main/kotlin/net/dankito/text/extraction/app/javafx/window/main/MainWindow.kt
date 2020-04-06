@@ -42,7 +42,7 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
 
     private val imageBasedPdfTextExtractor = ImageBasedPdfTextExtractor(tesseract4CommandlineImageTextExtractor, pdfimagesImagesFromPdfExtractor(commandExecutor))
 
-    private val tikaTextExtractor = TikaTextExtractor(TikaSettings(PdfContentExtractorStrategy.OcrAndText, tesseractConfig), tesseractHelper)
+    private val tikaTextExtractor = TikaTextExtractor(TikaSettings(true, PdfContentExtractorStrategy.OcrAndText, tesseractConfig), tesseractHelper)
 
     private val extractorRegistry: ITextExtractorRegistry = TextExtractorRegistry(listOf(
         openPdfPdfTextExtractor,

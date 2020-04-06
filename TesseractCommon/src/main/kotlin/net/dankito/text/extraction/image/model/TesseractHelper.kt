@@ -1,5 +1,7 @@
 package net.dankito.text.extraction.image.model
 
+import java.io.File
+
 
 open class TesseractHelper {
 
@@ -19,11 +21,16 @@ open class TesseractHelper {
         }
     }
 
-    fun getTesseractOptionName(ocrOutputType: OcrOutputType): String {
+    open fun getTesseractOptionName(ocrOutputType: OcrOutputType): String {
         return when (ocrOutputType) {
             OcrOutputType.Hocr -> "hocr"
             OcrOutputType.Text -> "text"
         }
+    }
+
+
+    open fun isTesseractCompatibleImageFileType(file: File): Boolean {
+        return SupportedFileTypes.contains(file.extension.toLowerCase())
     }
 
 }
