@@ -1,7 +1,6 @@
 package net.dankito.text.extraction
 
 import kotlinx.coroutines.delay
-import net.dankito.text.extraction.commandline.CommandlineProgram
 import net.dankito.utils.os.OsHelper
 import net.dankito.utils.os.OsType
 import net.dankito.utils.os.PackageManager
