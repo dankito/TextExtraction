@@ -23,7 +23,7 @@ open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
      * Only needed for UI applications that like to show an hint to user when external application isn't found.
      */
     installHintLocalization: ResourceBundle = ResourceBundle.getBundle("Messages")
-) : ExternalToolTextExtractorBase("tesseract", commandExecutor, maxCountParallelExecutions, installHintLocalization), IImageTextExtractor {
+) : ExternalToolTextExtractorBase(config.tesseractPath?.absolutePath ?: "tesseract", commandExecutor, maxCountParallelExecutions, installHintLocalization), IImageTextExtractor {
 
 
     override val name = "Tesseract 4"
@@ -61,7 +61,7 @@ open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
     protected open fun createCommandConfig(file: File): CommandConfig {
         val commandArgs = mutableListOf<String>()
 
-        commandArgs.add(config.tesseractPath?.absolutePath ?: commandlineProgram.programExecutablePath)
+        commandArgs.add(commandlineProgram.programExecutablePath)
 
         commandArgs.add(file.absolutePath)
 
