@@ -5,6 +5,7 @@ import net.dankito.utils.process.CommandConfig
 import net.dankito.utils.process.CommandExecutor
 import net.dankito.utils.process.ExecuteCommandResult
 import net.dankito.utils.process.ICommandExecutor
+import java.io.File
 
 
 open class CommandlineProgram(
@@ -26,7 +27,7 @@ open class CommandlineProgram(
 
 
     protected open fun getOsDependentExecutableName(executableName: String): String {
-        if (osHelper.isRunningOnWindows && executableName.toLowerCase().endsWith(".exe") == false) {
+        if (osHelper.isRunningOnWindows && File(executableName).extension.isEmpty()) {
             return executableName + ".exe"
         }
 
