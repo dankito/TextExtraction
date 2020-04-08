@@ -34,9 +34,9 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
 
     private val itextPdfTextExtractor = itextPdfTextExtractor()
 
-    private val pdfToTextPdfTextExtractor = pdfToTextPdfTextExtractor()
+    private val pdfToTextPdfTextExtractor = pdfToTextPdfTextExtractor(installHintLocalization = FX.messages)
 
-    private val tesseract4CommandlineImageTextExtractor = Tesseract4CommandlineImageTextExtractor(tesseractConfig, tesseractHelper, commandExecutor)
+    private val tesseract4CommandlineImageTextExtractor = Tesseract4CommandlineImageTextExtractor(tesseractConfig, tesseractHelper, commandExecutor, installHintLocalization = FX.messages)
 
     private val tesseract4JniImageTextExtractor = Tesseract4JniImageTextExtractor(tesseractConfig, tesseractHelper)
 

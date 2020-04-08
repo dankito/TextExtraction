@@ -14,6 +14,9 @@ abstract class TextExtractorBase : ITextExtractor {
     }
 
 
+    override val installHint = ""
+
+
     abstract fun extractTextForSupportedFormat(file: File): ExtractionResult
 
     // default implementation, may be overridden in subclasses with real suspendable functions

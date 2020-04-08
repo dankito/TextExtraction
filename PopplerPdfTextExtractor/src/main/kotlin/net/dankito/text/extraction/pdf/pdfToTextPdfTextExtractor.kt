@@ -12,6 +12,7 @@ import net.dankito.utils.process.CommandExecutor
 import net.dankito.utils.process.CpuInfo
 import net.dankito.utils.process.ICommandExecutor
 import java.io.File
+import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -26,8 +27,12 @@ open class pdfToTextPdfTextExtractor @JvmOverloads constructor(
      * pdfToTextPdfTextExtractor instances run in parallel, this would consume to many CPU resources and your system
      * therefore would go down.
      */
-    val willMultipleInstancesRunInParallel: Boolean = false
-) : ExternalToolTextExtractorBase("pdftotext", commandExecutor, UnlimitedParallelExecutions), ISearchablePdfTextExtractor {
+    val willMultipleInstancesRunInParallel: Boolean = false,
+    /**
+     * Only needed for UI applications that like to show an hint to user when external application isn't found.
+     */
+    installHintLocalization: ResourceBundle = ResourceBundle.getBundle("Messages")
+) : ExternalToolTextExtractorBase("pdftotext", commandExecutor, UnlimitedParallelExecutions, installHintLocalization), ISearchablePdfTextExtractor {
 
 
 

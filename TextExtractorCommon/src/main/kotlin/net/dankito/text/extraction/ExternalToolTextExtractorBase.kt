@@ -2,7 +2,12 @@ package net.dankito.text.extraction
 
 import kotlinx.coroutines.delay
 import net.dankito.text.extraction.commandline.CommandlineProgram
+import net.dankito.utils.os.OsHelper
+import net.dankito.utils.os.OsType
+import net.dankito.utils.os.PackageManager
+import net.dankito.utils.os.PackageManagerDetector
 import net.dankito.utils.process.*
+import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -16,7 +21,10 @@ abstract class ExternalToolTextExtractorBase(
      * Set to a value less or equal to zero to disable max parallel executions check and to run
      * unlimited instances in parallel.
      */
-    protected val maxCountParallelExecutions: Int = CpuInfo.CountCores
+    protected val maxCountParallelExecutions: Int = CpuInfo.CountCores,
+    protected val installHintLocalization: ResourceBundle = ResourceBundle.getBundle("Messages"),
+    protected val osHelper: OsHelper = OsHelper(),
+    protected val packageManagerDetector: PackageManagerDetector = PackageManagerDetector(commandExecutor)
 ) : TextExtractorBase() {
 
     companion object {
@@ -81,6 +89,42 @@ abstract class ExternalToolTextExtractorBase(
         countParallelExecutions.decrementAndGet()
 
         return result
+    }
+
+
+    protected open fun getInstallHintForOsType(installHintBaseKey: String): String {
+        val installHintOsKey = getInstallHintMessageKeyForOsType()
+
+        if (installHintOsKey != null) {
+            return String.format(installHintLocalization.getString(installHintBaseKey + installHintOsKey), programExecutablePath)
+        }
+
+        return String.format(installHintLocalization.getString("install.hint.install.program"), programExecutablePath)
+    }
+
+    protected open fun getInstallHintMessageKeyForOsType(): String? {
+        val osType = osHelper.osType
+
+        return when (osType) {
+            OsType.Windows -> "windows"
+            OsType.MacOs -> "macos"
+            OsType.Linux -> getInstallHintMessageKeyForLinux()
+            else -> null
+        }
+    }
+
+    protected open fun getInstallHintMessageKeyForLinux(): String? {
+        packageManagerDetector.findLinuxPackageInstaller()?.let { packageInstaller ->
+            return when (packageInstaller) {
+                PackageManager.apt -> "linux.debian"
+                PackageManager.dnf -> "linux.redhat"
+                PackageManager.zypper -> "linux.suse"
+                PackageManager.pacman -> "linux.archlinux"
+                else -> null
+            }
+        }
+
+        return null
     }
 
 }
