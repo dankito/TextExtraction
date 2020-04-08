@@ -9,13 +9,9 @@ compileTestKotlin.kotlinOptions.jvmTarget = "1.6"
 
 
 dependencies {
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    api "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"
     
     api "net.dankito.utils:java-utils:$javaUtilsVersion"
-
-    api "org.slf4j:slf4j-api:$slf4jVersion"
 
 
     testApi project(':TesseractCommon')
