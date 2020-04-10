@@ -45,6 +45,4 @@ artifacts {
 }
 
 
-publishing.publications.mavenJava {
-    artifactId = "text-extractor-common"
-}
+ext.artifactName = "text-extractor-common"

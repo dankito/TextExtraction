@@ -16,6 +16,11 @@ buildscript {
 }
 
 
+def commonScriptsFile = new File(new File(project.gradle.gradleUserHomeDir, "scripts"), "commonScripts.gradle")
+if (commonScriptsFile.exists()) {
+    apply from: commonScriptsFile
+}
+
 
 allprojects {
 
@@ -25,89 +30,4 @@ allprojects {
         jcenter()
         google()
     }
-
-    task allDeps(type: DependencyReportTask) {} // to have a simple way to print all dependencies to console
-}
-
-
-subprojects {
-    group 'net.dankito.text.extraction'
-    version '1.0.0-SNAPSHOT'
-
-    def sourceBaseUrl = "github.com/dankito/TextExtraction"
-
-
-    if (it.name.startsWith("TestApp") == false) {
-        apply plugin: 'java-library'
-        apply plugin: 'maven-publish'
-        apply plugin: 'signing'
-
-        java {
-            withJavadocJar()
-            withSourcesJar()
-        }
-
-        publishing {
-            publications {
-                mavenJava(MavenPublication) {
-                    // only artifactId has to be defined in sub projects!
-
-                    from components.java
-
-                    pom {
-                        name = artifactId
-                        description = "A framework for extracting text from different types of files, e.g. PDFs, images, office documents, text files, ..."
-                        url = "https://$sourceBaseUrl"
-
-                        scm {
-                            connection = "scm:git:git://${sourceBaseUrl}.git"
-                            developerConnection = "scm:git:ssh://${sourceBaseUrl}.git"
-                            url = "https://$sourceBaseUrl"
-                        }
-
-                        developers {
-                            developer {
-                                id = 'dankito'
-                                name = 'Christian Dankl'
-                                email = 'maven@dankito.net'
-                            }
-                        }
-
-                        licenses {
-                            license {
-                                name = 'The Apache License, Version 2.0'
-                                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                            }
-                        }
-                    }
-                }
-            }
-            repositories {
-                maven {
-                    def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-                    def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-                    url version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-
-                    if (ossrhUsername != null && ossrhPassword != null) {
-                        credentials {
-                            username ossrhUsername // TODO: rename to sonatypeUsername
-                            password ossrhPassword // TODO: rename to sonatypePassword
-                        }
-                    }
-                }
-            }
-        }
-
-        signing {
-            sign publishing.publications.mavenJava
-        }
-
-
-        javadoc {
-            if(JavaVersion.current().isJava9Compatible()) {
-                options.addBooleanOption('html5', true)
-            }
-        }
-    }
-
 }

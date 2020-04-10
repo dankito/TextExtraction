@@ -19,6 +19,4 @@ dependencies {
 }
 
 
-publishing.publications.mavenJava {
-    artifactId = "tika-text-extractor"
-}
+ext.artifactName = "tika-text-extractor"

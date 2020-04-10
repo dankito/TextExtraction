@@ -11,8 +11,8 @@ android {
         applicationId "net.dankito.text.extraction.app.android"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 1
-        versionName appVersionName
+        versionCode appVersionCode
+        versionName rootProject.version
 
         multiDexEnabled true
 

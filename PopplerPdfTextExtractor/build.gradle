@@ -17,6 +17,4 @@ dependencies {
 }
 
 
-publishing.publications.mavenJava {
-    artifactId = "poppler-text-extractor"
-}
+ext.artifactName = "poppler-text-extractor"

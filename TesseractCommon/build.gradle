@@ -13,6 +13,4 @@ dependencies {
 }
 
 
-publishing.publications.mavenJava {
-    artifactId = "tesseract-common"
-}
+ext.artifactName = "tesseract-common"

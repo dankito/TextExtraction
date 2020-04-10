@@ -1,6 +1,12 @@
-ext {
 
-    appVersionName = '1.0.0'
+rootProject.group ="net.dankito.text.extraction"
+rootProject.version = "1.0.0-SNAPSHOT"
+
+ext {
+    appVersionCode = 1
+
+    sourceCodeRepositoryBaseUrl = "github.com/dankito/TextExtraction"
+    projectDescription = "A framework for extracting text from different types of files, e.g. PDFs, images, office documents, text files, ..."
     
 
     kotlinVersion = '1.3.71'

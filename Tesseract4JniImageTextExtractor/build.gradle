@@ -20,6 +20,4 @@ dependencies {
 }
 
 
-publishing.publications.mavenJava {
-    artifactId = "tesseract4-jni-text-extractor"
-}
+ext.artifactName = "tesseract4-jni-text-extractor"

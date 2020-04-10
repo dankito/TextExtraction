@@ -26,6 +26,4 @@ dependencies {
 }
 
 
-publishing.publications.mavenJava {
-    artifactId = "text-info-extractor"
-}
+ext.artifactName = "text-info-extractor"

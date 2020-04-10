@@ -19,6 +19,4 @@ dependencies {
 }
 
 
-publishing.publications.mavenJava {
-    artifactId = "itext-text-extractor"
-}
+ext.artifactName = "itext-text-extractor"

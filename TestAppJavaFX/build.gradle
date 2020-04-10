@@ -38,7 +38,7 @@ jar {
     manifest {
         attributes  'Main-Class': mainClassName,
                 'Implementation-Title': title,
-                'Implementation-Version': appVersionName
+                'Implementation-Version': rootProject.version
     }
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
