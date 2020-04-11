@@ -37,3 +37,14 @@ allprojects {
         google()
     }
 }
+
+
+task publishAllToMavenLocal {
+    dependsOn = [ "TextExtractorCommon:publishToMavenLocal",
+                  "itextPdfTextExtractor:publishToMavenLocal", "OpenPdfPdfTextExtractor:publishToMavenLocal",
+                  "PopplerPdfTextExtractor:publishToMavenLocal",
+                  "TesseractCommon:publishToMavenLocal", "Tesseract4CommandlineImageTextExtractor:publishToMavenLocal",
+                  "Tesseract4JniImageTextExtractor:publishToMavenLocal",
+                  "TikaTextExtractor:publishToMavenLocal"
+    ]
+}
