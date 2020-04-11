@@ -56,3 +56,13 @@ task publishAllToMavenLocal {
                   "TikaTextExtractor:publishToMavenLocal"
     ]
 }
+
+task publishAndReleaseAll {
+    dependsOn = [ "TextExtractorCommon:publishAndRelease",
+                  "itextPdfTextExtractor:publishAndRelease", "OpenPdfPdfTextExtractor:publishAndRelease",
+                  "PopplerPdfTextExtractor:publishAndRelease",
+                  "TesseractCommon:publishAndRelease", "Tesseract4CommandlineImageTextExtractor:publishAndRelease",
+                  "Tesseract4JniImageTextExtractor:publishAndRelease",
+                  "TikaTextExtractor:publishAndRelease"
+    ]
+}
