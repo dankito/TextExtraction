@@ -36,6 +36,10 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
         get() = SupervisorJob() + Dispatchers.JavaFx
 
 
+    protected val showInstallHint = SimpleBooleanProperty(textExtractor.isAvailable == false && textExtractor.installHint.isNotBlank())
+
+    protected val installHintMessage = SimpleStringProperty(textExtractor.installHint)
+
     protected val userMustSelectProgramExecutablePath = SimpleBooleanProperty(false)
 
     protected val programExecutablePath = SimpleStringProperty("")
@@ -79,6 +83,38 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
 
     override val root = vbox {
         useMaxHeight = true
+
+        hbox {
+            alignment = Pos.CENTER_LEFT
+
+            setBackgroundToColor(Color.ORANGE)
+
+            visibleWhen(showInstallHint)
+            ensureOnlyUsesSpaceIfVisible()
+
+            label(installHintMessage) {
+                useMaxWidth = true
+
+                paddingAll = 8.0
+                textFill = Color.WHITE
+
+                lineSpacing = 4.0
+                isWrapText = true
+
+                hboxConstraints {
+                    hGrow = Priority.ALWAYS
+
+                    marginRight = 8.0
+                }
+            }
+
+            button(messages["recheck.program.executable.found.button.label"]) {
+                prefHeight = 40.0
+                minWidth = 125.0
+
+                action { recheckIfProgramExecutableFound() }
+            }
+        }
 
         hbox {
             prefHeight = 34.0
@@ -200,6 +236,14 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
                 vGrow = Priority.ALWAYS
             }
         }
+    }
+
+    private fun recheckIfProgramExecutableFound() {
+        (textExtractor as? ExternalToolTextExtractorBase)?.let {
+            textExtractor.setProgramExecutablePathTo(textExtractor.programExecutablePath)
+        }
+
+        showInstallHint.value = textExtractor.isAvailable == false && textExtractor.installHint.isNotBlank()
     }
 
 

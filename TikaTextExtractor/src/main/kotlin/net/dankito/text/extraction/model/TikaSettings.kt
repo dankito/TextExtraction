@@ -8,7 +8,8 @@ import java.io.File
 
 
 open class TikaSettings @JvmOverloads constructor(
-	val pdfContentExtractorStrategy: PdfContentExtractorStrategy,
+	val enableOcrForImages: Boolean = true,
+	val pdfContentExtractorStrategy: PdfContentExtractorStrategy = PdfContentExtractorStrategy.OcrAndText,
 	ocrLanguages: List<OcrLanguage> = listOf(OcrLanguage.English),
 	ocrOutputType: OcrOutputType = OcrOutputType.Text,
 	tesseractPath: File? = null,
@@ -16,8 +17,8 @@ open class TikaSettings @JvmOverloads constructor(
 	pageSegMode: PageSegMode? = null
 ) : TesseractConfig(ocrLanguages, ocrOutputType, tesseractPath, tessdataDirectory, pageSegMode) {
 
-	constructor(pdfContentExtractorStrategy: PdfContentExtractorStrategy, tesseractConfig: TesseractConfig)
-		: this(pdfContentExtractorStrategy, tesseractConfig.ocrLanguages, tesseractConfig.ocrOutputType,
+	constructor(enableOcrForImages: Boolean, pdfContentExtractorStrategy: PdfContentExtractorStrategy, tesseractConfig: TesseractConfig)
+		: this(enableOcrForImages, pdfContentExtractorStrategy, tesseractConfig.ocrLanguages, tesseractConfig.ocrOutputType,
 			tesseractConfig.tesseractPath, tesseractConfig.tessdataDirectory, tesseractConfig.pageSegMode)
 
 

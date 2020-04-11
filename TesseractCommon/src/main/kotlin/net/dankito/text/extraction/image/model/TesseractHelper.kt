@@ -1,10 +1,12 @@
 package net.dankito.text.extraction.image.model
 
+import java.io.File
+
 
 open class TesseractHelper {
 
     companion object {
-        val SupportedFileTypes = listOf("png", "jpg", "jpeg", "tif", "tiff", "gif", "webp") // are there additional supported image formats?
+        val SupportedFileTypes = listOf("png", "jpg", "jpeg", "jpe", "tif", "tiff", "gif", "webp") // are there additional supported image formats?
     }
 
 
@@ -19,11 +21,16 @@ open class TesseractHelper {
         }
     }
 
-    fun getTesseractOptionName(ocrOutputType: OcrOutputType): String {
+    open fun getTesseractOptionName(ocrOutputType: OcrOutputType): String {
         return when (ocrOutputType) {
             OcrOutputType.Hocr -> "hocr"
             OcrOutputType.Text -> "text"
         }
+    }
+
+
+    open fun isTesseractCompatibleImageFileType(file: File): Boolean {
+        return SupportedFileTypes.contains(file.extension.toLowerCase())
     }
 
 }

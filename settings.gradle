@@ -10,8 +10,6 @@ include ':Tesseract4JniImageTextExtractor'
 
 include ':TikaTextExtractor'
 
-include ':TextInfoExtractor'
-
 include ':TestAppAndroid'
 
 include ':TestAppJavaFX'

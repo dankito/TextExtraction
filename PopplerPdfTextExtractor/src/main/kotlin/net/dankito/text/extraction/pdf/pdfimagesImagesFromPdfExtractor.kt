@@ -1,11 +1,7 @@
 package net.dankito.text.extraction.pdf
 
-import net.dankito.text.extraction.commandline.CommandlineProgram
 import net.dankito.text.extraction.model.ExtractedImages
-import net.dankito.utils.process.CommandConfig
-import net.dankito.utils.process.CommandExecutor
-import net.dankito.utils.process.ExecuteCommandResult
-import net.dankito.utils.process.ICommandExecutor
+import net.dankito.utils.process.*
 import java.io.File
 
 

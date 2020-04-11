@@ -23,6 +23,4 @@ dependencies {
 }
 
 
-publishing.publications.mavenJava {
-    artifactId = "openpdf-text-extractor"
-}
+ext.artifactName = "openpdf-text-extractor"

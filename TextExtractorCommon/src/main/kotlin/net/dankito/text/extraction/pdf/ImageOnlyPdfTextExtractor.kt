@@ -8,20 +8,20 @@ import java.io.File
 
 
 /**
- * An [ITextExtractor] that extracts texts from images embedded in PDFs by first extracts all images
+ * An [ITextExtractor] that extracts texts from images embedded in PDFs by first extracting all images
  * from PDF file with a [IImagesFromPdfExtractor] and then applies OCR on extracted images with [IImageTextExtractor].
  */
-open class ImageBasedPdfTextExtractor(
+open class ImageOnlyPdfTextExtractor(
     protected val imageTextExtractor: IImageTextExtractor,
     protected val imagesFromPdfExtractor: IImagesFromPdfExtractor
-) : TextExtractorBase(), IImageBasedPdfTextExtractor {
+) : TextExtractorBase(), IImageOnlyPdfTextExtractor {
 
     companion object {
-        private val log = LoggerFactory.getLogger(ImageBasedPdfTextExtractor::class.java)
+        private val log = LoggerFactory.getLogger(ImageOnlyPdfTextExtractor::class.java)
     }
 
 
-    override val name = "Extract text from images embedded in PDFs"
+    override val name = "Extract text from images only PDFs"
 
     override val isAvailable = imageTextExtractor.isAvailable && imagesFromPdfExtractor.isAvailable
 

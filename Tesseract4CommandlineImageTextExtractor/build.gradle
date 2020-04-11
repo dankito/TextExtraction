@@ -18,6 +18,4 @@ dependencies {
 }
 
 
-publishing.publications.mavenJava {
-    artifactId = "tesseract4-commandline-text-extractor"
-}
+ext.artifactName = "tesseract4-commandline-text-extractor"

@@ -15,21 +15,18 @@ compileTestKotlin.kotlinOptions.jvmTarget = "1.8"
 
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-javafx:$kotlinCoroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-javafx:$kotlinCoroutinesVersion"
 
-    compile project(':TextExtractorCommon')
-    compile project(':OpenPdfPdfTextExtractor')
-    compile project(':itextPdfTextExtractor')
-    compile project(':PopplerPdfTextExtractor')
-    compile project(':TikaTextExtractor')
-    compile project(':Tesseract4CommandlineImageTextExtractor')
-    compile project(':Tesseract4JniImageTextExtractor')
+    implementation project(':OpenPdfPdfTextExtractor')
+    implementation project(':itextPdfTextExtractor')
+    implementation project(':PopplerPdfTextExtractor')
+    implementation project(':TikaTextExtractor')
+    implementation project(':Tesseract4CommandlineImageTextExtractor')
+    implementation project(':Tesseract4JniImageTextExtractor')
 
-    compile "net.dankito.utils:java-fx-utils:$javaFxUtilsVersion"
+    implementation "net.dankito.utils:java-fx-utils:$javaFxUtilsVersion"
 
-    compile "ch.qos.logback:logback-core:$logbackVersion"
-    compile "ch.qos.logback:logback-classic:$logbackVersion"
+    implementation "ch.qos.logback:logback-classic:$logbackVersion"
 
 }
 
@@ -41,10 +38,12 @@ jar {
     manifest {
         attributes  'Main-Class': mainClassName,
                 'Implementation-Title': title,
-                'Implementation-Version': appVersionName
+                'Implementation-Version': rootProject.version
     }
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+
+    dependsOn = [ ":jarAll" ]
 }

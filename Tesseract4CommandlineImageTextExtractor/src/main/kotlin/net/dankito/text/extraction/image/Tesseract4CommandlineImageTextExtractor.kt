@@ -11,19 +11,26 @@ import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
 import net.dankito.utils.process.*
 import java.io.File
+import java.util.*
 
 
 open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
     protected val config: TesseractConfig,
     protected val tesseractHelper: TesseractHelper = TesseractHelper(),
     commandExecutor: ICommandExecutor = CommandExecutor(),
-    maxCountParallelExecutions: Int = CpuInfo.CountCores - 2
-) : ExternalToolTextExtractorBase("tesseract", commandExecutor, maxCountParallelExecutions), IImageTextExtractor {
+    maxCountParallelExecutions: Int = CpuInfo.CountCores - 2,
+    /**
+     * Only needed for UI applications that like to show an hint to user when external application isn't found.
+     */
+    installHintLocalization: ResourceBundle = ResourceBundle.getBundle("Messages")
+) : ExternalToolTextExtractorBase(config.tesseractPath?.absolutePath ?: "tesseract", commandExecutor, maxCountParallelExecutions, installHintLocalization), IImageTextExtractor {
 
 
     override val name = "Tesseract 4"
 
     override val supportedFileTypes = TesseractHelper.SupportedFileTypes
+
+    override val installHint = getInstallHintForOsType("error.message.tesseract.not.found.")
 
     override fun getTextExtractionQualityForFileType(file: File): Int {
         if (isFileTypeSupported(file)) {
@@ -54,7 +61,7 @@ open class Tesseract4CommandlineImageTextExtractor @JvmOverloads constructor(
     protected open fun createCommandConfig(file: File): CommandConfig {
         val commandArgs = mutableListOf<String>()
 
-        commandArgs.add(config.tesseractPath?.absolutePath ?: commandlineProgram.programExecutablePath)
+        commandArgs.add(commandlineProgram.programExecutablePath)
 
         commandArgs.add(file.absolutePath)
 

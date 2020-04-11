@@ -15,6 +15,8 @@ interface ITextExtractor {
 
     val isAvailable: Boolean
 
+    val installHint: String
+
     val supportedFileTypes: List<String>
 
     fun isFileTypeSupported(file: File): Boolean {

@@ -40,7 +40,7 @@ open class TikaTextExtractor @JvmOverloads constructor(
 	}
 
 
-	constructor() : this(TikaSettings(PdfContentExtractorStrategy.OcrAndText,
+	constructor() : this(TikaSettings(true, PdfContentExtractorStrategy.OcrAndText,
 		listOf(OcrLanguage.English, OcrLanguage.German), OcrOutputType.Text
 	))
 
@@ -52,18 +52,27 @@ open class TikaTextExtractor @JvmOverloads constructor(
 
 	override val supportedFileTypes = listOf("pdf", "png", "jpg", "tif", "tiff", "odt", "docx", "ods", "xlsx", "csv") // TODO: set all supported file types
 
+	override fun isFileTypeSupported(file: File): Boolean {
+		if (settings.enableOcrForImages == false && isTesseractCompatibleImageFileType(file)) {
+			return false
+		}
+
+		return true
+	}
+
 	override fun getTextExtractionQualityForFileType(file: File): Int {
 		if ("pdf" == file.extension.toLowerCase()) {
 			return 60
 		}
-		else if (TesseractHelper.SupportedFileTypes.contains(file.extension.toLowerCase())) {
-			return 60 // try Tesseract4CommandlineImageTextExtractor - if available - first
-		}
-		else if (isFileTypeSupported(file)) {
-			return 95
+		else if (settings.enableOcrForImages == false && isTesseractCompatibleImageFileType(file)) {
+			return TextExtractionQualityForUnsupportedFileType
 		}
 
-		return TextExtractionQualityForUnsupportedFileType
+		return 95
+	}
+
+	protected open fun isTesseractCompatibleImageFileType(file: File): Boolean {
+		return tesseractHelper.isTesseractCompatibleImageFileType(file)
 	}
 
 
@@ -144,7 +153,7 @@ open class TikaTextExtractor @JvmOverloads constructor(
 		var pdfContentExtractorStrategy = settings.pdfContentExtractorStrategy
 		val parserClassesToExclude = mutableListOf<Class<out Parser>>()
 
-		if (settings.pdfContentExtractorStrategy.isOcrEnabled == false) {
+		if (settings.enableOcrForImages == false && settings.pdfContentExtractorStrategy.isOcrEnabled == false) {
 			parserClassesToExclude.add(TesseractOCRParser::class.java)
 		}
 		else {
@@ -155,7 +164,9 @@ open class TikaTextExtractor @JvmOverloads constructor(
 				parserClassesToExclude.add(TesseractOCRParser::class.java)
 			}
 			else {
-				parserClassesToExclude.add(PDFParser::class.java)
+				if (settings.pdfContentExtractorStrategy == PdfContentExtractorStrategy.OcrOnly) {
+					parserClassesToExclude.add(PDFParser::class.java)
+				}
 
 				initTesseractOCRConfig(context)
 			}
