@@ -39,6 +39,14 @@ allprojects {
 }
 
 
+task jarAll {
+    dependsOn = [ "TextExtractorCommon:jar",
+                  "itextPdfTextExtractor:jar", "OpenPdfPdfTextExtractor:jar", "PopplerPdfTextExtractor:jar",
+                  "TesseractCommon:jar", "Tesseract4CommandlineImageTextExtractor:jar", "Tesseract4JniImageTextExtractor:jar",
+                  "TikaTextExtractor:jar"
+    ]
+}
+
 task publishAllToMavenLocal {
     dependsOn = [ "TextExtractorCommon:publishToMavenLocal",
                   "itextPdfTextExtractor:publishToMavenLocal", "OpenPdfPdfTextExtractor:publishToMavenLocal",
