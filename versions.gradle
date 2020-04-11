@@ -32,7 +32,7 @@ ext {
     
     slf4jVersion = '1.7.16'
     
-    javaUtilsVersion = '1.0.14-SNAPSHOT'
+    javaUtilsVersion = '1.0.15'
     
     
     /*  Test    */    
