@@ -36,7 +36,10 @@ class Tesseract4CommandlineImageTextExtractorTest : ImageTextExtractorTestBase()
         // when
         for (i in 0 until countParallelInstances) {
             thread {
-                results.add(underTest.extractText(testFile))
+                val result = underTest.extractText(testFile)
+                if (result.couldExtractText) {
+                    results.add(result)
+                }
 
                 countDownLatch.countDown()
             }
@@ -71,7 +74,7 @@ class Tesseract4CommandlineImageTextExtractorTest : ImageTextExtractorTestBase()
                 delay(100) // give it some time so that Tesseract4CommandlineImageTextExtractor can detect that there's already another Tesseract instance running
             }
 
-            results.addAll(jobs.map { it.await() })
+            results.addAll(jobs.map { it.await() }.filter { it.couldExtractText })
         }
 
         // then
