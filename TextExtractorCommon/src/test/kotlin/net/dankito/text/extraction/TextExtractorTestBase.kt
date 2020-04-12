@@ -3,8 +3,7 @@ package net.dankito.text.extraction
 import net.dankito.text.extraction.image.model.OcrLanguage
 import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Page
-import net.dankito.utils.io.FileUtils
-import net.dankito.utils.resources.ResourceFilesExtractor
+import net.dankito.text.extraction.util.TestFilesHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -12,22 +11,12 @@ import java.io.File
 
 abstract class TextExtractorTestBase {
 
-    companion object {
-        const val TestFilesFolderName = "test_files"
-
-        const val WikipediaGandhiEnglishTestFileBaseName = "Wikipedia_Gandhi_en"
-        const val WikipediaGandhiGermanTestFileBaseName = "Wikipedia_Gandhi_de"
-    }
-
-
     abstract fun createExtractorForLanguage(language: OcrLanguage): ITextExtractor
 
     abstract val textExtractorType: TextExtractorType
 
 
-    protected val fileUtils = FileUtils()
-
-    protected val resourceFilesExtractor = ResourceFilesExtractor()
+    protected val testFilesHelper = TestFilesHelper()
 
 
     @Test
@@ -36,7 +25,7 @@ abstract class TextExtractorTestBase {
         // given
         val underTest = createExtractorForLanguage(OcrLanguage.English)
 
-        val testFile = getTestFile(WikipediaGandhiEnglishTestFileBaseName)
+        val testFile = getEnglishTestFile()
         val countExpectedPages = getCountExpectedPages(61)
 
         // when
@@ -95,7 +84,7 @@ abstract class TextExtractorTestBase {
         // given
         val underTest = createExtractorForLanguage(OcrLanguage.German)
 
-        val testFile = getTestFile(WikipediaGandhiGermanTestFileBaseName)
+        val testFile = getGermanTestFile()
         val countExpectedPages = getCountExpectedPages(32)
 
         // when
@@ -201,26 +190,12 @@ abstract class TextExtractorTestBase {
     }
 
 
-    protected open fun getTestFile(filename: String): File {
-        val resourceFolderName = if (textExtractorType == TextExtractorType.Pdf) "pdf" else "images"
-        val testFilename = if (textExtractorType == TextExtractorType.Pdf) filename else filename + "_01"
-        val fileExtension = if (textExtractorType == TextExtractorType.Pdf) "pdf" else "png"
-        val testFile = File(File(TestFilesFolderName, resourceFolderName), testFilename + "." + fileExtension)
+    protected open fun getEnglishTestFile(): File {
+        return testFilesHelper.getEnglishTestFile(textExtractorType)
+    }
 
-        val fileUrl = TextExtractorTestBase::class.java.classLoader.getResource(testFile.path)
-
-        if ("jar" == fileUrl.protocol) { // if running from jar file
-            val tempFolder = fileUtils.getTempDir() // extract test pdfs to temp folder
-
-            resourceFilesExtractor.extractAllFilesFromFolder(
-                TextExtractorTestBase::class.java,
-                File(TestFilesFolderName), tempFolder
-            )
-
-            return File(tempFolder, testFilename)
-        } else {
-            return File(fileUrl.toURI())
-        }
+    protected open fun getGermanTestFile(): File {
+        return testFilesHelper.getGermanTestFile(textExtractorType)
     }
 
 }

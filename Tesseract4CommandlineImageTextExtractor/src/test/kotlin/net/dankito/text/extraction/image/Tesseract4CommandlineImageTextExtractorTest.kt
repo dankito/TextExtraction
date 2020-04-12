@@ -27,7 +27,7 @@ class Tesseract4CommandlineImageTextExtractorTest : ImageTextExtractorTestBase()
 
         // given
         val underTest = createExtractorForLanguage(OcrLanguage.English)
-        val testFile = getTestFile(WikipediaGandhiEnglishTestFileBaseName)
+        val testFile = getEnglishTestFile()
         val countParallelInstances = CpuInfo.CountCores * 2
 
         val results = mutableListOf<ExtractionResult>()
@@ -55,7 +55,7 @@ class Tesseract4CommandlineImageTextExtractorTest : ImageTextExtractorTestBase()
 
         // given
         val underTest = createExtractorForLanguage(OcrLanguage.English)
-        val testFile = getTestFile(WikipediaGandhiEnglishTestFileBaseName)
+        val testFile = getEnglishTestFile()
         val countParallelInstances = CpuInfo.CountCores * 2
 
         val jobs = mutableListOf<Deferred<ExtractionResult>>()
