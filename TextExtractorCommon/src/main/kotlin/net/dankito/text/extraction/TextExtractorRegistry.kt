@@ -95,8 +95,8 @@ open class TextExtractorRegistry @JvmOverloads constructor(
     }
 
     protected open fun determinePdfType(file: File): PdfType? {
-        return if (file.extension.toLowerCase() == "pdf") {
-            pdfTypeDetector?.detectPdfType(file)
+        return if (file.extension.toLowerCase() == "pdf" && pdfTypeDetector?.isAvailable == true) {
+            pdfTypeDetector.detectPdfType(file)
         }
         else {
             null
