@@ -1,7 +1,6 @@
 package net.dankito.text.extraction.pdf
 
 import net.dankito.text.extraction.model.PdfType
-import net.dankito.utils.process.CommandConfig
 import net.dankito.utils.process.CommandExecutor
 import net.dankito.utils.process.CommandlineProgram
 import net.dankito.utils.process.ICommandExecutor
@@ -32,10 +31,10 @@ open class pdffontsPdfTypeDetector(
 
     override fun detectPdfType(file: File): PdfType? {
         try {
-            val executeCommandResult = commandExecutor.executeCommand(CommandConfig(listOf(
+            val executeCommandResult = commandExecutor.executeCommand(
                 commandlineProgram.programExecutablePath,
                 file.absolutePath
-            )))
+            )
 
             // first two lines are headers -> if there are more then two lines than PDF uses fonts
             if (executeCommandResult.outputLines.size > 2) {
