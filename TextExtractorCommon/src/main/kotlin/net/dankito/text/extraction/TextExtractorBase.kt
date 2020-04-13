@@ -21,13 +21,7 @@ abstract class TextExtractorBase : ITextExtractor {
 
     // default implementation, may be overridden in subclasses with real suspendable functions
     open suspend fun extractTextForSupportedFormatSuspendable(file: File): ExtractionResult {
-        try {
-            return extractTextForSupportedFormat(file)
-        } catch (e: Exception) {
-            log.error("Could not extract text of file '$file' with extractor ${this@TextExtractorBase.javaClass.name}", e)
-
-            return ExtractionResult(ErrorInfo(ErrorType.ParseError, e))
-        }
+        return extractTextForSupportedFormat(file)
     }
 
 
@@ -50,7 +44,13 @@ abstract class TextExtractorBase : ITextExtractor {
             return canNotExtractTextExtractionResult
         }
 
-        return extractTextForSupportedFormatSuspendable(file)
+        try {
+            return extractTextForSupportedFormatSuspendable(file)
+        } catch (e: Exception) {
+            log.error("Could not extract text of file '$file' with extractor ${this@TextExtractorBase.javaClass.name}", e)
+
+            return ExtractionResult(ErrorInfo(ErrorType.ParseError, e))
+        }
     }
 
     protected open fun checkIfCanNotExtractTextForFile(file: File): ExtractionResult? {
