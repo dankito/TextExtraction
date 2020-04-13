@@ -6,6 +6,9 @@ import java.io.File
 
 interface IPdfTypeDetector {
 
+    val isAvailable: Boolean
+
+
     fun detectPdfType(file: File): PdfType?
 
 }

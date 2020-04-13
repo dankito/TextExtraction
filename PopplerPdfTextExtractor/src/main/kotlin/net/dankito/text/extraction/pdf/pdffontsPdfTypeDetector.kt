@@ -3,6 +3,7 @@ package net.dankito.text.extraction.pdf
 import net.dankito.text.extraction.model.PdfType
 import net.dankito.utils.process.CommandConfig
 import net.dankito.utils.process.CommandExecutor
+import net.dankito.utils.process.CommandlineProgram
 import net.dankito.utils.process.ICommandExecutor
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -22,6 +23,11 @@ open class pdffontsPdfTypeDetector(
     companion object {
         private val log = LoggerFactory.getLogger(pdffontsPdfTypeDetector::class.java)
     }
+
+    protected val commandlineProgram = CommandlineProgram("pdffonts", commandExecutor)
+
+    override val isAvailable: Boolean
+        get() = commandlineProgram.isAvailable
 
 
     override fun detectPdfType(file: File): PdfType? {
