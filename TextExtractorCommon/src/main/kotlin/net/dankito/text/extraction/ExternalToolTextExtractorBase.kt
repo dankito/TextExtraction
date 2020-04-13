@@ -69,7 +69,9 @@ abstract class ExternalToolTextExtractorBase(
 
         val result = commandExecutor.executeCommand(config)
 
-        countParallelExecutions.decrementAndGet()
+        if (maxCountParallelExecutions > 0) {
+            countParallelExecutions.decrementAndGet()
+        }
 
         return result
     }
@@ -85,7 +87,9 @@ abstract class ExternalToolTextExtractorBase(
 
         val result = commandExecutor.executeCommandSuspendable(config)
 
-        countParallelExecutions.decrementAndGet()
+        if (maxCountParallelExecutions > 0) {
+            countParallelExecutions.decrementAndGet()
+        }
 
         return result
     }
