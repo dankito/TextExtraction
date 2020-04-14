@@ -24,7 +24,7 @@ open class ExtractionResult(
         get() = ArrayList(pagesField).sortedBy { it.pageNum } // don't return pagesField as otherwise it would be manipulated on the outside of this class
 
     open val text: String?
-        get() = if (pagesField.isEmpty()) null else pagesField.joinToString("\n")
+        get() = if (pagesField.isEmpty()) null else pages.joinToString("\n")
 
 
     open fun addPage(page: Page) {
