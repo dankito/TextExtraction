@@ -25,6 +25,7 @@ ext {
     bouncyCastleVersion = '1.64' // optional dependency of OpenPdf
 
     iTextVersion = '7.1.6'
+    iText2Version = '2.1.7.js7'
 
     tikaVersion = '1.23'
     

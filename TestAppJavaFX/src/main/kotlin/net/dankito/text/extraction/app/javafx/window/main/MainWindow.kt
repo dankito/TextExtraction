@@ -30,7 +30,9 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
     private val tesseractHelper = TesseractHelper()
 
 
-    private val openPdfPdfTextExtractor = OpenPdfPdfTextExtractor()
+//    private val openPdfPdfTextExtractor = OpenPdfPdfTextExtractor()
+
+    private val itext2PdfTextExtractor = iText2PdfTextExtractor()
 
     private val itextPdfTextExtractor = iTextPdfTextExtractor()
 
@@ -45,7 +47,8 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
     private val tikaTextExtractor = TikaTextExtractor(TikaSettings(true, PdfContentExtractorStrategy.OcrAndText, tesseractConfig), tesseractHelper)
 
     private val extractorRegistry: ITextExtractorRegistry = TextExtractorRegistry(pdffontsPdfTypeDetector(), listOf(
-        openPdfPdfTextExtractor,
+//        openPdfPdfTextExtractor,
+        itext2PdfTextExtractor,
         itextPdfTextExtractor,
         pdfToTextPdfTextExtractor,
         tesseract4CommandlineImageTextExtractor,
@@ -61,7 +64,10 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
 
 
         tabpane {
-            addTab("main.window.tab.openpdf", TextExtractorTab(openPdfPdfTextExtractor))
+            // do not include OpenPdfPdfTextExtractor and iText2PdfTextExtractor at the same time as both
+            // have the same package and class names but different method and class signatures
+//            addTab("main.window.tab.openpdf", TextExtractorTab(openPdfPdfTextExtractor))
+            addTab("main.window.tab.itext2", TextExtractorTab(itext2PdfTextExtractor))
             addTab("main.window.tab.itext", TextExtractorTab(itextPdfTextExtractor))
             addTab("main.window.tab.pdftotext", TextExtractorTab(pdfToTextPdfTextExtractor))
             addTab("main.window.tab.tesseract4.commandline", TextExtractorTab(tesseract4CommandlineImageTextExtractor))

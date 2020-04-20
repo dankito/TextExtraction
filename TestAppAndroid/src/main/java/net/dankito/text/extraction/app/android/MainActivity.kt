@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import net.dankito.text.extraction.ITextExtractorRegistry
 import net.dankito.text.extraction.TextExtractorRegistry
 import net.dankito.text.extraction.app.android.adapter.MainActivityTabsAdapter
-import net.dankito.text.extraction.pdf.OpenPdfPdfTextExtractor
+import net.dankito.text.extraction.pdf.iText2PdfTextExtractor
 import net.dankito.text.extraction.pdf.iTextPdfTextExtractor
 import net.dankito.utils.android.permissions.PermissionsService
 import org.slf4j.LoggerFactory
@@ -22,7 +22,10 @@ class MainActivity : AppCompatActivity() {
 
 
     private val extractorRegistry: ITextExtractorRegistry = TextExtractorRegistry(listOf(
-        OpenPdfPdfTextExtractor(),
+        // do not include OpenPdfPdfTextExtractor and iText2PdfTextExtractor at the same time as both
+        // have the same package and class names but different method and class signatures
+//        OpenPdfPdfTextExtractor(),
+        iText2PdfTextExtractor(),
         iTextPdfTextExtractor()
     ))
 

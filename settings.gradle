@@ -2,6 +2,7 @@ include ':TextExtractorCommon'
 
 include ':PopplerPdfTextExtractor'
 include ':OpenPdfPdfTextExtractor'
+include ':iText2PdfTextExtractor'
 include ':iTextPdfTextExtractor'
 
 include ':TesseractCommon'
@@ -13,4 +14,3 @@ include ':TikaTextExtractor'
 include ':TestAppAndroid'
 
 include ':TestAppJavaFX'
-

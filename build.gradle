@@ -35,13 +35,17 @@ allprojects {
         mavenLocal()
         jcenter()
         google()
+        // for security issues fixed version of iText 2 from JasperReports
+        maven {
+            url "http://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts"
+        }
     }
 }
 
 
 task jarAll {
     dependsOn = [ "TextExtractorCommon:jar",
-                  "iTextPdfTextExtractor:jar", "OpenPdfPdfTextExtractor:jar", "PopplerPdfTextExtractor:jar",
+                  "iTextPdfTextExtractor:jar", "iText2PdfTextExtractor:jar", "OpenPdfPdfTextExtractor:jar", "PopplerPdfTextExtractor:jar",
                   "TesseractCommon:jar", "Tesseract4CommandlineImageTextExtractor:jar", "Tesseract4JniImageTextExtractor:jar",
                   "TikaTextExtractor:jar"
     ]
@@ -49,7 +53,8 @@ task jarAll {
 
 task publishAllToMavenLocal {
     dependsOn = [ "TextExtractorCommon:publishToMavenLocal",
-                  "iTextPdfTextExtractor:publishToMavenLocal", "OpenPdfPdfTextExtractor:publishToMavenLocal", "PopplerPdfTextExtractor:publishToMavenLocal",
+                  "iTextPdfTextExtractor:publishToMavenLocal", "iText2PdfTextExtractor:publishToMavenLocal",
+                  "OpenPdfPdfTextExtractor:publishToMavenLocal", "PopplerPdfTextExtractor:publishToMavenLocal",
                   "TesseractCommon:publishToMavenLocal", "Tesseract4CommandlineImageTextExtractor:publishToMavenLocal",
                   "Tesseract4JniImageTextExtractor:publishToMavenLocal",
                   "TikaTextExtractor:publishToMavenLocal"

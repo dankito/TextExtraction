@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import net.dankito.text.extraction.ITextExtractorRegistry
 import net.dankito.text.extraction.app.android.fragment.FindBestExtractorExtractTextTabFragment
-import net.dankito.text.extraction.app.android.fragment.OpenPdfExtractTextTabFragment
+import net.dankito.text.extraction.app.android.fragment.iText2ExtractTextTabFragment
 import net.dankito.text.extraction.app.android.fragment.iTextExtractTextTabFragment
 
 
@@ -26,7 +26,10 @@ class MainActivityTabsAdapter(
 
     override fun getItem(position: Int): Fragment? {
         when (position) {
-            0 -> return OpenPdfExtractTextTabFragment()
+            // do not include OpenPdfPdfTextExtractor and iText2PdfTextExtractor at the same time as both
+            // have the same package and class names but different method and class signatures
+//            0 -> return OpenPdfExtractTextTabFragment()
+            0 -> return iText2ExtractTextTabFragment()
             1 -> return iTextExtractTextTabFragment()
             2 -> return FindBestExtractorExtractTextTabFragment(extractorRegistry)
         }

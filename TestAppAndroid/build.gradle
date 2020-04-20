@@ -66,7 +66,10 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
 
-    implementation project(':OpenPdfPdfTextExtractor')
+    // do not include OpenPdfPdfTextExtractor and iText2PdfTextExtractor at the same time as both
+    // have the same package and class names but different method and class signatures
+//    implementation project(':OpenPdfPdfTextExtractor')
+    implementation project(':iText2PdfTextExtractor')
     implementation project(':iTextPdfTextExtractor')
 
     implementation "net.dankito.filechooserdialog:filechooserdialog-android:$fileChooserVersion"

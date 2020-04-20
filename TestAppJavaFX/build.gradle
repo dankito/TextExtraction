@@ -17,9 +17,12 @@ compileTestKotlin.kotlinOptions.jvmTarget = "1.8"
 dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-javafx:$kotlinCoroutinesVersion"
 
-    implementation project(':OpenPdfPdfTextExtractor')
-    implementation project(':iTextPdfTextExtractor')
     implementation project(':PopplerPdfTextExtractor')
+    // do not include OpenPdfPdfTextExtractor and iText2PdfTextExtractor at the same time as both
+    // have the same package and class names but different method and class signatures
+//    implementation project(':OpenPdfPdfTextExtractor')
+    implementation project(':iText2PdfTextExtractor')
+    implementation project(':iTextPdfTextExtractor')
     implementation project(':TikaTextExtractor')
     implementation project(':Tesseract4CommandlineImageTextExtractor')
     implementation project(':Tesseract4JniImageTextExtractor')
