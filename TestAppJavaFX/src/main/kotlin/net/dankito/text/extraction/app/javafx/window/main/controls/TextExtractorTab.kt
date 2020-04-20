@@ -341,19 +341,22 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
     }
 
 
-    protected open fun extractTextOfFileAndShowResult() = launch {
+    protected open fun extractTextOfFileAndShowResult() {
         lastSelectedFile?.let { file ->
             isExtractingText.value = true
             didTextExtractionReturnAnError.value = false
             showTextExtractorInfo.value = false
-            val stopwatch = Stopwatch()
 
-            val extractionResult = extractTextOfFile(file)
+            GlobalScope.launch(Dispatchers.IO) {
+                val stopwatch = Stopwatch()
 
-            stopwatch.stop()
+                val extractionResult = extractTextOfFile(file)
 
-            withContext(Dispatchers.JavaFx) {
-                showExtractedTextOnUiThread(file, extractionResult, stopwatch)
+                stopwatch.stop()
+
+                withContext(Dispatchers.JavaFx) {
+                    showExtractedTextOnUiThread(file, extractionResult, stopwatch)
+                }
             }
         }
     }
