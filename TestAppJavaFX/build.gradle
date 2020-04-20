@@ -18,7 +18,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-javafx:$kotlinCoroutinesVersion"
 
     implementation project(':OpenPdfPdfTextExtractor')
-    implementation project(':itextPdfTextExtractor')
+    implementation project(':iTextPdfTextExtractor')
     implementation project(':PopplerPdfTextExtractor')
     implementation project(':TikaTextExtractor')
     implementation project(':Tesseract4CommandlineImageTextExtractor')

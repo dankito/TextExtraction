@@ -10,7 +10,7 @@ import net.dankito.text.extraction.ITextExtractorRegistry
 import net.dankito.text.extraction.TextExtractorRegistry
 import net.dankito.text.extraction.app.android.adapter.MainActivityTabsAdapter
 import net.dankito.text.extraction.pdf.OpenPdfPdfTextExtractor
-import net.dankito.text.extraction.pdf.itextPdfTextExtractor
+import net.dankito.text.extraction.pdf.iTextPdfTextExtractor
 import net.dankito.utils.android.permissions.PermissionsService
 import org.slf4j.LoggerFactory
 
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private val extractorRegistry: ITextExtractorRegistry = TextExtractorRegistry(listOf(
         OpenPdfPdfTextExtractor(),
-        itextPdfTextExtractor()
+        iTextPdfTextExtractor()
     ))
 
     /**

@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory
 import java.io.File
 
 
-open class itextPdfMetadataExtractor : IPdfMetadataExtractor {
+open class iTextPdfMetadataExtractor : IPdfMetadataExtractor {
 
     companion object {
-        private val log = LoggerFactory.getLogger(itextPdfMetadataExtractor::class.java)
+        private val log = LoggerFactory.getLogger(iTextPdfMetadataExtractor::class.java)
     }
 
 

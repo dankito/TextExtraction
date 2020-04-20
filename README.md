@@ -11,7 +11,7 @@ A modular framework for extracting text from many different sources (websites, P
 |[OpenPDF](https://github.com/librepdf/openpdf)|<ul><li>Free</li><li>Quite good and fast</li></ul>|<ul><li>Does not work on PDFs with disordered layouts</li><li>Does not run on older Androids (uses Java 8 features (Optinal); works on Android 6 but not on Android 4.1, others not tested)</li></ul>|
 |[PDFBox](https://pdfbox.apache.org/) (not added yet)|||
 |[PdfBox-Android](https://github.com/TomRoush/PdfBox-Android) (not added yet)|||
-|[itext](https://github.com/itext/itext7)|<ul><li>Works also with PDFs with disordered layouts</li><li>Best PDF extraction result of any Java library I found</li><li>Works on older Androids (at least on Android 4.1)</li></ul>|<ul><li>Not free / commercial (AGPL / commercial license)</li></ul>|
+|[iText](https://github.com/itext/itext7)|<ul><li>Works also with PDFs with disordered layouts</li><li>Best PDF extraction result of any Java library I found</li><li>Works on older Androids (at least on Android 4.1)</li></ul>|<ul><li>Not free / commercial (AGPL / commercial license)</li></ul>|
 |pdftotext|<ul><li>Best PDF extraction result so far</li></ul>|<ul><li>User has to install [XPDF](https://www.xpdfreader.com/download.html)</li><li>Does not run on Android</li></ul>|
 
 ### Images
@@ -31,4 +31,4 @@ A modular framework for extracting text from many different sources (websites, P
 
 If not stated otherwise all code is licensed under Apache License, Version 2.0.
 
-**Notice**: Some libraries, like **itext**, have different, partially commercial licenses.
+**Notice**: Some libraries, like **iText**, have different, partially commercial licenses.

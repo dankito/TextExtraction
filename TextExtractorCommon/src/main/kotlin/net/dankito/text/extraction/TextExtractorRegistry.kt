@@ -29,6 +29,7 @@ open class TextExtractorRegistry @JvmOverloads constructor(
             .filter { canExtractDataFromFile(it, file, pdfType) }
     }
 
+    // TODO: should actually be FindBestTextExtractor's job
     override fun findBestExtractorForFile(file: File): ITextExtractor? {
         val pdfType = determinePdfType(file)
 
@@ -38,6 +39,7 @@ open class TextExtractorRegistry @JvmOverloads constructor(
     }
 
 
+    // TODO: should actually be FindBestTextExtractor's job
     override fun extractTextWithBestExtractorForFile(file: File): ExtractionResultForExtractor {
         var mostSuitableError: ExtractionResult? = null
         var mostSuitableErrorTextExtractor: ITextExtractor? = null

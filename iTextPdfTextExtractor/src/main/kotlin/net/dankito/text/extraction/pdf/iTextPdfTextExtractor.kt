@@ -12,12 +12,12 @@ import org.slf4j.LoggerFactory
 import java.io.File
 
 
-open class itextPdfTextExtractor(
-    protected val metadataExtractor: IPdfMetadataExtractor = itextPdfMetadataExtractor()
+open class iTextPdfTextExtractor(
+    protected val metadataExtractor: IPdfMetadataExtractor = iTextPdfMetadataExtractor()
 ): TextExtractorBase(), ISearchablePdfTextExtractor {
 
     companion object {
-        private val log = LoggerFactory.getLogger(itextPdfTextExtractor::class.java)
+        private val log = LoggerFactory.getLogger(iTextPdfTextExtractor::class.java)
     }
 
 
@@ -65,7 +65,7 @@ open class itextPdfTextExtractor(
     }
 
     protected open fun getMetadata(pdfDocument: PdfDocument, file: File): Metadata? {
-        return if (metadataExtractor is itextPdfMetadataExtractor) {
+        return if (metadataExtractor is iTextPdfMetadataExtractor) {
             metadataExtractor.extractMetadata(pdfDocument, file)
         }
         else {

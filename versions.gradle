@@ -24,7 +24,7 @@ ext {
     openPdfVersion = '1.2.12' // last version running on pre-24 Androids (doesn't use java.util.Optional)
     bouncyCastleVersion = '1.64' // optional dependency of OpenPdf
 
-    itextVersion = '7.1.6'
+    iTextVersion = '7.1.6'
 
     tikaVersion = '1.23'
     

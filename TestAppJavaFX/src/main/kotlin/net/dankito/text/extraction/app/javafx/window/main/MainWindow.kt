@@ -32,7 +32,7 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
 
     private val openPdfPdfTextExtractor = OpenPdfPdfTextExtractor()
 
-    private val itextPdfTextExtractor = itextPdfTextExtractor()
+    private val itextPdfTextExtractor = iTextPdfTextExtractor()
 
     private val pdfToTextPdfTextExtractor = pdfToTextPdfTextExtractor(installHintLocalization = FX.messages)
 

@@ -2,7 +2,7 @@ include ':TextExtractorCommon'
 
 include ':PopplerPdfTextExtractor'
 include ':OpenPdfPdfTextExtractor'
-include ':itextPdfTextExtractor'
+include ':iTextPdfTextExtractor'
 
 include ':TesseractCommon'
 include ':Tesseract4CommandlineImageTextExtractor'
