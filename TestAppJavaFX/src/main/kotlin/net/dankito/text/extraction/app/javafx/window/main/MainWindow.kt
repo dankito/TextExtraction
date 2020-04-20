@@ -30,13 +30,15 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
     private val tesseractHelper = TesseractHelper()
 
 
+    private val pdfToTextPdfTextExtractor = pdfToTextPdfTextExtractor(installHintLocalization = FX.messages)
+
 //    private val openPdfPdfTextExtractor = OpenPdfPdfTextExtractor()
 
     private val itext2PdfTextExtractor = iText2PdfTextExtractor()
 
     private val itextPdfTextExtractor = iTextPdfTextExtractor()
 
-    private val pdfToTextPdfTextExtractor = pdfToTextPdfTextExtractor(installHintLocalization = FX.messages)
+    private val pdfBoxPdfTextExtractor = PdfBoxPdfTextExtractor()
 
     private val tesseract4CommandlineImageTextExtractor = Tesseract4CommandlineImageTextExtractor(tesseractConfig, tesseractHelper, commandExecutor, installHintLocalization = FX.messages)
 
@@ -47,10 +49,11 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
     private val tikaTextExtractor = TikaTextExtractor(TikaSettings(true, PdfContentExtractorStrategy.OcrAndText, tesseractConfig), tesseractHelper)
 
     private val extractorRegistry: ITextExtractorRegistry = TextExtractorRegistry(pdffontsPdfTypeDetector(), listOf(
+        pdfToTextPdfTextExtractor,
 //        openPdfPdfTextExtractor,
         itext2PdfTextExtractor,
         itextPdfTextExtractor,
-        pdfToTextPdfTextExtractor,
+        pdfBoxPdfTextExtractor,
         tesseract4CommandlineImageTextExtractor,
         tesseract4JniImageTextExtractor,
         imageBasedPdfTextExtractor,
@@ -69,6 +72,7 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
 //            addTab("main.window.tab.openpdf", TextExtractorTab(openPdfPdfTextExtractor))
             addTab("main.window.tab.itext2", TextExtractorTab(itext2PdfTextExtractor))
             addTab("main.window.tab.itext", TextExtractorTab(itextPdfTextExtractor))
+            addTab("main.window.tab.pdfbox", TextExtractorTab(pdfBoxPdfTextExtractor))
             addTab("main.window.tab.pdftotext", TextExtractorTab(pdfToTextPdfTextExtractor))
             addTab("main.window.tab.tesseract4.commandline", TextExtractorTab(tesseract4CommandlineImageTextExtractor))
             addTab("main.window.tab.tesseract4.jni", TextExtractorTab(tesseract4JniImageTextExtractor))

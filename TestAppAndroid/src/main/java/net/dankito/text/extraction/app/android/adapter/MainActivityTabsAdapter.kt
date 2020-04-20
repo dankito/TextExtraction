@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import net.dankito.text.extraction.ITextExtractorRegistry
 import net.dankito.text.extraction.app.android.fragment.FindBestExtractorExtractTextTabFragment
+import net.dankito.text.extraction.app.android.fragment.PdfBoxAndroidExtractTextTabFragment
 import net.dankito.text.extraction.app.android.fragment.iText2ExtractTextTabFragment
 import net.dankito.text.extraction.app.android.fragment.iTextExtractTextTabFragment
 
@@ -20,7 +21,7 @@ class MainActivityTabsAdapter(
 
 
     override fun getCount(): Int {
-        return 3
+        return 4
     }
 
 
@@ -31,7 +32,8 @@ class MainActivityTabsAdapter(
 //            0 -> return OpenPdfExtractTextTabFragment()
             0 -> return iText2ExtractTextTabFragment()
             1 -> return iTextExtractTextTabFragment()
-            2 -> return FindBestExtractorExtractTextTabFragment(extractorRegistry)
+            2 -> return PdfBoxAndroidExtractTextTabFragment()
+            3 -> return FindBestExtractorExtractTextTabFragment(extractorRegistry)
         }
 
         // should never come to here

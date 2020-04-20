@@ -4,13 +4,13 @@ apply plugin: 'kotlin-android-extensions'
 
 
 android {
-    compileSdkVersion 27
-
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
 
     defaultConfig {
         applicationId "net.dankito.text.extraction.app.android"
-        minSdkVersion 15
-        targetSdkVersion 27
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidTargetSdkVersion
         versionCode appVersionCode
         versionName rootProject.version
 
@@ -71,6 +71,7 @@ dependencies {
 //    implementation project(':OpenPdfPdfTextExtractor')
     implementation project(':iText2PdfTextExtractor')
     implementation project(':iTextPdfTextExtractor')
+    implementation project(':PdfBoxAndroidPdfTextExtractor')
 
     implementation "net.dankito.filechooserdialog:filechooserdialog-android:$fileChooserVersion"
 

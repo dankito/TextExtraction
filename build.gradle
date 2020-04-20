@@ -2,8 +2,8 @@
 buildscript {
     
     apply from: 'versions.gradle'
-    
-    
+
+
     repositories {
         google()
         jcenter()
@@ -45,7 +45,8 @@ allprojects {
 
 task jarAll {
     dependsOn = [ "TextExtractorCommon:jar",
-                  "iTextPdfTextExtractor:jar", "iText2PdfTextExtractor:jar", "OpenPdfPdfTextExtractor:jar", "PopplerPdfTextExtractor:jar",
+                  "iTextPdfTextExtractor:jar", "iText2PdfTextExtractor:jar", "OpenPdfPdfTextExtractor:jar",
+                  "PdfBoxPdfTextExtractor:jar", "PopplerPdfTextExtractor:jar",
                   "TesseractCommon:jar", "Tesseract4CommandlineImageTextExtractor:jar", "Tesseract4JniImageTextExtractor:jar",
                   "TikaTextExtractor:jar"
     ]
@@ -54,7 +55,8 @@ task jarAll {
 task publishAllToMavenLocal {
     dependsOn = [ "TextExtractorCommon:publishToMavenLocal",
                   "iTextPdfTextExtractor:publishToMavenLocal", "iText2PdfTextExtractor:publishToMavenLocal",
-                  "OpenPdfPdfTextExtractor:publishToMavenLocal", "PopplerPdfTextExtractor:publishToMavenLocal",
+                  "OpenPdfPdfTextExtractor:publishToMavenLocal", "PdfBoxPdfTextExtractor:publishToMavenLocal",
+                  "PdfBoxAndroidPdfTextExtractor:publishToMavenLocal", "PopplerPdfTextExtractor:publishToMavenLocal",
                   "TesseractCommon:publishToMavenLocal", "Tesseract4CommandlineImageTextExtractor:publishToMavenLocal",
                   "Tesseract4JniImageTextExtractor:publishToMavenLocal",
                   "TikaTextExtractor:publishToMavenLocal"

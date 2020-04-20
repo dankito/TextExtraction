@@ -1,5 +1,5 @@
 
-rootProject.group ="net.dankito.text.extraction"
+rootProject.group = "net.dankito.text.extraction"
 rootProject.version = "0.5.1-SNAPSHOT"
 
 ext {
@@ -27,6 +27,9 @@ ext {
     iTextVersion = '7.1.6'
     iText2Version = '2.1.7.js7'
 
+    pdfBoxVersion = "2.0.19"
+    pdfBoxAndroidVersion = "1.8.10.1"
+
     tikaVersion = '1.23'
     
     tesseract4Version = '4.0.0-1.5'
@@ -52,6 +55,11 @@ ext {
     
     
     /*  Android */
+
+    androidCompileSdkVersion = 27
+    androidTargetSdkVersion = 27
+    androidMinSdkVersion = 15
+    androidBuildToolsVersion = "28.0.3"
     
     fileChooserVersion = '1.1.5'
     multiDexVersion = '1.0.3'

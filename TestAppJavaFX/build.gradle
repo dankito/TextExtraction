@@ -23,6 +23,7 @@ dependencies {
 //    implementation project(':OpenPdfPdfTextExtractor')
     implementation project(':iText2PdfTextExtractor')
     implementation project(':iTextPdfTextExtractor')
+    implementation project(':PdfBoxPdfTextExtractor')
     implementation project(':TikaTextExtractor')
     implementation project(':Tesseract4CommandlineImageTextExtractor')
     implementation project(':Tesseract4JniImageTextExtractor')
