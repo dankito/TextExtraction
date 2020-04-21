@@ -1,0 +1,23 @@
+apply plugin: 'kotlin'
+
+sourceCompatibility = "7"
+targetCompatibility = "7"
+
+compileKotlin.kotlinOptions.jvmTarget = "1.6"
+
+compileTestKotlin.kotlinOptions.jvmTarget = "1.6"
+
+
+ext {
+    artifactName = "finereader-hotfolder-text-extractor"
+}
+
+
+dependencies {
+    api project(':TextExtractorCommon')
+
+    implementation("org.jsoup:jsoup:$jsoupVersion")
+
+
+    testImplementation project(path: ':TextExtractorCommon', configuration: 'tests')
+}

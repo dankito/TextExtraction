@@ -6,7 +6,10 @@ import net.dankito.text.extraction.FindBestTextExtractor
 import net.dankito.text.extraction.ITextExtractorRegistry
 import net.dankito.text.extraction.TextExtractorRegistry
 import net.dankito.text.extraction.TikaTextExtractor
+import net.dankito.text.extraction.app.javafx.window.main.controls.FineReaderHotFolderTextExtractorTab
 import net.dankito.text.extraction.app.javafx.window.main.controls.TextExtractorTab
+import net.dankito.text.extraction.image.FineReaderHotFolderConfig
+import net.dankito.text.extraction.image.FineReaderHotFolderImageTextExtractor
 import net.dankito.text.extraction.image.Tesseract4CommandlineImageTextExtractor
 import net.dankito.text.extraction.image.Tesseract4JniImageTextExtractor
 import net.dankito.text.extraction.image.model.OcrLanguage
@@ -18,6 +21,7 @@ import net.dankito.text.extraction.pdf.*
 import net.dankito.utils.PackageInfo
 import net.dankito.utils.process.CommandExecutor
 import tornadofx.*
+import java.io.File
 
 
 class MainWindow : Fragment(String.format(FX.messages["application.title"], PackageInfo.getAppVersionFromManifest())) {
@@ -44,6 +48,8 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
 
     private val tesseract4JniImageTextExtractor = Tesseract4JniImageTextExtractor(tesseractConfig, tesseractHelper)
 
+    private val fineReaderHotFolderImageTextExtractor = FineReaderHotFolderImageTextExtractor(FineReaderHotFolderConfig(File(""), File("")))
+
     private val imageBasedPdfTextExtractor = ImageOnlyPdfTextExtractor(tesseract4CommandlineImageTextExtractor, pdfimagesImagesFromPdfExtractor(commandExecutor))
 
     private val tikaTextExtractor = TikaTextExtractor(TikaSettings(true, PdfContentExtractorStrategy.OcrAndText, tesseractConfig), tesseractHelper)
@@ -56,6 +62,7 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
         pdfBoxPdfTextExtractor,
         tesseract4CommandlineImageTextExtractor,
         tesseract4JniImageTextExtractor,
+        fineReaderHotFolderImageTextExtractor,
         imageBasedPdfTextExtractor,
         tikaTextExtractor
     ))
@@ -76,6 +83,7 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
             addTab("main.window.tab.pdftotext", TextExtractorTab(pdfToTextPdfTextExtractor))
             addTab("main.window.tab.tesseract4.commandline", TextExtractorTab(tesseract4CommandlineImageTextExtractor))
             addTab("main.window.tab.tesseract4.jni", TextExtractorTab(tesseract4JniImageTextExtractor))
+            addTab("main.window.tab.finereader.hotfolder", FineReaderHotFolderTextExtractorTab(fineReaderHotFolderImageTextExtractor))
             addTab("main.window.tab.image.based.pdf.text.extractor", TextExtractorTab(imageBasedPdfTextExtractor))
             addTab("main.window.tab.tika", TextExtractorTab(tikaTextExtractor))
             addTab("main.window.tab.find.best.extractor.for.type", TextExtractorTab(FindBestTextExtractor(extractorRegistry)))

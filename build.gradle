@@ -48,6 +48,7 @@ task jarAll {
                   "iTextPdfTextExtractor:jar", "iText2PdfTextExtractor:jar", "OpenPdfPdfTextExtractor:jar",
                   "PdfBoxPdfTextExtractor:jar", "PopplerPdfTextExtractor:jar",
                   "TesseractCommon:jar", "Tesseract4CommandlineImageTextExtractor:jar", "Tesseract4JniImageTextExtractor:jar",
+                  "FineReaderHotFolderImageTextExtractor:jar",
                   "TikaTextExtractor:jar"
     ]
 }
@@ -59,6 +60,7 @@ task publishAllToMavenLocal {
                   "PdfBoxAndroidPdfTextExtractor:publishToMavenLocal", "PopplerPdfTextExtractor:publishToMavenLocal",
                   "TesseractCommon:publishToMavenLocal", "Tesseract4CommandlineImageTextExtractor:publishToMavenLocal",
                   "Tesseract4JniImageTextExtractor:publishToMavenLocal",
+                  "FineReaderHotFolderImageTextExtractor:publishToMavenLocal",
                   "TikaTextExtractor:publishToMavenLocal"
     ]
 }
@@ -66,9 +68,11 @@ task publishAllToMavenLocal {
 task publishAndReleaseAll {
     dependsOn = [ "TextExtractorCommon:publishAndRelease",
                   "itextPdfTextExtractor:publishAndRelease", "OpenPdfPdfTextExtractor:publishAndRelease",
+                  "PdfBoxPdfTextExtractor:publishAndRelease", // TODO: add "PdfBoxAndroidPdfTextExtractor:publishAndRelease"
                   "PopplerPdfTextExtractor:publishAndRelease",
                   "TesseractCommon:publishAndRelease", "Tesseract4CommandlineImageTextExtractor:publishAndRelease",
                   "Tesseract4JniImageTextExtractor:publishAndRelease",
+                  "FineReaderHotFolderImageTextExtractor:publishAndRelease",
                   "TikaTextExtractor:publishAndRelease"
     ]
 }

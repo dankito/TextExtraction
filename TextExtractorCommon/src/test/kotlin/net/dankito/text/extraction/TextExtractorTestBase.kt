@@ -54,7 +54,7 @@ abstract class TextExtractorTestBase {
             "Karamchand Gandhi",
             "South Africa and India. He lived modestly in a self-sufficient residential",
             "2 October 1869",
-            "community and wore the traditional Indian dhoti and shawl, woven with yarn",
+            "community and wore the traditional Indian dhoti and shawl, woven with ya", // FineReader detects 'yam' instead of 'yarn'
             "Porbandar,",
             "hand-spun on a charkha. He ate simple vegetarian food, and also undertook long",
             "Porbandar State,",

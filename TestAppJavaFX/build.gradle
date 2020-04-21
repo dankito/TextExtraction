@@ -27,6 +27,7 @@ dependencies {
     implementation project(':TikaTextExtractor')
     implementation project(':Tesseract4CommandlineImageTextExtractor')
     implementation project(':Tesseract4JniImageTextExtractor')
+    implementation project(':FineReaderHotFolderImageTextExtractor')
 
     implementation "net.dankito.utils:java-fx-utils:$javaFxUtilsVersion"
 

@@ -10,6 +10,7 @@ include ':OpenPdfPdfTextExtractor'
 include ':TesseractCommon'
 include ':Tesseract4CommandlineImageTextExtractor'
 include ':Tesseract4JniImageTextExtractor'
+include ':FineReaderHotFolderImageTextExtractor'
 
 include ':TikaTextExtractor'
 

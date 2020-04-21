@@ -5,6 +5,7 @@ import net.dankito.text.extraction.model.ErrorType
 import net.dankito.text.extraction.model.ExtractionResult
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.util.concurrent.CopyOnWriteArraySet
 
 
 abstract class TextExtractorBase : ITextExtractor {
@@ -13,6 +14,11 @@ abstract class TextExtractorBase : ITextExtractor {
         private val log = LoggerFactory.getLogger(TextExtractorBase::class.java)
     }
 
+
+    protected val isIsAvailableDeterminedYetListeners = CopyOnWriteArraySet<(isAvailable: Boolean) -> Unit>()
+
+
+    override val isIsAvailableDeterminedYet = true
 
     override val installHint = ""
 
@@ -63,6 +69,25 @@ abstract class TextExtractorBase : ITextExtractor {
         }
 
         return null // can extract text for file
+    }
+
+
+    override fun addIsIsAvailableDeterminedYetListener(listener: (isAvailable: Boolean) -> Unit) {
+        if (isIsAvailableDeterminedYet) {
+            listener(isAvailable)
+        }
+        else {
+            isIsAvailableDeterminedYetListeners.add(listener)
+        }
+    }
+
+    protected fun determinedIsAvailableDetermined(isAvailable: Boolean) {
+        val listeners = ArrayList(isIsAvailableDeterminedYetListeners)
+        isIsAvailableDeterminedYetListeners.clear()
+
+        listeners.forEach { listener ->
+            listener(isAvailable)
+        }
     }
 
 }
