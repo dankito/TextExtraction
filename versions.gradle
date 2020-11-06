@@ -1,9 +1,9 @@
 
 rootProject.group = "net.dankito.text.extraction"
-rootProject.version = "0.6.0"
+rootProject.version = "0.6.1-SNAPSHOT"
 
 ext {
-    appVersionCode = 2
+    appVersionCode = 3
 
     sourceCodeRepositoryBaseUrl = "github.com/dankito/TextExtraction"
     projectDescription = "A framework for extracting text from different types of files, e.g. PDFs, images, office documents, text files, ..."
