@@ -5,6 +5,7 @@ import net.dankito.text.extraction.model.ErrorType
 import net.dankito.text.extraction.model.ExtractionResult
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.util.concurrent.CopyOnWriteArraySet
 
 
 abstract class TextExtractorBase : ITextExtractor {
@@ -14,6 +15,11 @@ abstract class TextExtractorBase : ITextExtractor {
     }
 
 
+    protected val isIsAvailableDeterminedYetListeners = CopyOnWriteArraySet<(isAvailable: Boolean) -> Unit>()
+
+
+    override val isIsAvailableDeterminedYet = true
+
     override val installHint = ""
 
 
@@ -21,13 +27,7 @@ abstract class TextExtractorBase : ITextExtractor {
 
     // default implementation, may be overridden in subclasses with real suspendable functions
     open suspend fun extractTextForSupportedFormatSuspendable(file: File): ExtractionResult {
-        try {
-            return extractTextForSupportedFormat(file)
-        } catch (e: Exception) {
-            log.error("Could not extract text of file '$file' with extractor ${this@TextExtractorBase.javaClass.name}", e)
-
-            return ExtractionResult(ErrorInfo(ErrorType.ParseError, e))
-        }
+        return extractTextForSupportedFormat(file)
     }
 
 
@@ -50,7 +50,13 @@ abstract class TextExtractorBase : ITextExtractor {
             return canNotExtractTextExtractionResult
         }
 
-        return extractTextForSupportedFormatSuspendable(file)
+        try {
+            return extractTextForSupportedFormatSuspendable(file)
+        } catch (e: Exception) {
+            log.error("Could not extract text of file '$file' with extractor ${this@TextExtractorBase.javaClass.name}", e)
+
+            return ExtractionResult(ErrorInfo(ErrorType.ParseError, e))
+        }
     }
 
     protected open fun checkIfCanNotExtractTextForFile(file: File): ExtractionResult? {
@@ -63,6 +69,25 @@ abstract class TextExtractorBase : ITextExtractor {
         }
 
         return null // can extract text for file
+    }
+
+
+    override fun addIsIsAvailableDeterminedYetListener(listener: (isAvailable: Boolean) -> Unit) {
+        if (isIsAvailableDeterminedYet) {
+            listener(isAvailable)
+        }
+        else {
+            isIsAvailableDeterminedYetListeners.add(listener)
+        }
+    }
+
+    protected fun determinedIsAvailableDetermined(isAvailable: Boolean) {
+        val listeners = ArrayList(isIsAvailableDeterminedYetListeners)
+        isIsAvailableDeterminedYetListeners.clear()
+
+        listeners.forEach { listener ->
+            listener(isAvailable)
+        }
     }
 
 }

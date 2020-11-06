@@ -5,6 +5,8 @@ enum class TextExtractorType {
 
     Image,
 
-    Pdf
+    SearchableTextPdf,
+
+    ImageOnlyPdf
 
 }

@@ -5,8 +5,10 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
+import javafx.scene.layout.Pane
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
+import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
 import kotlinx.coroutines.*
 import kotlinx.coroutines.javafx.JavaFx
@@ -17,7 +19,10 @@ import net.dankito.text.extraction.model.ErrorType
 import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.ExtractionResultForExtractor
 import net.dankito.utils.Stopwatch
+import net.dankito.utils.javafx.ui.controls.ProcessingIndicatorButton
+import net.dankito.utils.javafx.ui.controls.processingIndicatorButton
 import net.dankito.utils.javafx.ui.extensions.ensureOnlyUsesSpaceIfVisible
+import net.dankito.utils.javafx.ui.extensions.fixedHeight
 import net.dankito.utils.javafx.ui.extensions.setBackgroundToColor
 import org.slf4j.LoggerFactory
 import tornadofx.*
@@ -28,6 +33,8 @@ import kotlin.coroutines.CoroutineContext
 open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), CoroutineScope {
 
     companion object {
+        const val TextFieldInputPaneHeight = 34.0
+
         private val logger = LoggerFactory.getLogger(TextExtractorTab::class.java)
     }
 
@@ -44,11 +51,13 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
 
     protected val programExecutablePath = SimpleStringProperty("")
 
-    protected val lastSelectedFilePath = SimpleStringProperty("")
+    protected val lastSelectedFilePath = SimpleStringProperty("/home/ganymed/data/docs/Steuer/2019/Ausgaben/2019.03.21 Untersuchung Geschlechtskrankheiten PVS Südwest.pdf")
+
+    protected val showCustomTextExtractorConfigurationPane = SimpleBooleanProperty(false)
 
     protected val extractionTime = SimpleStringProperty("")
 
-    protected val isExistingFileSelected = SimpleBooleanProperty(false)
+    protected val isExistingFileSelected = SimpleBooleanProperty(true)
 
     protected val canExtractText = SimpleBooleanProperty(false)
 
@@ -65,10 +74,19 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
     protected val extractedText = SimpleStringProperty("")
 
 
-    protected var lastSelectedFile: File? = null
+    protected var checkIfTextExtractorAvailableButton: ProcessingIndicatorButton by singleAssign()
+
+    protected var customConfigurationPane: Pane by singleAssign()
+
+
+    protected var lastSelectedFile: File? = File("/home/ganymed/data/docs/Steuer/2019/Ausgaben/2019.03.21 Untersuchung Geschlechtskrankheiten PVS Südwest.pdf")
 
 
     init {
+        if (textExtractor.isIsAvailableDeterminedYet == false) {
+            addIsAvailableDeterminedYetListener()
+        }
+
         programExecutablePath.addListener { _, _, newValue -> checkIfProgramExecutableExists(newValue) }
 
         lastSelectedFilePath.addListener { _, _, newValue -> checkIfFileExists(newValue) }
@@ -108,16 +126,16 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
                 }
             }
 
-            button(messages["recheck.program.executable.found.button.label"]) {
-                prefHeight = 40.0
+            checkIfTextExtractorAvailableButton = processingIndicatorButton(messages["recheck.program.executable.found.button.label"]) {
+                fixedHeight = 40.0
                 minWidth = 125.0
 
-                action { recheckIfProgramExecutableFound() }
+                action { recheckIfProgramIsNowAvailable() }
             }
         }
 
         hbox {
-            prefHeight = 34.0
+            prefHeight = TextFieldInputPaneHeight
             alignment = Pos.CENTER_LEFT
 
             visibleWhen(userMustSelectProgramExecutablePath)
@@ -149,8 +167,14 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
 
         }
 
+        // may be configured in sub classes
+        customConfigurationPane = vbox {
+            visibleWhen(showCustomTextExtractorConfigurationPane)
+            ensureOnlyUsesSpaceIfVisible()
+        }
+
         hbox {
-            prefHeight = 34.0
+            prefHeight = TextFieldInputPaneHeight
             alignment = Pos.CENTER_LEFT
 
             label(messages["extract.text.tab.file.label"])
@@ -171,7 +195,7 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
                 useMaxHeight = true
                 prefWidth = 45.0
 
-                action { selectFile() }
+                action { selectFileToExtract() }
             }
 
             label(extractionTime) {
@@ -238,12 +262,28 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
         }
     }
 
-    private fun recheckIfProgramExecutableFound() {
+
+    protected open fun addIsAvailableDeterminedYetListener() {
+        textExtractor.addIsIsAvailableDeterminedYetListener {
+            runLater {
+                recheckIfInstallHintShouldBeDisplayed()
+                updateCanExtractText()
+            }
+        }
+    }
+
+    protected open fun recheckIfProgramIsNowAvailable() {
         (textExtractor as? ExternalToolTextExtractorBase)?.let {
             textExtractor.setProgramExecutablePathTo(textExtractor.programExecutablePath)
         }
 
+        recheckIfInstallHintShouldBeDisplayed()
+    }
+
+    protected open fun recheckIfInstallHintShouldBeDisplayed() {
         showInstallHint.value = textExtractor.isAvailable == false && textExtractor.installHint.isNotBlank()
+
+        checkIfTextExtractorAvailableButton.resetIsProcessing()
     }
 
 
@@ -256,22 +296,12 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
     }
 
     protected open fun selectProgramExecutablePath() {
-        val fileChooser = FileChooser()
-
-        val programExecutablePathAsFile = File(programExecutablePath.value)
-
-        if (programExecutablePathAsFile.parentFile?.exists() == true) {
-            fileChooser.initialDirectory = programExecutablePathAsFile.parentFile
-        }
-
-        fileChooser.showOpenDialog(FX.primaryStage)?.let { selectedProgramExecutablePath ->
+        selectFile(programExecutablePath) { selectedProgramExecutablePath ->
             selectedProgramExecutablePath(selectedProgramExecutablePath.absolutePath)
         }
     }
 
     protected fun selectedProgramExecutablePath(selectedProgramExecutablePath: String) {
-        programExecutablePath.value = selectedProgramExecutablePath
-
         checkIfProgramExecutableExists(selectedProgramExecutablePath)
 
         ifPossibleExtractTextOfFileAndShowResult()
@@ -292,29 +322,21 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
         }
     }
 
-    private fun keyReleased(event: KeyEvent) {
+    protected open fun keyReleased(event: KeyEvent) {
         if (event.code == KeyCode.ENTER) {
             if (isExistingFileSelected.value) {
-                lastSelectedFile?.let { selectedFile(it) }
+                lastSelectedFile?.let { selectedFileToExtract(it) }
             }
         }
     }
 
-    protected open fun selectFile() {
-        val fileChooser = FileChooser()
-
-        lastSelectedFile?.let { lastSelectedFile ->
-            if (lastSelectedFile.parentFile.exists()) {
-                fileChooser.initialDirectory = lastSelectedFile.parentFile
-            }
-        }
-
-        fileChooser.showOpenDialog(FX.primaryStage)?.let { selectedFile ->
-            selectedFile(selectedFile)
+    protected open fun selectFileToExtract() {
+        selectFile(SimpleStringProperty(lastSelectedFile?.absolutePath ?: "")) { selectedFile ->
+            selectedFileToExtract(selectedFile)
         }
     }
 
-    protected open fun selectedFile(file: File) {
+    protected open fun selectedFileToExtract(file: File) {
         lastSelectedFilePath.value = file.absolutePath
 
         existingFileSelected(file)
@@ -340,20 +362,55 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
         canExtractText.value = isExistingFileSelected.value && textExtractor.isAvailable
     }
 
+    protected open fun selectFile(currentValue: SimpleStringProperty, pathSelected: (File) -> Unit) {
+        val fileChooser = FileChooser()
 
-    protected open fun extractTextOfFileAndShowResult() = launch {
+        val currentValueAsFile = File(currentValue.value)
+
+        if (currentValueAsFile.parentFile?.exists() == true) {
+            fileChooser.initialDirectory = currentValueAsFile.parentFile
+        }
+
+        fileChooser.showOpenDialog(FX.primaryStage)?.let { selectedFile ->
+            currentValue.value = selectedFile.absolutePath
+
+            pathSelected(selectedFile)
+        }
+    }
+
+    protected open fun selectFolder(currentValue: SimpleStringProperty, pathSelected: (File) -> Unit) {
+        val fileChooser = DirectoryChooser()
+
+        val currentValueAsFile = File(currentValue.value)
+
+        if (currentValueAsFile.exists()) {
+            fileChooser.initialDirectory = currentValueAsFile
+        }
+
+        fileChooser.showDialog(FX.primaryStage)?.let { selectedFolder ->
+            currentValue.value = selectedFolder.absolutePath
+
+            pathSelected(selectedFolder)
+        }
+    }
+
+
+    protected open fun extractTextOfFileAndShowResult() {
         lastSelectedFile?.let { file ->
             isExtractingText.value = true
             didTextExtractionReturnAnError.value = false
             showTextExtractorInfo.value = false
-            val stopwatch = Stopwatch()
 
-            val extractionResult = extractTextOfFile(file)
+            GlobalScope.launch(Dispatchers.IO) {
+                val stopwatch = Stopwatch()
 
-            stopwatch.stop()
+                val extractionResult = extractTextOfFile(file)
 
-            withContext(Dispatchers.JavaFx) {
-                showExtractedTextOnUiThread(file, extractionResult, stopwatch)
+                stopwatch.stop()
+
+                withContext(Dispatchers.JavaFx) {
+                    showExtractedTextOnUiThread(file, extractionResult, stopwatch)
+                }
             }
         }
     }

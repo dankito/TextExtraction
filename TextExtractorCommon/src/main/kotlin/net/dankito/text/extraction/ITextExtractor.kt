@@ -13,6 +13,8 @@ interface ITextExtractor {
 
     val name: String
 
+    val isIsAvailableDeterminedYet: Boolean
+
     val isAvailable: Boolean
 
     val installHint: String
@@ -28,6 +30,8 @@ interface ITextExtractor {
     }
 
     fun getTextExtractionQualityForFileType(file: File): Int
+
+    fun addIsIsAvailableDeterminedYetListener(listener: (isAvailable: Boolean) -> Unit)
 
 
     fun extractText(file: File): ExtractionResult

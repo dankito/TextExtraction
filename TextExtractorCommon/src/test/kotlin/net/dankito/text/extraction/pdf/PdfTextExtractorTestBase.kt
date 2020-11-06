@@ -11,7 +11,7 @@ abstract class PdfTextExtractorTestBase : TextExtractorTestBase() {
 
     abstract fun createExtractor(): ITextExtractor
 
-    override val textExtractorType = TextExtractorType.Pdf
+    override val textExtractorType = TextExtractorType.SearchableTextPdf
 
     override fun createExtractorForLanguage(language: OcrLanguage): ITextExtractor {
         return createExtractor()

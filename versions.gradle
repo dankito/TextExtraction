@@ -1,9 +1,9 @@
 
-rootProject.group ="net.dankito.text.extraction"
-rootProject.version = "0.5.0"
+rootProject.group = "net.dankito.text.extraction"
+rootProject.version = "0.6.1-SNAPSHOT"
 
 ext {
-    appVersionCode = 1
+    appVersionCode = 3
 
     sourceCodeRepositoryBaseUrl = "github.com/dankito/TextExtraction"
     projectDescription = "A framework for extracting text from different types of files, e.g. PDFs, images, office documents, text files, ..."
@@ -24,7 +24,12 @@ ext {
     openPdfVersion = '1.2.12' // last version running on pre-24 Androids (doesn't use java.util.Optional)
     bouncyCastleVersion = '1.64' // optional dependency of OpenPdf
 
-    itextVersion = '7.1.6'
+    iTextVersion = '7.1.6'
+    iText2Version = '2.1.7.js7'
+
+    pdfBoxVersion = "2.0.19"
+    pdfBoxAndroidVersion = "1.8.10.1"
+    pdfBoxLayoutTextStripperVersion = "2.2.3"
 
     tikaVersion = '1.23'
     
@@ -32,7 +37,9 @@ ext {
     
     slf4jVersion = '1.7.16'
     
-    javaUtilsVersion = '1.0.15'
+    javaUtilsVersion = '1.0.16-SNAPSHOT'
+
+    jsoupVersion = "1.13.1"
     
     
     /*  Test    */    
@@ -51,6 +58,11 @@ ext {
     
     
     /*  Android */
+
+    androidCompileSdkVersion = 27
+    androidTargetSdkVersion = 27
+    androidMinSdkVersion = 15
+    androidBuildToolsVersion = "28.0.3"
     
     fileChooserVersion = '1.1.5'
     multiDexVersion = '1.0.3'

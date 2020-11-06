@@ -9,32 +9,15 @@ import kotlinx.android.synthetic.main.activity_main.*
 import net.dankito.text.extraction.ITextExtractorRegistry
 import net.dankito.text.extraction.TextExtractorRegistry
 import net.dankito.text.extraction.app.android.adapter.MainActivityTabsAdapter
-import net.dankito.text.extraction.pdf.OpenPdfPdfTextExtractor
-import net.dankito.text.extraction.pdf.itextPdfTextExtractor
+import net.dankito.text.extraction.pdf.PdfBoxAndroidPdfTextExtractor
+import net.dankito.text.extraction.pdf.iText2PdfTextExtractor
+import net.dankito.text.extraction.pdf.iTextPdfTextExtractor
 import net.dankito.utils.android.permissions.PermissionsService
-import org.slf4j.LoggerFactory
 
 class MainActivity : AppCompatActivity() {
 
-    companion object {
-        private val log = LoggerFactory.getLogger(MainActivity::class.java)
-    }
 
-
-    private val extractorRegistry: ITextExtractorRegistry = TextExtractorRegistry(listOf(
-        OpenPdfPdfTextExtractor(),
-        itextPdfTextExtractor()
-    ))
-
-    /**
-     * The [android.support.v4.view.PagerAdapter] that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * [android.support.v4.app.FragmentStatePagerAdapter].
-     */
-    private val sectionsPagerAdapter = MainActivityTabsAdapter(supportFragmentManager, extractorRegistry)
+    private lateinit var extractorRegistry: ITextExtractorRegistry
 
     val permissionsService = PermissionsService(this)
 
@@ -42,9 +25,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initUi()
-
         initLogic()
+
+        initUi()
     }
 
     private fun initUi() {
@@ -53,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         // Set up the ViewPager with the sections adapter.
-        container.adapter = sectionsPagerAdapter
+        container.adapter = MainActivityTabsAdapter(supportFragmentManager, extractorRegistry)
 
         container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
@@ -88,7 +71,14 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun initLogic() {
-
+        extractorRegistry = TextExtractorRegistry(listOf(
+            // do not include OpenPdfPdfTextExtractor and iText2PdfTextExtractor at the same time as both
+            // have the same package and class names but different method and class signatures
+//            OpenPdfPdfTextExtractor(),
+            iText2PdfTextExtractor(),
+            iTextPdfTextExtractor(),
+            PdfBoxAndroidPdfTextExtractor(applicationContext)
+        ))
     }
 
 }

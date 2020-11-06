@@ -1,13 +1,19 @@
 package net.dankito.text.extraction
 
-import net.dankito.text.extraction.model.ErrorInfo
-import net.dankito.text.extraction.model.ErrorType
-import net.dankito.text.extraction.model.ExtractionResult
-import net.dankito.text.extraction.model.ExtractionResultForExtractor
+import net.dankito.text.extraction.model.*
+import net.dankito.text.extraction.pdf.IImageOnlyPdfTextExtractor
+import net.dankito.text.extraction.pdf.IPdfTypeDetector
+import net.dankito.text.extraction.pdf.ISearchablePdfTextExtractor
 import java.io.File
 
 
-open class TextExtractorRegistry @JvmOverloads constructor(extractors: List<ITextExtractor> = listOf()) : ITextExtractorRegistry {
+open class TextExtractorRegistry @JvmOverloads constructor(
+    protected val pdfTypeDetector: IPdfTypeDetector? = null,
+    extractors: List<ITextExtractor> = listOf()
+) : ITextExtractorRegistry {
+
+    constructor(extractors: List<ITextExtractor> = listOf()) : this(null, extractors)
+
 
     protected val availableExtractors: MutableList<ITextExtractor> = ArrayList(extractors)
 
@@ -16,18 +22,24 @@ open class TextExtractorRegistry @JvmOverloads constructor(extractors: List<ITex
 
 
     override fun getAllExtractorsForFile(file: File): List<ITextExtractor> {
+        val pdfType = determinePdfType(file)
+
         return extractors
             .sortedByDescending { it.getTextExtractionQualityForFileType(file) }
-            .filter { canExtractDataFromFile(it, file) }
+            .filter { canExtractDataFromFile(it, file, pdfType) }
     }
 
+    // TODO: should actually be FindBestTextExtractor's job
     override fun findBestExtractorForFile(file: File): ITextExtractor? {
+        val pdfType = determinePdfType(file)
+
         return extractors
             .sortedByDescending { it.getTextExtractionQualityForFileType(file) }
-            .firstOrNull { canExtractDataFromFile(it, file) }
+            .firstOrNull { canExtractDataFromFile(it, file, pdfType) }
     }
 
 
+    // TODO: should actually be FindBestTextExtractor's job
     override fun extractTextWithBestExtractorForFile(file: File): ExtractionResultForExtractor {
         var mostSuitableError: ExtractionResult? = null
         var mostSuitableErrorTextExtractor: ITextExtractor? = null
@@ -80,8 +92,32 @@ open class TextExtractorRegistry @JvmOverloads constructor(extractors: List<ITex
     }
 
 
-    protected open fun canExtractDataFromFile(extractor: ITextExtractor, file: File): Boolean {
-        return extractor.isAvailable && extractor.canExtractDataFromFile(file)
+    protected open fun canExtractDataFromFile(extractor: ITextExtractor, file: File, pdfType: PdfType?): Boolean {
+        return extractor.isAvailable && extractor.canExtractDataFromFile(file) && passesPdfTypeCheck(extractor, file, pdfType)
+    }
+
+    protected open fun determinePdfType(file: File): PdfType? {
+        return if (file.extension.toLowerCase() == "pdf" && pdfTypeDetector?.isAvailable == true) {
+            pdfTypeDetector.detectPdfType(file)
+        }
+        else {
+            null
+        }
+    }
+
+    protected open fun passesPdfTypeCheck(extractor: ITextExtractor, file: File, pdfType: PdfType?): Boolean {
+        if (pdfType == null) {
+            return true
+        }
+
+        if (pdfType == PdfType.ImageOnlyPdf) {
+            return extractor is IImageOnlyPdfTextExtractor
+        }
+        else if (pdfType == PdfType.SearchableTextPdf) {
+            return extractor is ISearchablePdfTextExtractor
+        }
+
+        return true // not a PDF file -> // TODO: check if extractor is not a PdfTextExtractor
     }
 
 

@@ -1,0 +1,69 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+
+ext {
+    artifactName = "pdfbox-android-text-extractor"
+}
+
+
+android {
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+
+    defaultConfig {
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidTargetSdkVersion
+        versionCode appVersionCode
+        versionName rootProject.version
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    api project(':TextExtractorCommon')
+
+    implementation "com.tom_roush:pdfbox-android:$pdfBoxAndroidVersion"
+
+
+    testImplementation project(path: ':TextExtractorCommon', configuration: 'tests')
+}
+
+// TODO: make generic and add to publishToMaven.gradle
+afterEvaluate {
+    apply plugin: "maven-publish"
+
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+
+                groupId = "net.dankito.text.extraction"
+                artifactId = "pdfbox-android-text-extractor"
+                version = project.version ?: rootProject.version
+            }
+            // Creates a Maven publication called “debug”.
+            debug(MavenPublication) {
+                // Applies the component for the debug build variant.
+                from components.debug
+
+                groupId = "net.dankito.text.extraction"
+                artifactId = "pdfbox-android-text-extractor"
+                version = project.version ?: rootProject.version
+            }
+        }
+    }
+}

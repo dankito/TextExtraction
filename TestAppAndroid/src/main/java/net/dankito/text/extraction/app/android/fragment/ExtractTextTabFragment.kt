@@ -96,21 +96,24 @@ abstract class ExtractTextTabFragment : Fragment(), CoroutineScope by MainScope(
     }
 
 
-    protected open fun extractTextOfFileAndShowResult() = launch {
+    protected open fun extractTextOfFileAndShowResult() {
         lastSelectedFile?.let { file ->
             prgbrIsExtractingText.visibility = View.VISIBLE
             btnExtractSelectedFile.isEnabled = false
             txtInfoTextExtractedWith.visibility = View.GONE
             txtErrorMessage.visibility = View.GONE
-            val stopwatch = Stopwatch()
 
-            val extractionResult = extractTextOfFile(file)
+            GlobalScope.launch(Dispatchers.IO) {
+                val stopwatch = Stopwatch()
 
-            stopwatch.stop()
+                val extractionResult = extractTextOfFile(file)
 
-            withContext(Dispatchers.Main) {
-                activity?.let { context ->
-                    showExtractedTextOnUiThread(context, file, extractionResult, stopwatch)
+                stopwatch.stop()
+
+                withContext(Dispatchers.Main) {
+                    activity?.let { context ->
+                        showExtractedTextOnUiThread(context, file, extractionResult, stopwatch)
+                    }
                 }
             }
         }

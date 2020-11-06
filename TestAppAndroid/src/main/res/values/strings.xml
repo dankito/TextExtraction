@@ -2,7 +2,9 @@
     <string name="app_name">TextExtraction</string>
 
     <string name="main_activity_tab_text_open_pdf">OpenPdf</string>
-    <string name="main_activity_tab_text_itext">itext</string>
+    <string name="main_activity_tab_text_itext2">iText 2</string>
+    <string name="main_activity_tab_text_itext">iText</string>
+    <string name="main_activity_tab_text_pdfbox_android">PdfBox</string>
     <string name="main_activity_tab_text_find_best_extractor_for_type">Find best extractor</string>
     <string name="action_settings">Settings</string>
 
