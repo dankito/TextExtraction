@@ -1,5 +1,6 @@
 package net.dankito.text.extraction.pdf
 
+import io.github.jonathanlink.PDFLayoutTextStripper
 import net.dankito.text.extraction.ITextExtractor.Companion.TextExtractionQualityForUnsupportedFileType
 import net.dankito.text.extraction.TextExtractorBase
 import net.dankito.text.extraction.model.ExtractionResult
@@ -7,7 +8,6 @@ import net.dankito.text.extraction.model.Metadata
 import net.dankito.text.extraction.model.Page
 import net.dankito.utils.os.OsHelper
 import org.apache.pdfbox.pdmodel.PDDocument
-import org.apache.pdfbox.text.PDFTextStripper
 import org.slf4j.LoggerFactory
 import java.io.File
 
@@ -39,7 +39,7 @@ open class PdfBoxPdfTextExtractor(
 
     override fun extractTextForSupportedFormat(file: File): ExtractionResult {
         PDDocument.load(file).use { document ->
-            val textStripper = PDFTextStripper()
+            val textStripper = PDFLayoutTextStripper()
 
             val extractedText = ExtractionResult(null, "application/pdf", getMetadata(document, file))
             val countPages = document.numberOfPages

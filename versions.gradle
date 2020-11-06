@@ -29,6 +29,7 @@ ext {
 
     pdfBoxVersion = "2.0.19"
     pdfBoxAndroidVersion = "1.8.10.1"
+    pdfBoxLayoutTextStripperVersion = "2.2.3"
 
     tikaVersion = '1.23'
     

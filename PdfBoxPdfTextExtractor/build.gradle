@@ -18,6 +18,8 @@ dependencies {
 
     implementation "org.apache.pdfbox:pdfbox:$pdfBoxVersion"
 
+    implementation "io.github.jonathanlink:PDFLayoutTextStripper:$pdfBoxLayoutTextStripperVersion"
+
 
     testImplementation project(path: ':TextExtractorCommon', configuration: 'tests')
 }
