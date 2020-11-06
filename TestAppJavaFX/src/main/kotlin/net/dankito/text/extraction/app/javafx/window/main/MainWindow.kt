@@ -8,10 +8,7 @@ import net.dankito.text.extraction.TextExtractorRegistry
 import net.dankito.text.extraction.TikaTextExtractor
 import net.dankito.text.extraction.app.javafx.window.main.controls.FineReaderHotFolderTextExtractorTab
 import net.dankito.text.extraction.app.javafx.window.main.controls.TextExtractorTab
-import net.dankito.text.extraction.image.FineReaderHotFolderConfig
-import net.dankito.text.extraction.image.FineReaderHotFolderImageTextExtractor
-import net.dankito.text.extraction.image.Tesseract4CommandlineImageTextExtractor
-import net.dankito.text.extraction.image.Tesseract4JniImageTextExtractor
+import net.dankito.text.extraction.image.*
 import net.dankito.text.extraction.image.model.OcrLanguage
 import net.dankito.text.extraction.image.model.TesseractConfig
 import net.dankito.text.extraction.image.model.TesseractHelper
@@ -50,6 +47,8 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
 
     private val fineReaderHotFolderImageTextExtractor = FineReaderHotFolderImageTextExtractor(FineReaderHotFolderConfig(File(""), File("")))
 
+    private val fineReaderCommandlineImageTextExtractor = FineReaderCommandlineImageTextExtractor(commandExecutor)
+
     private val imageBasedPdfTextExtractor = ImageOnlyPdfTextExtractor(tesseract4CommandlineImageTextExtractor, pdfimagesImagesFromPdfExtractor(commandExecutor))
 
     private val tikaTextExtractor = TikaTextExtractor(TikaSettings(true, PdfContentExtractorStrategy.OcrAndText, tesseractConfig), tesseractHelper)
@@ -63,6 +62,7 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
         tesseract4CommandlineImageTextExtractor,
         tesseract4JniImageTextExtractor,
         fineReaderHotFolderImageTextExtractor,
+        fineReaderCommandlineImageTextExtractor,
         imageBasedPdfTextExtractor,
         tikaTextExtractor
     ))
@@ -84,6 +84,7 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
             addTab("main.window.tab.tesseract4.commandline", TextExtractorTab(tesseract4CommandlineImageTextExtractor))
             addTab("main.window.tab.tesseract4.jni", TextExtractorTab(tesseract4JniImageTextExtractor))
             addTab("main.window.tab.finereader.hotfolder", FineReaderHotFolderTextExtractorTab(fineReaderHotFolderImageTextExtractor))
+            addTab("main.window.tab.finereader.commandline", TextExtractorTab(fineReaderCommandlineImageTextExtractor))
             addTab("main.window.tab.image.based.pdf.text.extractor", TextExtractorTab(imageBasedPdfTextExtractor))
             addTab("main.window.tab.tika", TextExtractorTab(tikaTextExtractor))
             addTab("main.window.tab.find.best.extractor.for.type", TextExtractorTab(FindBestTextExtractor(extractorRegistry)))

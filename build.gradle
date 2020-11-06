@@ -48,7 +48,7 @@ task jarAll {
                   "iTextPdfTextExtractor:jar", "iText2PdfTextExtractor:jar", "OpenPdfPdfTextExtractor:jar",
                   "PdfBoxPdfTextExtractor:jar", "PopplerPdfTextExtractor:jar",
                   "TesseractCommon:jar", "Tesseract4CommandlineImageTextExtractor:jar", "Tesseract4JniImageTextExtractor:jar",
-                  "FineReaderHotFolderImageTextExtractor:jar",
+                  "FineReaderHotFolderImageTextExtractor:jar", "FineReaderCommandlineImageTextExtractor:jar",
                   "TikaTextExtractor:jar"
     ]
 }
@@ -60,7 +60,7 @@ task publishAllToMavenLocal {
                   "PdfBoxAndroidPdfTextExtractor:publishToMavenLocal", "PopplerPdfTextExtractor:publishToMavenLocal",
                   "TesseractCommon:publishToMavenLocal", "Tesseract4CommandlineImageTextExtractor:publishToMavenLocal",
                   "Tesseract4JniImageTextExtractor:publishToMavenLocal",
-                  "FineReaderHotFolderImageTextExtractor:publishToMavenLocal",
+                  "FineReaderHotFolderImageTextExtractor:publishToMavenLocal", "FineReaderCommandlineImageTextExtractor:publishToMavenLocal",
                   "TikaTextExtractor:publishToMavenLocal"
     ]
 }
@@ -72,7 +72,7 @@ task publishAndReleaseAll {
                   "PopplerPdfTextExtractor:publishAndRelease",
                   "TesseractCommon:publishAndRelease", "Tesseract4CommandlineImageTextExtractor:publishAndRelease",
                   "Tesseract4JniImageTextExtractor:publishAndRelease",
-                  "FineReaderHotFolderImageTextExtractor:publishAndRelease",
+                  "FineReaderHotFolderImageTextExtractor:publishAndRelease", "FineReaderCommandlineImageTextExtractor:publishAndRelease",
                   "TikaTextExtractor:publishAndRelease"
     ]
 }
