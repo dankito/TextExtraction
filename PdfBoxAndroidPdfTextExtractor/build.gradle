@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'maven-publish'
 
 
 ext {
@@ -40,29 +41,24 @@ dependencies {
     testImplementation project(path: ':TextExtractorCommon', configuration: 'tests')
 }
 
-// TODO: make generic and add to publishToMaven.gradle
-afterEvaluate {
-    apply plugin: "maven-publish"
 
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
+}
+
+
+// TODO: make generic and add to publishToMaven.gradle (also add sourceJar() task)
+afterEvaluate {
     publishing {
         publications {
-            // Creates a Maven publication called "release".
+            // completes some settings release closure in publishToMaven.gradle is not able to set for Android projects
             release(MavenPublication) {
-                // Applies the component for the release build variant.
                 from components.release
 
-                groupId = "net.dankito.text.extraction"
-                artifactId = "pdfbox-android-text-extractor"
-                version = project.version ?: rootProject.version
-            }
-            // Creates a Maven publication called “debug”.
-            debug(MavenPublication) {
-                // Applies the component for the debug build variant.
-                from components.debug
+                artifact sourceJar
 
-                groupId = "net.dankito.text.extraction"
                 artifactId = "pdfbox-android-text-extractor"
-                version = project.version ?: rootProject.version
             }
         }
     }
