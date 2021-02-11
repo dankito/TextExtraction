@@ -51,7 +51,7 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
 
     protected val programExecutablePath = SimpleStringProperty("")
 
-    protected val lastSelectedFilePath = SimpleStringProperty("/home/ganymed/data/docs/Steuer/2019/Ausgaben/2019.03.21 Untersuchung Geschlechtskrankheiten PVS Südwest.pdf")
+    protected val lastSelectedFilePath = SimpleStringProperty("")
 
     protected val showCustomTextExtractorConfigurationPane = SimpleBooleanProperty(false)
 
@@ -79,7 +79,7 @@ open class TextExtractorTab(val textExtractor: ITextExtractor) : View(), Corouti
     protected var customConfigurationPane: Pane by singleAssign()
 
 
-    protected var lastSelectedFile: File? = File("/home/ganymed/data/docs/Steuer/2019/Ausgaben/2019.03.21 Untersuchung Geschlechtskrankheiten PVS Südwest.pdf")
+    protected var lastSelectedFile: File? = File("")
 
 
     init {
