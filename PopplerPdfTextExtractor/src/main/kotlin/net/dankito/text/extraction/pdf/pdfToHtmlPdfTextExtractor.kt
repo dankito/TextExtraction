@@ -10,6 +10,7 @@ import java.util.*
 
 
 open class pdfToHtmlPdfTextExtractor @JvmOverloads constructor(
+    osIndependentDefaultExecutableName: String = "pdftohtml",
     commandExecutor: ICommandExecutor = CommandExecutor(),
     metadataExtractor: IPdfMetadataExtractor = pdfinfoPdfMetadataExtractor(commandExecutor),
     /**
@@ -22,7 +23,7 @@ open class pdfToHtmlPdfTextExtractor @JvmOverloads constructor(
      * Only needed for UI applications that like to show an hint to user when external application isn't found.
      */
     installHintLocalization: ResourceBundle = ResourceBundle.getBundle("Messages")
-) : pdfToTextPdfTextExtractorBase("pdftohtml", commandExecutor, metadataExtractor, willMultipleInstancesRunInParallel, installHintLocalization), ISearchablePdfTextExtractor {
+) : pdfToTextPdfTextExtractorBase(osIndependentDefaultExecutableName, commandExecutor, metadataExtractor, willMultipleInstancesRunInParallel, installHintLocalization), ISearchablePdfTextExtractor {
 
 
     override val name = "pdftohtml"
