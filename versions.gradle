@@ -37,7 +37,7 @@ ext {
     
     slf4jVersion = '1.7.16'
     
-    javaUtilsVersion = '1.0.16-SNAPSHOT'
+    javaUtilsVersion = '1.0.17'
 
     jsoupVersion = "1.13.1"
     
