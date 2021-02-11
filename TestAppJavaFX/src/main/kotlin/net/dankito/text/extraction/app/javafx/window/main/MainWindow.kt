@@ -33,6 +33,8 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
 
     private val pdfToTextPdfTextExtractor = pdfToTextPdfTextExtractor(installHintLocalization = FX.messages)
 
+    private val pdfToHtmlPdfTextExtractor = pdfToHtmlPdfTextExtractor(installHintLocalization = FX.messages)
+
 //    private val openPdfPdfTextExtractor = OpenPdfPdfTextExtractor()
 
     private val itext2PdfTextExtractor = iText2PdfTextExtractor()
@@ -55,6 +57,7 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
 
     private val extractorRegistry: ITextExtractorRegistry = TextExtractorRegistry(pdffontsPdfTypeDetector(), listOf(
         pdfToTextPdfTextExtractor,
+        pdfToHtmlPdfTextExtractor,
 //        openPdfPdfTextExtractor,
         itext2PdfTextExtractor,
         itextPdfTextExtractor,
@@ -81,6 +84,7 @@ class MainWindow : Fragment(String.format(FX.messages["application.title"], Pack
             addTab("main.window.tab.itext", TextExtractorTab(itextPdfTextExtractor))
             addTab("main.window.tab.pdfbox", TextExtractorTab(pdfBoxPdfTextExtractor))
             addTab("main.window.tab.pdftotext", TextExtractorTab(pdfToTextPdfTextExtractor))
+            addTab("main.window.tab.pdftohtml", TextExtractorTab(pdfToHtmlPdfTextExtractor))
             addTab("main.window.tab.tesseract4.commandline", TextExtractorTab(tesseract4CommandlineImageTextExtractor))
             addTab("main.window.tab.tesseract4.jni", TextExtractorTab(tesseract4JniImageTextExtractor))
             addTab("main.window.tab.finereader.hotfolder", FineReaderHotFolderTextExtractorTab(fineReaderHotFolderImageTextExtractor))

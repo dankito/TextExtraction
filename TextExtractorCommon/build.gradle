@@ -22,6 +22,8 @@ dependencies {
     testApi "org.assertj:assertj-core:$assertJVersion"
     testApi "org.mockito:mockito-core:$mockitoVersion"
 
+    testApi "org.jsoup:jsoup:$jsoupVersion"
+
     testApi "ch.qos.logback:logback-classic:$logbackVersion"
 }
 
