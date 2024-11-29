@@ -1,7 +1,4 @@
 
-rootProject.group = "net.dankito.text.extraction"
-rootProject.version = "0.6.1-SNAPSHOT"
-
 ext {
     appVersionCode = 3
     
