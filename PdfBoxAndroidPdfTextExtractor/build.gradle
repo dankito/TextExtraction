@@ -34,7 +34,7 @@ android {
 dependencies {
     api project(':TextExtractorCommon')
 
-    implementation "com.tom_roush:pdfbox-android:$pdfBoxAndroidVersion"
+    implementation "com.tom-roush:pdfbox-android:$pdfBoxAndroidVersion"
 
 
     testImplementation project(path: ':TextExtractorCommon', configuration: 'tests')
