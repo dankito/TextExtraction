@@ -1,11 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'maven-publish'
-
-
-ext {
-    artifactName = "pdfbox-android-text-extractor"
-}
 
 
 android {
@@ -41,24 +35,11 @@ dependencies {
 }
 
 
-task sourceJar(type: Jar) {
+ext["customArtifactId"] = "pdfbox-android-text-extractor"
+
+task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier "sources"
 }
 
-
-// TODO: make generic and add to publishToMaven.gradle (also add sourceJar() task)
-afterEvaluate {
-    publishing {
-        publications {
-            // completes some settings release closure in publishToMaven.gradle is not able to set for Android projects
-            release(MavenPublication) {
-                from components.release
-
-                artifact sourceJar
-
-                artifactId = "pdfbox-android-text-extractor"
-            }
-        }
-    }
-}
+apply(from: "../gradle/scripts/publish-dankito.gradle.kts")
