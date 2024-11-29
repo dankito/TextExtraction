@@ -17,44 +17,45 @@ ext {
     agplLicenseUrl = "https://www.gnu.org/licenses/agpl.txt"
     
 
-    kotlinVersion = '1.8.22'
-    kotlinCoroutinesVersion = '1.3.5'
+    kotlinVersion = "1.8.22"
+    // Coroutine version 1.7 -> Kotlin 1.8; 1.8 -> Kotlin 1.9; 1.9 -> Kotlin 2.0
+    kotlinCoroutinesVersion = "1.7.3"
 
 
-    openPdfVersion = '1.2.12' // last version running on pre-24 Androids (doesn't use java.util.Optional)
-    bouncyCastleVersion = '1.64' // optional dependency of OpenPdf
+    openPdfVersion = "1.2.12" // last version running on pre-24 Androids (doesn't use java.util.Optional)
+    bouncyCastleVersion = "1.64" // optional dependency of OpenPdf
 
-    iTextVersion = '7.1.6'
-    iText2Version = '2.1.7.js7'
+    iTextVersion = "7.2.6"
+    iText2Version = "2.1.7.js7"
 
-    pdfBoxVersion = "2.0.19"
+    pdfBoxVersion = "2.0.32"
     pdfBoxAndroidVersion = "2.0.27.0"
-    pdfBoxLayoutTextStripperVersion = "2.2.3"
+    pdfBoxLayoutTextStripperVersion = "2.2.4"
 
-    tikaVersion = '1.23'
+    tikaVersion = "1.28.5"
     
-    tesseract4Version = '4.0.0-1.5'
+    tesseract4Version = "4.0.0-1.5"
     
-    slf4jVersion = '1.7.16'
+    slf4jVersion = "1.7.16"
     
-    javaUtilsVersion = '1.0.17'
+    javaUtilsVersion = "1.0.17"
 
     jsoupVersion = "1.13.1"
     
     
     /*  Test    */    
 
-    junit5Version = '5.5.2'
+    junit5Version = "5.5.2"
 
-    assertJVersion = '3.14.0'
+    assertJVersion = "3.14.0"
 
-    mockitoVersion = '2.22.0'
-    mockitoKotlinVersion = '1.6.0'
+    mockitoVersion = "2.22.0"
+    mockitoKotlinVersion = "1.6.0"
 
-    androidTestRunnerVersion = '1.0.2'
-    espressoVersion = '3.0.2'
+    androidTestRunnerVersion = "1.0.2"
+    espressoVersion = "3.0.2"
 
-    logbackVersion = '1.2.3'
+    logbackVersion = "1.2.3"
     
     
     /*  Android */
