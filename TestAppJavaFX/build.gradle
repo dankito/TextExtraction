@@ -7,11 +7,11 @@ mainClassName = "net.dankito.text.extraction.app.javafx.TestApplicationJavaFX"
 def title = 'Test Extractor Demo'
 
 
-sourceCompatibility = 1.8
-
-compileKotlin.kotlinOptions.jvmTarget = "1.8"
-
-compileTestKotlin.kotlinOptions.jvmTarget = "1.8"
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
 
 
 dependencies {

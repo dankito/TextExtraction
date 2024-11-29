@@ -1,21 +1,20 @@
 package net.dankito.text.extraction.pdf
 
 import net.dankito.text.extraction.model.Metadata
-import org.apache.pdfbox.Loader
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.slf4j.LoggerFactory
 import java.io.File
 
 
-open class PdfBoxPdfMetadataExtractor : IPdfMetadataExtractor {
+open class PdfBox2PdfMetadataExtractor : IPdfMetadataExtractor {
 
     companion object {
-        private val log = LoggerFactory.getLogger(PdfBoxPdfMetadataExtractor::class.java)
+        private val log = LoggerFactory.getLogger(PdfBox2PdfMetadataExtractor::class.java)
     }
 
 
     override fun extractMetadata(file: File): Metadata? {
-        Loader.loadPDF(file).use { document ->
+        PDDocument.load(file).use { document ->
             return extractMetadata(document, file)
         }
     }

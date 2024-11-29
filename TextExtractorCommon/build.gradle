@@ -1,11 +1,11 @@
 apply plugin: 'kotlin'
 
 
-sourceCompatibility = 1.7
-
-compileKotlin.kotlinOptions.jvmTarget = "1.6"
-
-compileTestKotlin.kotlinOptions.jvmTarget = "1.6"
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
 
 
 dependencies {
@@ -21,6 +21,8 @@ dependencies {
 
     testApi "org.assertj:assertj-core:$assertJVersion"
     testApi "org.mockito:mockito-core:$mockitoVersion"
+
+    testApi "org.jsoup:jsoup:$jsoupVersion"
 
     testApi "ch.qos.logback:logback-classic:$logbackVersion"
 }
@@ -45,4 +47,6 @@ artifacts {
 }
 
 
-ext.artifactName = "text-extractor-common"
+ext["customArtifactId"] = "text-extractor-common"
+
+apply(from: "../gradle/scripts/publish-dankito.gradle.kts")

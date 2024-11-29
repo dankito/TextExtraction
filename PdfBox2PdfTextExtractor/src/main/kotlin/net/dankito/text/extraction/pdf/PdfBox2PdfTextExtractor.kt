@@ -7,19 +7,18 @@ import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Metadata
 import net.dankito.text.extraction.model.Page
 import net.dankito.utils.os.OsHelper
-import org.apache.pdfbox.Loader
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.slf4j.LoggerFactory
 import java.io.File
 
 
-open class PdfBoxPdfTextExtractor(
-    protected val metadataExtractor: IPdfMetadataExtractor = PdfBoxPdfMetadataExtractor(),
+open class PdfBox2PdfTextExtractor(
+    protected val metadataExtractor: IPdfMetadataExtractor = PdfBox2PdfMetadataExtractor(),
     protected val osHelper: OsHelper = OsHelper()
 ): TextExtractorBase(), ISearchablePdfTextExtractor {
 
     companion object {
-        private val log = LoggerFactory.getLogger(PdfBoxPdfTextExtractor::class.java)
+        private val log = LoggerFactory.getLogger(PdfBox2PdfTextExtractor::class.java)
     }
 
 
@@ -39,7 +38,7 @@ open class PdfBoxPdfTextExtractor(
 
 
     override fun extractTextForSupportedFormat(file: File): ExtractionResult {
-        Loader.loadPDF(file).use { document ->
+        PDDocument.load(file).use { document ->
             val textStripper = PDFLayoutTextStripper()
 
             val extractedText = ExtractionResult(null, "application/pdf", getMetadata(document, file))
@@ -67,7 +66,7 @@ open class PdfBoxPdfTextExtractor(
     }
 
     protected open fun getMetadata(pdfDocument: PDDocument, file: File): Metadata? {
-        return if (metadataExtractor is PdfBoxPdfMetadataExtractor) {
+        return if (metadataExtractor is PdfBox2PdfMetadataExtractor) {
             metadataExtractor.extractMetadata(pdfDocument, file)
         }
         else {
