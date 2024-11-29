@@ -1,14 +1,15 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm")
+    kotlin("jvm")
 }
 
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(8)
-    }
+kotlin {
+    jvmToolchain(8)
 }
 
+
+val pdfBoxVersion: String by project
+val pdfBoxLayoutTextStripperVersion: String by project
 
 dependencies {
     api(project(":TextExtractorCommon"))
@@ -18,10 +19,10 @@ dependencies {
     implementation("io.github.jonathanlink:PDFLayoutTextStripper:$pdfBoxLayoutTextStripperVersion")
 
 
-    testImplementation(project(path: ":TextExtractorCommon", configuration: "tests"))
+    testImplementation(project(path = ":TextExtractorCommon", configuration = "tests"))
 }
 
 
 ext["customArtifactId"] = "pdfbox-text-extractor"
 
-apply(from: "../gradle/scripts/publish-dankito.gradle.kts")
+apply(from = "../gradle/scripts/publish-dankito.gradle.kts")

@@ -1,14 +1,14 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm")
+    kotlin("jvm")
 }
 
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(8)
-    }
+kotlin {
+    jvmToolchain(8)
 }
 
+
+val iTextVersion: String by project
 
 dependencies {
     api(project(":TextExtractorCommon"))
@@ -16,7 +16,7 @@ dependencies {
     implementation("com.itextpdf:itext7-core:$iTextVersion")
 
 
-    testImplementation(project(path: ":TextExtractorCommon", configuration: "tests"))
+    testImplementation(project(path = ":TextExtractorCommon", configuration = "tests"))
 }
 
 
@@ -26,4 +26,4 @@ ext["customArtifactId"] = "itext-text-extractor"
 ext["licenseName"] = "GNU Affero General Public License v3.0"
 ext["licenseUrl"] = "https://www.gnu.org/licenses/agpl.txt"
 
-apply(from: "../gradle/scripts/publish-dankito.gradle.kts")
+apply(from = "../gradle/scripts/publish-dankito.gradle.kts")

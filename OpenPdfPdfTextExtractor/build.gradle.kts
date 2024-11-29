@@ -1,14 +1,15 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm")
+    kotlin("jvm")
 }
 
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(8)
-    }
+kotlin {
+    jvmToolchain(8)
 }
 
+
+val openPdfVersion: String by project
+val bouncyCastleVersion: String by project
 
 dependencies {
     api(project(":TextExtractorCommon"))
@@ -19,10 +20,10 @@ dependencies {
     implementation("org.bouncycastle:bcpkix-jdk15on:$bouncyCastleVersion")
 
 
-    testImplementation(project(path: ":TextExtractorCommon", configuration: "tests"))
+    testImplementation(project(path = ":TextExtractorCommon", configuration = "tests"))
 }
 
 
 ext["customArtifactId"] = "openpdf-text-extractor"
 
-apply(from: "../gradle/scripts/publish-dankito.gradle.kts")
+apply(from = "../gradle/scripts/publish-dankito.gradle.kts")
