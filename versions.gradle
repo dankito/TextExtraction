@@ -4,17 +4,6 @@ rootProject.version = "0.6.1-SNAPSHOT"
 
 ext {
     appVersionCode = 3
-
-    sourceCodeRepositoryBaseUrl = "github.com/dankito/TextExtraction"
-    projectDescription = "A framework for extracting text from different types of files, e.g. PDFs, images, office documents, text files, ..."
-
-    // most projects are under Apache license ...
-    licenseName = "The Apache License, Version 2.0"
-    licenseUrl = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-
-    // ... but projects using iText have to use AGPL
-    agplLicenseName = "GNU Affero General Public License v3.0"
-    agplLicenseUrl = "https://www.gnu.org/licenses/agpl.txt"
     
 
     kotlinVersion = "1.8.22"

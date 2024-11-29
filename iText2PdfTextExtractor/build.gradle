@@ -8,11 +8,6 @@ java {
 }
 
 
-ext {
-    artifactName = "itext2-text-extractor"
-}
-
-
 dependencies {
     api project(':TextExtractorCommon')
 
@@ -21,3 +16,8 @@ dependencies {
 
     testImplementation project(path: ':TextExtractorCommon', configuration: 'tests')
 }
+
+
+ext["customArtifactId"] = "itext2-text-extractor"
+
+apply(from: "../gradle/scripts/publish-dankito.gradle.kts")

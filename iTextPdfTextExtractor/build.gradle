@@ -8,13 +8,6 @@ java {
 }
 
 
-ext {
-    artifactName = "itext-text-extractor"
-    licenseName = agplLicenseName
-    agplLicenseUrl = agplLicenseUrl
-}
-
-
 dependencies {
     api project(':TextExtractorCommon')
 
@@ -23,3 +16,12 @@ dependencies {
 
     testImplementation project(path: ':TextExtractorCommon', configuration: 'tests')
 }
+
+
+ext["customArtifactId"] = "itext-text-extractor"
+
+// iText is under AGPL license, so we also have to put this library and AGPL
+ext["licenseName"] = "GNU Affero General Public License v3.0"
+ext["licenseUrl"] = "https://www.gnu.org/licenses/agpl.txt"
+
+apply(from: "../gradle/scripts/publish-dankito.gradle.kts")

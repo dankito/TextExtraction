@@ -21,13 +21,14 @@ plugins {
 }
 
 
-def commonScriptsFile = new File(new File(project.gradle.gradleUserHomeDir, "scripts"), "commonScripts.gradle")
-if (commonScriptsFile.exists()) {
-    apply from: commonScriptsFile
-}
-
-
 allprojects {
+    group = "net.dankito.text.extraction"
+    version = "0.6.1-SNAPSHOT"
+
+    ext["sourceCodeRepositoryBaseUrl"] = "github.com/dankito/TextExtraction"
+
+    ext["projectDescription"] = "A framework for extracting text from different types of files, e.g. PDFs, images, office documents, text files, ..."
+
 
     repositories {
         mavenCentral()
@@ -56,7 +57,8 @@ task publishAllToMavenLocal {
                   "iTextPdfTextExtractor:publishToMavenLocal", "iText2PdfTextExtractor:publishToMavenLocal",
                   "OpenPdfPdfTextExtractor:publishToMavenLocal",
                   "PdfBoxPdfTextExtractor:publishToMavenLocal", "PdfBox2PdfTextExtractor:publishToMavenLocal",
-                  "PdfBoxAndroidPdfTextExtractor:publishToMavenLocal", "PopplerPdfTextExtractor:publishToMavenLocal",
+                  "PdfBoxAndroidPdfTextExtractor:publishToMavenLocal",
+                  "PopplerPdfTextExtractor:publishToMavenLocal",
                   "TesseractCommon:publishToMavenLocal", "Tesseract4CommandlineImageTextExtractor:publishToMavenLocal",
                   "Tesseract4JniImageTextExtractor:publishToMavenLocal",
                   "FineReaderHotFolderImageTextExtractor:publishToMavenLocal", "FineReaderCommandlineImageTextExtractor:publishToMavenLocal",
@@ -64,15 +66,16 @@ task publishAllToMavenLocal {
     ]
 }
 
-task publishAndReleaseAll {
-    dependsOn = [ "TextExtractorCommon:publishAndRelease",
-                  "itextPdfTextExtractor:publishAndRelease", "OpenPdfPdfTextExtractor:publishAndRelease",
-                  "PdfBoxPdfTextExtractor:publishAndRelease", "PdfBox2PdfTextExtractor:publishAndRelease",
-                  // TODO: add "PdfBoxAndroidPdfTextExtractor:publishAndRelease"
-                  "PopplerPdfTextExtractor:publishAndRelease",
-                  "TesseractCommon:publishAndRelease", "Tesseract4CommandlineImageTextExtractor:publishAndRelease",
-                  "Tesseract4JniImageTextExtractor:publishAndRelease",
-                  "FineReaderHotFolderImageTextExtractor:publishAndRelease", "FineReaderCommandlineImageTextExtractor:publishAndRelease",
-                  "TikaTextExtractor:publishAndRelease"
+task publish {
+    dependsOn = [ "TextExtractorCommon:publish",
+                  "iTextPdfTextExtractor:publish", "iText2PdfTextExtractor:publish",
+                  "OpenPdfPdfTextExtractor:publish",
+                  "PdfBoxPdfTextExtractor:publish", "PdfBox2PdfTextExtractor:publish",
+                  "PdfBoxAndroidPdfTextExtractor:publish",
+                  "PopplerPdfTextExtractor:publish",
+                  "TesseractCommon:publish", "Tesseract4CommandlineImageTextExtractor:publish",
+                  "Tesseract4JniImageTextExtractor:publish",
+                  "FineReaderHotFolderImageTextExtractor:publish", "FineReaderCommandlineImageTextExtractor:publish",
+                  "TikaTextExtractor:publish"
     ]
 }

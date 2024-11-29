@@ -20,4 +20,6 @@ dependencies {
 }
 
 
-ext.artifactName = "tesseract4-jni-text-extractor"
+ext["customArtifactId"] = "tesseract4-jni-text-extractor"
+
+apply(from: "../gradle/scripts/publish-dankito.gradle.kts")

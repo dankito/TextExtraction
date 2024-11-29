@@ -18,4 +18,6 @@ dependencies {
 }
 
 
-ext.artifactName = "tesseract4-commandline-text-extractor"
+ext["customArtifactId"] = "tesseract4-commandline-text-extractor"
+
+apply(from: "../gradle/scripts/publish-dankito.gradle.kts")

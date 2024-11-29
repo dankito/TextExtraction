@@ -17,4 +17,6 @@ dependencies {
 }
 
 
-ext.artifactName = "poppler-text-extractor"
+ext["customArtifactId"] = "poppler-text-extractor"
+
+apply(from: "../gradle/scripts/publish-dankito.gradle.kts")

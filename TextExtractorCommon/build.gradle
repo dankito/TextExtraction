@@ -47,4 +47,6 @@ artifacts {
 }
 
 
-ext.artifactName = "text-extractor-common"
+ext["customArtifactId"] = "text-extractor-common"
+
+apply(from: "../gradle/scripts/publish-dankito.gradle.kts")

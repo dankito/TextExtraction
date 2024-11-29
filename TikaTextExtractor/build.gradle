@@ -19,4 +19,6 @@ dependencies {
 }
 
 
-ext.artifactName = "tika-text-extractor"
+ext["customArtifactId"] = "tika-text-extractor"
+
+apply(from: "../gradle/scripts/publish-dankito.gradle.kts")

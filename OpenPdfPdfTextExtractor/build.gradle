@@ -22,4 +22,6 @@ dependencies {
 }
 
 
-ext.artifactName = "openpdf-text-extractor"
+ext["customArtifactId"] = "openpdf-text-extractor"
+
+apply(from: "../gradle/scripts/publish-dankito.gradle.kts")

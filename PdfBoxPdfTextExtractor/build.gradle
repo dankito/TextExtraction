@@ -8,11 +8,6 @@ java {
 }
 
 
-ext {
-    artifactName = "pdfbox-text-extractor"
-}
-
-
 dependencies {
     api project(':TextExtractorCommon')
 
@@ -23,3 +18,8 @@ dependencies {
 
     testImplementation project(path: ':TextExtractorCommon', configuration: 'tests')
 }
+
+
+ext["customArtifactId"] = "pdfbox-text-extractor"
+
+apply(from: "../gradle/scripts/publish-dankito.gradle.kts")
