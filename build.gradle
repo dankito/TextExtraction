@@ -56,7 +56,8 @@ task jarAll {
 task publishAllToMavenLocal {
     dependsOn = [ "TextExtractorCommon:publishToMavenLocal",
                   "iTextPdfTextExtractor:publishToMavenLocal", "iText2PdfTextExtractor:publishToMavenLocal",
-                  "OpenPdfPdfTextExtractor:publishToMavenLocal", "PdfBoxPdfTextExtractor:publishToMavenLocal",
+                  "OpenPdfPdfTextExtractor:publishToMavenLocal",
+                  "PdfBoxPdfTextExtractor:publishToMavenLocal", "PdfBox2PdfTextExtractor:publishToMavenLocal",
                   "PdfBoxAndroidPdfTextExtractor:publishToMavenLocal", "PopplerPdfTextExtractor:publishToMavenLocal",
                   "TesseractCommon:publishToMavenLocal", "Tesseract4CommandlineImageTextExtractor:publishToMavenLocal",
                   "Tesseract4JniImageTextExtractor:publishToMavenLocal",
@@ -68,7 +69,8 @@ task publishAllToMavenLocal {
 task publishAndReleaseAll {
     dependsOn = [ "TextExtractorCommon:publishAndRelease",
                   "itextPdfTextExtractor:publishAndRelease", "OpenPdfPdfTextExtractor:publishAndRelease",
-                  "PdfBoxPdfTextExtractor:publishAndRelease", // TODO: add "PdfBoxAndroidPdfTextExtractor:publishAndRelease"
+                  "PdfBoxPdfTextExtractor:publishAndRelease", "PdfBox2PdfTextExtractor:publishAndRelease",
+                  // TODO: add "PdfBoxAndroidPdfTextExtractor:publishAndRelease"
                   "PopplerPdfTextExtractor:publishAndRelease",
                   "TesseractCommon:publishAndRelease", "Tesseract4CommandlineImageTextExtractor:publishAndRelease",
                   "Tesseract4JniImageTextExtractor:publishAndRelease",

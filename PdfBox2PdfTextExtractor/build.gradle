@@ -1,0 +1,25 @@
+apply plugin: 'kotlin'
+
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+
+ext {
+    artifactName = "pdfbox2-text-extractor"
+}
+
+
+dependencies {
+    api project(':TextExtractorCommon')
+
+    implementation "org.apache.pdfbox:pdfbox:$pdfBox2Version"
+
+    implementation "io.github.jonathanlink:PDFLayoutTextStripper:$pdfBoxLayoutTextStripperVersion"
+
+
+    testImplementation project(path: ':TextExtractorCommon', configuration: 'tests')
+}

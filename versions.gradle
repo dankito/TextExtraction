@@ -29,6 +29,7 @@ ext {
     iText2Version = "2.1.7.js7"
 
     pdfBoxVersion = "2.0.32"
+    pdfBox2Version = "2.0.32"
     pdfBoxAndroidVersion = "2.0.27.0"
     pdfBoxLayoutTextStripperVersion = "2.2.4"
 

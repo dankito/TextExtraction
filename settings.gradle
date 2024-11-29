@@ -4,6 +4,7 @@ include ':PopplerPdfTextExtractor'
 include ':iText2PdfTextExtractor'
 include ':iTextPdfTextExtractor'
 include ':PdfBoxPdfTextExtractor'
+include ':PdfBox2PdfTextExtractor'
 include ':PdfBoxAndroidPdfTextExtractor'
 include ':OpenPdfPdfTextExtractor'
 
