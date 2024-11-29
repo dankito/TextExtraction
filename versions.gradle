@@ -50,10 +50,10 @@ ext {
     
     /*  Android */
 
-    androidCompileSdkVersion = 27
-    androidTargetSdkVersion = 27
+    androidCompileSdkVersion = 30
+    androidTargetSdkVersion = 30
     androidMinSdkVersion = 15
-    androidBuildToolsVersion = "28.0.3"
+    androidBuildToolsVersion = "30.0.2"
     
     fileChooserVersion = '1.1.5'
     multiDexVersion = '1.0.3'
