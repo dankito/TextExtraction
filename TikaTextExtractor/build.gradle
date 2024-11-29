@@ -1,4 +1,6 @@
-apply plugin: 'kotlin'
+plugins {
+    id("org.jetbrains.kotlin.jvm")
+}
 
 
 java {
@@ -9,13 +11,13 @@ java {
 
 
 dependencies {
-    api project(':TextExtractorCommon')
-    api project(':TesseractCommon')
+    api(project(":TextExtractorCommon"))
+    api(project(":TesseractCommon"))
 
-    implementation"org.apache.tika:tika-java7:$tikaVersion"
+    implementation("org.apache.tika:tika-java7:$tikaVersion")
 
 
-    testImplementation project(path: ':TextExtractorCommon', configuration: 'tests')
+    testImplementation(project(path: ":TextExtractorCommon", configuration: "tests"))
 }
 
 

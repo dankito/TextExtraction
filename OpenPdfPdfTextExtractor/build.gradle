@@ -1,4 +1,6 @@
-apply plugin: 'kotlin'
+plugins {
+    id("org.jetbrains.kotlin.jvm")
+}
 
 
 java {
@@ -9,16 +11,15 @@ java {
 
 
 dependencies {
-    api project(':TextExtractorCommon')
+    api(project(":TextExtractorCommon"))
 
-    implementation "com.github.librepdf:openpdf:$openPdfVersion"
+    implementation("com.github.librepdf:openpdf:$openPdfVersion")
     // optional dependencies of OpenPdf but needed for some PDFs
-    implementation "org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion"
-    implementation "org.bouncycastle:bcpkix-jdk15on:$bouncyCastleVersion"
+    implementation("org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion")
+    implementation("org.bouncycastle:bcpkix-jdk15on:$bouncyCastleVersion")
 
 
-    testImplementation project(path: ':TextExtractorCommon', configuration: 'tests')
-
+    testImplementation(project(path: ":TextExtractorCommon", configuration: "tests"))
 }
 
 

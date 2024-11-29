@@ -1,4 +1,6 @@
-apply plugin: 'kotlin'
+plugins {
+    id("org.jetbrains.kotlin.jvm")
+}
 
 
 java {
@@ -9,12 +11,12 @@ java {
 
 
 dependencies {
-    api project(':TextExtractorCommon')
+    api(project(":TextExtractorCommon"))
 
-    implementation "com.itextpdf:itext7-core:$iTextVersion"
+    implementation("com.itextpdf:itext7-core:$iTextVersion")
 
 
-    testImplementation project(path: ':TextExtractorCommon', configuration: 'tests')
+    testImplementation(project(path: ":TextExtractorCommon", configuration: "tests"))
 }
 
 
