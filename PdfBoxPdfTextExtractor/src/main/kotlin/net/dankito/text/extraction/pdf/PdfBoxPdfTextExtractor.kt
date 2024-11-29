@@ -7,6 +7,7 @@ import net.dankito.text.extraction.model.ExtractionResult
 import net.dankito.text.extraction.model.Metadata
 import net.dankito.text.extraction.model.Page
 import net.dankito.utils.os.OsHelper
+import org.apache.pdfbox.Loader
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -38,7 +39,7 @@ open class PdfBoxPdfTextExtractor(
 
 
     override fun extractTextForSupportedFormat(file: File): ExtractionResult {
-        PDDocument.load(file).use { document ->
+        Loader.loadPDF(file).use { document ->
             val textStripper = PDFLayoutTextStripper()
 
             val extractedText = ExtractionResult(null, "application/pdf", getMetadata(document, file))
