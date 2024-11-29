@@ -6,7 +6,6 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
     }
 
     dependencies {
@@ -33,7 +32,6 @@ allprojects {
     repositories {
         mavenCentral()
         mavenLocal()
-        jcenter()
         google()
         // for security issues fixed version of iText 2 from JasperReports
         maven {
